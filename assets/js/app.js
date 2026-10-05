@@ -6,28 +6,10 @@
   "use strict";
 
   var CFG = window.SITE_CONFIG || {};
-  var WATCH = CFG.watchPlatforms || [
-    { id: "qq", name: "腾讯视频", url: "https://v.qq.com/x/search/?q={q}" },
-    { id: "iqiyi", name: "爱奇艺", url: "https://so.iqiyi.com/so/q_{q}" },
-    { id: "youku", name: "优酷", url: "https://so.youku.com/search_video/q_{q}" },
-    { id: "bili", name: "哔哩哔哩", url: "https://search.bilibili.com/all?keyword={q}" },
-    { id: "douban", name: "豆瓣(看评分)", url: "https://search.douban.com/movie/subject_search?search_text={q}" }
-  ];
-  var KEY_PLATFORM = "dd_platform";
 
   var ALL = [].concat(FILMS, TV_SHOWS.map(function (t) { return Object.assign({}, t, { isTV: true }); }));
 
   var REL_LABEL = { direct: "直接相关", context: "重要背景", minor: "一般关联", info: "番外" };
-
-  var STUDIO_COLOR = [
-    [/漫威影业/, "#e23636"], [/福克斯/, "#4a7fd6"], [/索尼/, "#3b9ac4"],
-    [/环球/, "#c08a2e"], [/新线/, "#7d5fff"], [/狮门/, "#8a6ce0"],
-    [/迪士尼/, "#4aa3df"], [/哥伦比亚/, "#c46a2e"], [/康斯坦丁/, "#7a7a7a"], [/世纪电影/, "#7a7a7a"]
-  ];
-  function studioColor(s) {
-    for (var i = 0; i < STUDIO_COLOR.length; i++) if (STUDIO_COLOR[i][0].test(s || "")) return STUDIO_COLOR[i][1];
-    return "#5c6b7a";
-  }
 
   /* ---------------- 电影速览 ---------------- */
   var FACTS = [
@@ -117,8 +99,8 @@
       a: "只推荐两部:①《洛基》(S1-S2)——TVA、康之死、时间树全部在这里,不看它复联5的多元宇宙设定会缺一角;②《假如…?》——多元宇宙的可视化教材。其余剧集(旺达幻视、猎鹰与冬兵、夜魔侠:重生等)按需补。"
     },
     {
-      q: "作品库里的 ▶ 播放按钮是干什么的?能免费看吗?",
-      a: "那个按钮是带片名去『正版平台』(腾讯视频/爱奇艺/优酷/B站/Disney+等)搜索,由平台告诉你这部剧有没有上架、要不要会员——本站不提供也不链接任何盗版资源,原因很简单:盗版站既不稳定也违法。国内实际能原价看到漫威电影的地方主要是各视频平台的会员区,偶尔会有老片免费(带广告)。"
+      q: "这些电影电视剧在哪里能看?",
+      a: "国内的正版渠道主要是各视频平台的会员区:腾讯视频、爱奇艺、优酷、哔哩哔哩(部分老片限时免费带广告),Disney+ 覆盖最全但需要海外账号。本站只做剧情整理与关联梳理,不提供、也不链接任何盗版资源 —— 盗版站既不稳定也违法。想看正片,直接在常用视频 App 里搜片名即可。"
     },
     {
       q: "为什么作品库有的片子是灰色的/没有中文资源?",
@@ -144,8 +126,7 @@
   /* ---------------- 状态 ---------------- */
   var state = {
     q: "", studio: "all", rel: "all", status: "all",
-    castTab: "trailer", castIndex: 0,
-    platform: store(KEY_PLATFORM) || CFG.defaultWatchPlatform || (WATCH[0] && WATCH[0].id)
+    castTab: "trailer", castIndex: 0
   };
 
   var STUDIO_GROUPS = [
@@ -224,7 +205,7 @@
       }).join("");
   }
 
-  /* ---------------- 渲染:筛选器(含播放平台) ---------------- */
+  /* ---------------- 渲染:筛选器 ---------------- */
   function renderControls() {
     function chips(groups, key, label) {
       return '<div class="filter-group"><span class="filter-label">' + label + "</span>" +
@@ -232,43 +213,17 @@
           return '<button class="chip' + (state[key] === g.id ? " active" : "") + '" data-key="' + key + '" data-val="' + g.id + '">' + esc(g.name) + "</button>";
         }).join("") + "</div>";
     }
-    var platformChips = '<div class="filter-group"><span class="filter-label">播放平台</span>' +
-      WATCH.map(function (p) {
-        return '<button class="chip chip-platform' + (state.platform === p.id ? " active" : "") + '" data-platform="' + esc(p.id) + '">' + esc(p.name) + "</button>";
-      }).join("") + '<span class="chip-hint">(点作品卡上的 ▶ 会去这里搜索)</span></div>';
-
     $("#controls").innerHTML =
       '<div class="search-row"><input class="search-input" id="searchInput" type="search" placeholder="搜索片名 / 英文名 / 年份 / 简介关键词…" value="' + esc(state.q) + '" /></div>' +
-      platformChips +
       chips(STUDIO_GROUPS, "studio", "出品方") +
       chips(REL_GROUPS, "rel", "关联度") +
       chips(STATUS_GROUPS, "status", "状态");
   }
 
-  /* ---------------- 渲染:影片列表(封面 + 播放按钮) ---------------- */
+  /* ---------------- 渲染:影片列表 ---------------- */
   function relTag(rel) {
     var cls = { direct: "tag-direct", context: "tag-context", minor: "tag-minor", info: "tag-info" }[rel] || "tag-minor";
     return '<span class="tag ' + cls + '">' + (REL_LABEL[rel] || rel) + "</span>";
-  }
-  function currentPlatform() {
-    for (var i = 0; i < WATCH.length; i++) if (WATCH[i].id === state.platform) return WATCH[i];
-    return WATCH[0];
-  }
-  function watchUrl(f) {
-    var p = currentPlatform();
-    if (!p) return "#";
-    return p.url.replace("{q}", encodeURIComponent(f.title)).replace("{qen}", encodeURIComponent(f.en || f.title));
-  }
-  function posterHtml(f) { return ""; }
-  /* 播放按钮:带片名去正版平台搜索(本站不提供任何盗版资源) */
-  function watchBtnHtml(f) {
-    var p = currentPlatform();
-    var pname = p ? p.name : "平台";
-    if (f.status === "upcoming") {
-      return '<span class="watch-btn watch-soon" title="还没上映">🔒 待上映</span>';
-    }
-    return '<a class="watch-btn" href="' + esc(watchUrl(f)) + '" target="_blank" rel="noopener noreferrer" ' +
-      'title="去' + esc(pname) + '搜索这部剧">▶ 去' + esc(pname) + "查</a>";
   }
   function filmHtml(f) {
     var statusTag = f.status === "upcoming"
@@ -276,11 +231,8 @@
       : '<span class="tag">已上映</span>';
     var tvTag = f.isTV ? '<span class="tag">剧集</span>' : "";
     return '<article class="film-card" data-id="' + esc(f.id) + '">' +
-      '<div class="film-top">' +
-      '<h3 class="film-title">' + esc(f.title) +
-      '<span>' + esc(f.en || "") + "</span></h3>" +
-      watchBtnHtml(f) +
-      "</div>" +
+      '<div class="film-top"><h3 class="film-title">' + esc(f.title) +
+      '<span>' + esc(f.en || "") + "</span></h3></div>" +
       '<div class="film-meta">' + statusTag + tvTag + relTag(f.rel) + '<span class="tag">' + esc(f.studio) + "</span>" +
       (f.phase ? '<span class="tag">' + esc(f.phase) + "</span>" : "") + "</div>" +
       (f.plot ? '<p class="film-plot"><b>讲了什么:</b>' + esc(f.plot) + "</p>" : "") +
@@ -305,7 +257,7 @@
     $("#filmsMore").innerHTML =
       "<h3>待映与说明</h3>" +
       ext.map(function (f) { return '<p class="more-note">· ' + esc(f.title) + "( " + esc(f.en) + " )— " + esc(f.plot) + "</p>"; }).join("") +
-      '<p class="more-note" style="margin-top:10px">· 关于播放按钮:点每张卡片右上角的 ▶ 会带片名去您选择的<b>正版平台</b>搜索(腾讯视频 / 爱奇艺 / 优酷 / B站 / Disney+ / JustWatch)。本站<b>不提供、也不链接任何盗版资源</b> —— 盗版站不稳定、随时失效,而且违法。</p>' +
+      '<p class="more-note" style="margin-top:10px">· 想看正片:漫威电影在国内的正版渠道主要是各视频平台的会员区(腾讯视频 / 爱奇艺 / 优酷 / 哔哩哔哩 等),Disney+ 覆盖最全但需要海外账号。本站只整理剧情与关联,不提供、也不链接任何盗版资源。</p>' +
       '<p class="more-note">· 未收录说明:①1994年科尔曼版《神奇四侠》从未正式公映(仅按合约拍摄),仅作历史注脚收录;②1998年《复仇者》(费因斯/瑟曼)改编自英国同名间谍剧,与漫威无关,已排除;③各厂直发DVD的漫威动画长片(如《钢铁侠:科技达人》《终极复仇者》等)非院线作品,未收录;④2003年《夜魔侠》等老片与MCU不共享宇宙,但其角色已在《死侍与金刚狼》中以"老宇宙"身份回归。</p>';
   }
 
@@ -419,14 +371,6 @@
         document.querySelectorAll(".route-tab").forEach(function (b) { b.classList.toggle("active", b === tab); });
         return;
       }
-      var pt = t.closest("[data-platform]");
-      if (pt) {
-        state.platform = pt.dataset.platform;
-        store(KEY_PLATFORM, state.platform);
-        document.querySelectorAll("[data-platform]").forEach(function (b) { b.classList.toggle("active", b === pt); });
-        renderFilms();
-        return;
-      }
       var chip = t.closest(".chip");
       if (chip && chip.dataset.key) {
         state[chip.dataset.key] = chip.dataset.val;
@@ -492,6 +436,6 @@
   /* 供测试使用 */
   window.GuideApp = {
     state: state, renderFilms: renderFilms, renderCast: renderCast, castGo: castGo,
-    watchUrl: function (f) { return watchUrl(f); }, castData: castData, charArtUrl: charArtUrl
+    castData: castData, charArtUrl: charArtUrl
   };
 })();

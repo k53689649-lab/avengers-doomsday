@@ -61,10 +61,8 @@ const countBy = (html, token) => (html.match(new RegExp(token, "g")) || []).leng
 
 const total = data.FILMS.length + data.TV_SHOWS.length;
 check("作品卡片渲染 " + total + " 条", countCards(q("#filmsList"), "film-card") === total);
-check("作品卡含播放按钮", q("#filmsList").includes("watch-btn") && !q("#filmsList").includes("film-poster"));
-check("播放按钮指向正版平台搜索", /v\.qq\.com\/x\/search\/\?q=/.test(q("#filmsList")));
-check("待映影片显示锁而不是播放键", q("#filmsList").includes("watch-soon"));
-check("平台选择器已渲染", q("#controls").includes("chip-platform") && q("#controls").includes("哔哩哔哩"));
+check("作品卡为纯信息卡(跳转 UI 已移除)", !q("#filmsList").includes("watch-btn") && !q("#filmsList").includes("film-poster"));
+check("筛选器不再有播放平台行", !q("#controls").includes("chip-platform") && !q("#controls").includes("播放平台"));
 
 /* 角色图鉴(PPT 式轮播) */
 const trailerN = data.TRAILER_CHARS.length;

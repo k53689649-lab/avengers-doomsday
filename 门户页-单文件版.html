@@ -357,23 +357,10 @@ window.SITE_CONFIG = {
     note: "声明:本站不制作、不翻译、不压制任何字幕 —— 以上预告均为搬运自哔哩哔哩(汉化与字幕由原 UP 主制作),视频与字幕版权归原作者、漫威及迪士尼所有;若权利人提出要求,本站会立即移除。点击播放后会直接调用 B 站官方播放器。"
   },
 
-  /* ============ 哪里能看(作品库播放按钮) ============
-     说明:本站不提供也不链接任何盗版资源。播放按钮会带着片名去「正版平台」搜索,
-           由平台告诉你这部片子有没有上架、是否需要会员。
-     想增删平台,直接改这个数组即可;
-     url 里的 {q} 会替换成片名(中文名),{qen} 替换成英文名 */
-  watchPlatforms: [
-    { id: "qq",     name: "腾讯视频", url: "https://v.qq.com/x/search/?q={q}" },
-    { id: "iqiyi",  name: "爱奇艺",   url: "https://so.iqiyi.com/so/q_{q}" },
-    { id: "youku",  name: "优酷",     url: "https://so.youku.com/search_video/q_{q}" },
-    { id: "bili",   name: "哔哩哔哩", url: "https://search.bilibili.com/all?keyword={q}" },
-    { id: "disney", name: "Disney+",  url: "https://www.disneyplus.com/search?q={qen}" },
-    { id: "jw",     name: "JustWatch", url: "https://www.justwatch.com/us/search?q={qen}" },
-    { id: "douban", name: "豆瓣(看评分)", url: "https://search.douban.com/movie/subject_search?search_text={q}" }
-  ],
-
-  /* 默认打开哪个平台(对应上面 id;用户切换后会记住选择) */
-  defaultWatchPlatform: "qq",
+  /* ============ 视频观看渠道 ============
+     说明:本站不提供也不链接任何盗版资源,因此作品库不再做「跳转播放」界面。
+     这里只是给访客看的一段说明文字(显示在作品库底部),可按需修改。 */
+  watchInfo: "正版观看渠道:腾讯视频 / 爱奇艺 / 优酷 / 哔哩哔哩(部分老片免费带广告)等平台的会员区;Disney+ 覆盖最全但需要海外账号。本站只整理剧情与关联,不提供、也不链接任何盗版资源。",
 
   /* Waline 云留言板地址(另一种云端方案,二选一即可;与上面的 cloud 不冲突) */
   walineServerURL: "",

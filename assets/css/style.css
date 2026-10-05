@@ -387,17 +387,8 @@ body.photo-bg .footer { background: rgba(6, 9, 13, 0.86); }
 }
 
 /* =========================================================
-   作品卡:干净卡片 + 播放按钮(不要海报背景)
+   作品卡:纯信息卡(不做跳转播放界面)
    ========================================================= */
 .chip-hint { font-size: 11.5px; color: var(--muted); margin-left: 4px; }
 .film-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.watch-btn {
-  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(226, 54, 54, 0.92); color: #fff; text-decoration: none;
-  font-size: 12.5px; font-weight: 700; padding: 8px 14px; border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.14); white-space: nowrap;
-  box-shadow: 0 4px 14px rgba(226, 54, 54, 0.22); transition: 0.2s;
-}
-.watch-btn:hover { background: #ff4747; transform: translateY(-1px); }
-.watch-soon { background: rgba(90, 100, 110, 0.55); color: #c7d0d8; box-shadow: none; cursor: default; }
 .film-body { display: flex; flex-direction: column; gap: 10px; }
