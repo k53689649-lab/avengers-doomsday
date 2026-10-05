@@ -52,6 +52,15 @@ create table if not exists public.article_favorites (
   primary key (article_id, visitor_id)
 );
 
+-- ---------- 3.5) 表级授权(少了这段会报 permission denied for table articles) ----------
+grant usage on schema public to anon, authenticated;
+-- 文章:访客可读 + 可投稿;站长(登录后是 authenticated)可改可删
+grant select, insert on public.articles to anon, authenticated;
+grant update, delete on public.articles to authenticated;
+-- 点赞 / 收藏记录:前端要读「我点过没」;写入走函数
+grant select on public.article_likes     to anon, authenticated;
+grant select on public.article_favorites to anon, authenticated;
+
 -- ---------- 4) 权限(RLS) ----------
 alter table public.articles          enable row level security;
 alter table public.article_likes     enable row level security;
