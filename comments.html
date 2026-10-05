@@ -38,6 +38,11 @@
     <div class="cm-stats" id="cmStats"></div>
   </section>
 
+  <!-- ======= 数据库升级提示(未升级时自动出现,放在最前面以便一眼看到) ======= -->
+  <section class="cm-section" id="v2NoticeSection">
+    <div class="v2-banner" id="v2Banner"></div>
+  </section>
+
   <!-- ======= 声明 ======= -->
   <section class="cm-section" id="rules">
     <div class="notice-panel">
@@ -83,7 +88,6 @@
         <button class="btn-qq" data-provider="qq">🐧 QQ 登录</button>
         <span class="login-hint">(点按可查看当前配置状态;未配置时可直接用昵称留言)</span>
       </div>
-    <div class="v2-banner" id="v2Banner"></div>
       <div class="form-grid">
         <input id="cmName" type="text" maxlength="16" placeholder="你的昵称(2-16 字,请勿用真实姓名)" />
         <select id="cmType">

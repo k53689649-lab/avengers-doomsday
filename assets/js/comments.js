@@ -169,8 +169,14 @@
   function renderV2Banner() {
     var el = $("#v2Banner");
     if (!el) return;
+    var sec = $("#v2NoticeSection");
     /* 只在云端模式且确实探测到未升级时提示;本地模式不提示(否则会误导) */
-    if (v2Ready !== false || !cloudMode()) { el.classList.remove("show"); el.innerHTML = ""; return; }
+    if (v2Ready !== false || !cloudMode()) {
+      el.classList.remove("show"); el.innerHTML = "";
+      if (sec) sec.style.display = "none";
+      return;
+    }
+    if (sec) sec.style.display = "";
     el.classList.add("show");
     el.innerHTML =
       '<div class="v2b-head">⚠️ 楼中楼与点赞还没启用:数据库差一次升级(30 秒)</div>' +

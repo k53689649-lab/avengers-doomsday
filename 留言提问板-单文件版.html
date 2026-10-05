@@ -694,6 +694,11 @@ textarea { width: 100%; min-height: 120px; resize: vertical; line-height: 1.7; }
     <div class="cm-stats" id="cmStats"></div>
   </section>
 
+  <!-- ======= 数据库升级提示(未升级时自动出现,放在最前面以便一眼看到) ======= -->
+  <section class="cm-section" id="v2NoticeSection">
+    <div class="v2-banner" id="v2Banner"></div>
+  </section>
+
   <!-- ======= 声明 ======= -->
   <section class="cm-section" id="rules">
     <div class="notice-panel">
@@ -739,7 +744,6 @@ textarea { width: 100%; min-height: 120px; resize: vertical; line-height: 1.7; }
         <button class="btn-qq" data-provider="qq">🐧 QQ 登录</button>
         <span class="login-hint">(点按可查看当前配置状态;未配置时可直接用昵称留言)</span>
       </div>
-    <div class="v2-banner" id="v2Banner"></div>
       <div class="form-grid">
         <input id="cmName" type="text" maxlength="16" placeholder="你的昵称(2-16 字,请勿用真实姓名)" />
         <select id="cmType">
@@ -1288,8 +1292,14 @@ window.SITE_CONFIG = {
   function renderV2Banner() {
     var el = $("#v2Banner");
     if (!el) return;
+    var sec = $("#v2NoticeSection");
     /* 只在云端模式且确实探测到未升级时提示;本地模式不提示(否则会误导) */
-    if (v2Ready !== false || !cloudMode()) { el.classList.remove("show"); el.innerHTML = ""; return; }
+    if (v2Ready !== false || !cloudMode()) {
+      el.classList.remove("show"); el.innerHTML = "";
+      if (sec) sec.style.display = "none";
+      return;
+    }
+    if (sec) sec.style.display = "";
     el.classList.add("show");
     el.innerHTML =
       '<div class="v2b-head">⚠️ 楼中楼与点赞还没启用:数据库差一次升级(30 秒)</div>' +
