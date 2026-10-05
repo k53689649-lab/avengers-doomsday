@@ -1,13 +1,21 @@
 -- ============================================================================
 --  《复仇者联盟5:毁灭之日》观影指南 —— 留言板数据库结构(Supabase)
 --
---  使用方法:
---    1. 打开你的 Supabase 项目 → 左侧「SQL Editor」→「New query」
---    2. 把本文件全部内容粘贴进去
---    3. ⚠️ 运行前,把下面两处 'OWNER_UID' 全部替换成你自己的用户 UID
---       (UID 获取方式:Authentication → Users → 添加/查看用户 → 复制 "User UID")
---       例如:把 auth.uid() = 'OWNER_UID'::uuid 改成 auth.uid() = 'a1b2c3d4-....'::uuid
---    4. 点「Run」执行
+--  ✅ 使用方法(照做即可):
+--    1. 先建好站长账号:Authentication → Users → Add user → Create new user
+--       (填你自己的邮箱 + 强密码,勾选 Auto Confirm),建好后复制它的 "User UID"
+--
+--    2. 用记事本打开本文件 → 按 Ctrl+H 打开替换:
+--         查找:OWNER_UID
+--         替换为:(粘贴刚复制的 User UID,形如 a1b2c3d4-5e6f-...)
+--       点「全部替换」。文件里一共有 7 处(含开头注释里的 1 处,一起换掉也没关系)
+--
+--    3. 按 Ctrl+A 全选 → Ctrl+C 复制【整个文件】
+--
+--    4. 回到 Supabase → 左侧「SQL Editor」→「New query」→ Ctrl+V 粘贴 → 点「Run」
+--       看到 "Success. No rows returned" 就成功了(建表不返回数据,属正常现象)
+--
+--    5. 若报错,把红色报错信息截图发给站长(最常见原因:忘记替换 OWNER_UID)
 --
 --  这套策略实现的效果(公开留言板):
 --    · 任何人都能读全部留言(select)
