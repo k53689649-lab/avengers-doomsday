@@ -36,6 +36,8 @@ function inline(pageFile) {
     if (/^https?:/.test(src)) return m;
     return "<script>\n" + read(src) + "\n</script>";
   });
+  // 单文件版:去掉响应式封面(只保留竖版原图),避免内联两张封面导致体积翻倍
+  html = html.replace(/<source[^>]*srcset="assets\/img\/[^"]*"[^>]*>\s*/g, "");
   // 图片资源内联为 data URI(单文件版才能脱离文件夹独立运行)
   html = html.replace(/src="(assets\/img\/[^"]+)"/g, (m, src) => {
     let full = path.join(dir, src);
