@@ -2,13 +2,14 @@
    门户封面页 · 样式
    ========================================================= */
 :root {
-  --p-bg: #05070c;
-  --p-green: #1f7a5a;
-  --p-red: #e23636;
-  --p-gold: #f7c948;
+  --p-bg: #03110c;
+  --p-green: #2fd39a;        /* 主色:毁灭博士绿 */
+  --p-green-deep: #0e5b43;
+  --p-gold: #f7c948;         /* 点缀:漫威金 */
+  --p-red: #ff5a5a;          /* 仅用于冷色边缘光的对比 */
   --p-line: rgba(255, 255, 255, 0.10);
-  --p-text: #eef2f8;
-  --p-muted: #9aa5b8;
+  --p-text: #eef7f2;
+  --p-muted: #93a5a0;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,17 +26,17 @@ body.portal {
 }
 
 /* ---------- 封面背景 ---------- */
-.portal-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: radial-gradient(120% 90% at 50% 0%, #132033 0%, #070a11 55%, #04060a 100%); }
+.portal-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: radial-gradient(120% 90% at 50% 0%, #0c4432 0%, #062018 55%, #03100b 100%); }
 .portal-cover {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; object-position: center 30%;
-  opacity: 0.85; filter: saturate(1.05) contrast(1.05);
+  object-fit: cover; object-position: center 32%;
+  opacity: 0.92; filter: saturate(1.08) contrast(1.04);
 }
 .portal-vignette {
   position: absolute; inset: 0;
   background:
-    radial-gradient(80% 60% at 50% 45%, rgba(5, 7, 12, 0.15) 0%, rgba(5, 7, 12, 0.78) 62%, rgba(5, 7, 12, 0.96) 100%),
-    linear-gradient(180deg, rgba(5, 7, 12, 0.72) 0%, rgba(5, 7, 12, 0.35) 35%, rgba(5, 7, 12, 0.92) 100%);
+    radial-gradient(72% 54% at 50% 48%, rgba(3, 17, 12, 0.46) 0%, rgba(3, 17, 12, 0.74) 58%, rgba(3, 14, 10, 0.95) 100%),
+    linear-gradient(180deg, rgba(3, 17, 12, 0.62) 0%, rgba(3, 17, 12, 0.22) 28%, rgba(3, 14, 10, 0.58) 72%, rgba(3, 14, 10, 0.95) 100%);
 }
 .portal-noise {
   position: absolute; inset: 0; opacity: 0.35;
@@ -66,14 +67,14 @@ body.portal {
 }
 .portal-title-sub {
   display: block; margin-top: 6px;
-  background: linear-gradient(120deg, #ff4d4d 10%, var(--p-gold) 85%);
+  background: linear-gradient(120deg, #2fd39a 8%, #8dffd0 42%, var(--p-gold) 92%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 
 .portal-sub {
   margin-top: 20px; max-width: 780px;
-  font-size: clamp(13.5px, 1.6vw, 16px); color: #cbd5e4;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+  font-size: clamp(13.5px, 1.6vw, 16px); color: #c8e9dc;
+  text-shadow: 0 2px 18px rgba(0, 12, 8, 0.85);
 }
 
 /* ---------- 倒计时 ---------- */
@@ -83,10 +84,10 @@ body.portal {
 }
 .cd-item {
   min-width: 78px; padding: 10px 14px; border-radius: 12px;
-  background: rgba(10, 14, 22, 0.62); border: 1px solid var(--p-line);
+  background: rgba(5, 26, 20, 0.62); border: 1px solid rgba(47, 211, 154, 0.28);
   backdrop-filter: blur(6px);
 }
-.cd-item b { display: block; font-size: clamp(20px, 3vw, 28px); font-weight: 900; color: #fff; line-height: 1.1; }
+.cd-item b { display: block; font-size: clamp(20px, 3vw, 28px); font-weight: 900; color: #eafff5; line-height: 1.1; }
 .cd-item span { font-size: 11.5px; color: var(--p-muted); }
 .cd-label { font-size: 12.5px; color: var(--p-muted); padding-bottom: 8px; letter-spacing: 1px; }
 
@@ -100,35 +101,35 @@ body.portal {
   position: relative; overflow: hidden; text-decoration: none; color: var(--p-text);
   display: flex; flex-direction: column; align-items: flex-start; text-align: left;
   padding: 30px 28px 26px; border-radius: 18px;
-  background: linear-gradient(160deg, rgba(20, 26, 38, 0.92), rgba(11, 15, 22, 0.92));
-  border: 1px solid var(--p-line);
+  background: linear-gradient(160deg, rgba(9, 38, 29, 0.92), rgba(4, 18, 13, 0.94));
+  border: 1px solid rgba(47, 211, 154, 0.22);
   transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
   backdrop-filter: blur(8px);
 }
 .choice::after {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
-  background: linear-gradient(90deg, var(--p-red), var(--p-gold)); opacity: 0.9;
+  background: linear-gradient(90deg, var(--p-green), var(--p-gold)); opacity: 0.95;
 }
-.choice-board::after { background: linear-gradient(90deg, #4da3ff, #43d17c); }
-.choice:hover { transform: translateY(-6px); border-color: rgba(226, 54, 54, 0.55); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55); }
-.choice-board:hover { border-color: rgba(77, 163, 255, 0.55); }
+.choice-board::after { background: linear-gradient(90deg, #39d5d0, #2fd39a); }
+.choice:hover { transform: translateY(-6px); border-color: rgba(47, 211, 154, 0.62); box-shadow: 0 20px 50px rgba(2, 25, 18, 0.66); }
+.choice-board:hover { border-color: rgba(57, 213, 208, 0.62); }
 
 .choice-rank {
   position: absolute; right: 22px; top: 18px;
   font-family: "Segoe UI", sans-serif; font-size: 40px; font-weight: 900;
-  color: rgba(255, 255, 255, 0.07); line-height: 1;
+  color: rgba(141, 255, 208, 0.10); line-height: 1;
 }
 .choice-icon { font-size: 30px; margin-bottom: 10px; }
 .choice-title { font-size: clamp(21px, 2.6vw, 27px); font-weight: 900; letter-spacing: 1px; }
 .choice-desc { margin-top: 10px; font-size: 13.5px; color: var(--p-muted); line-height: 1.85; }
 .choice-go {
-  margin-top: 18px; font-size: 14px; font-weight: 800; color: var(--p-gold);
-  border-bottom: 1px solid rgba(247, 201, 72, 0.4); padding-bottom: 3px;
+  margin-top: 18px; font-size: 14px; font-weight: 800; color: #8dffd0;
+  border-bottom: 1px solid rgba(141, 255, 208, 0.45); padding-bottom: 3px;
 }
-.choice-board .choice-go { color: #8ec4ff; border-bottom-color: rgba(142, 196, 255, 0.4); }
+.choice-board .choice-go { color: #7ff0ff; border-bottom-color: rgba(127, 240, 255, 0.45); }
 
 .portal-foot {
-  margin-top: 46px; font-size: 11.5px; color: #7f8aa0; line-height: 1.9;
+  margin-top: 46px; font-size: 11.5px; color: #7f9a90; line-height: 1.9;
   max-width: 760px;
 }
 

@@ -1,130 +1,240 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="毁灭之日原创概念封面">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="毁灭之日原创概念封面(绿色基调 · 标识版)">
   <defs>
-    <radialGradient id="sky" cx="50%" cy="18%" r="85%">
-      <stop offset="0%" stop-color="#1b2c44"/>
-      <stop offset="45%" stop-color="#0b1220"/>
-      <stop offset="100%" stop-color="#04060b"/>
+    <linearGradient id="bgBase" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0%" stop-color="#0d4c38"/>
+      <stop offset="38%" stop-color="#072b20"/>
+      <stop offset="78%" stop-color="#041710"/>
+      <stop offset="100%" stop-color="#020d09"/>
+    </linearGradient>
+    <radialGradient id="bgGlow" cx="50%" cy="32%" r="72%">
+      <stop offset="0%" stop-color="#3fe0a6" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#1a8f66" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#020d09" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#4fe0b0" stop-opacity="0.55"/>
-      <stop offset="55%" stop-color="#1f7a5a" stop-opacity="0.20"/>
+    <radialGradient id="maskGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7dffcb" stop-opacity="0.30"/>
+      <stop offset="62%" stop-color="#1f7a5a" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#1f7a5a" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="cloak" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1c6b51"/>
-      <stop offset="55%" stop-color="#0f4636"/>
-      <stop offset="100%" stop-color="#071c17"/>
+
+    <!-- 金属绿(面具) -->
+    <linearGradient id="metalGreen" x1="0.06" y1="0" x2="0.94" y2="1">
+      <stop offset="0%" stop-color="#e6fff4"/>
+      <stop offset="12%" stop-color="#9fe4c4"/>
+      <stop offset="30%" stop-color="#439c77"/>
+      <stop offset="46%" stop-color="#17503a"/>
+      <stop offset="58%" stop-color="#3f9a75"/>
+      <stop offset="76%" stop-color="#12503a"/>
+      <stop offset="100%" stop-color="#062018"/>
     </linearGradient>
-    <linearGradient id="hoodIn" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0d3a2d"/>
-      <stop offset="100%" stop-color="#05130f"/>
+    <linearGradient id="faceSheen" x1="0" y1="0" x2="1" y2="0.6">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.30"/>
+      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.06"/>
+      <stop offset="60%" stop-color="#000000" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.26"/>
     </linearGradient>
-    <linearGradient id="metal" x1="0.15" y1="0" x2="0.85" y2="1">
-      <stop offset="0%" stop-color="#e8edf2"/>
-      <stop offset="28%" stop-color="#aab4c0"/>
-      <stop offset="52%" stop-color="#78838f"/>
-      <stop offset="74%" stop-color="#b9c3ce"/>
-      <stop offset="100%" stop-color="#5d6672"/>
+    <linearGradient id="hoodGreen" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#12553e"/>
+      <stop offset="50%" stop-color="#0a3325"/>
+      <stop offset="100%" stop-color="#04140e"/>
     </linearGradient>
-    <linearGradient id="metalDark" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#4a525c"/>
-      <stop offset="100%" stop-color="#23282e"/>
+    <linearGradient id="socket" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#03130d"/>
+      <stop offset="100%" stop-color="#082a1e"/>
     </linearGradient>
-    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="26"/>
-    </filter>
-    <filter id="soft2" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="6"/>
-    </filter>
+    <linearGradient id="cloakGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f6547"/>
+      <stop offset="50%" stop-color="#093a2a"/>
+      <stop offset="100%" stop-color="#03120c"/>
+    </linearGradient>
+
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0.25">
+      <stop offset="0%" stop-color="#a37a19"/>
+      <stop offset="20%" stop-color="#f7c948"/>
+      <stop offset="44%" stop-color="#fff6d2"/>
+      <stop offset="64%" stop-color="#f0c236"/>
+      <stop offset="84%" stop-color="#c99a1f"/>
+      <stop offset="100%" stop-color="#8d6a15"/>
+    </linearGradient>
+    <linearGradient id="goldFade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f7c948" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#f7c948" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#f7c948" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="soft" x="-45%" y="-45%" width="190%" height="190%"><feGaussianBlur stdDeviation="34"/></filter>
+    <filter id="soft2" x="-45%" y="-45%" width="190%" height="190%"><feGaussianBlur stdDeviation="7"/></filter>
+    <filter id="eyeglow" x="-120%" y="-220%" width="340%" height="540%"><feGaussianBlur stdDeviation="9"/></filter>
+
+    <pattern id="hex" width="44" height="38" patternUnits="userSpaceOnUse">
+      <path d="M22 0 L44 11 L44 27 L22 38 L0 27 L0 11 Z" fill="none" stroke="#5ff0b8" stroke-opacity="0.085" stroke-width="1"/>
+    </pattern>
+
+    <linearGradient id="bottomFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#02100b" stop-opacity="0"/>
+      <stop offset="60%" stop-color="#02100b" stop-opacity="0.68"/>
+      <stop offset="100%" stop-color="#010b07" stop-opacity="0.95"/>
+    </linearGradient>
+
+    <style>
+      .wm { font-family: Impact, 'Haettenschweiler', 'Arial Narrow', 'Franklin Gothic Heavy', 'Microsoft YaHei', sans-serif; font-weight: 700; }
+      .cn { font-family: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', sans-serif; }
+    </style>
   </defs>
 
-  <!-- 背景 -->
-  <rect width="1600" height="900" fill="url(#sky)"/>
+  <!-- ================= 背景 ================= -->
+  <rect width="1600" height="900" fill="url(#bgBase)"/>
+  <rect width="1600" height="900" fill="url(#bgGlow)"/>
+  <rect width="1600" height="900" fill="url(#hex)"/>
 
-  <!-- 背后巨大字母 D -->
-  <text x="800" y="700" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
-        font-size="880" font-weight="700" fill="#ffffff" opacity="0.028">D</text>
+  <!-- 透视地板网格 -->
+  <g opacity="0.20" stroke="#5ff0b8" stroke-width="1">
+    <path d="M-100 900 L430 700"/><path d="M180 900 L560 700"/><path d="M460 900 L690 700"/>
+    <path d="M740 900 L820 700"/><path d="M1020 900 L950 700"/><path d="M1300 900 L1080 700"/>
+    <path d="M1580 900 L1210 700"/><path d="M1700 900 L1340 700"/>
+    <path d="M300 806 L1300 806" stroke-opacity="0.45"/>
+    <path d="M420 864 L1180 864" stroke-opacity="0.35"/>
+  </g>
+
+  <!-- 弧形刻线 -->
+  <g opacity="0.16" stroke="#7ff0c8" fill="none">
+    <circle cx="800" cy="500" r="300" stroke-width="1.2"/>
+    <circle cx="800" cy="500" r="410" stroke-width="1" stroke-opacity="0.6"/>
+    <circle cx="800" cy="500" r="530" stroke-width="1" stroke-opacity="0.35"/>
+  </g>
 
   <!-- 光柱 -->
-  <g opacity="0.30" filter="url(#soft)">
-    <rect x="700" y="-120" width="90" height="900" fill="#6ff0c8" opacity="0.10"/>
-    <rect x="880" y="-120" width="46" height="900" fill="#6ff0c8" opacity="0.14"/>
-    <rect x="1010" y="-120" width="120" height="900" fill="#6ff0c8" opacity="0.08"/>
+  <g opacity="0.28" filter="url(#soft)">
+    <rect x="706" y="-140" width="76" height="1100" fill="#6ff0c8" opacity="0.12"/>
+    <rect x="872" y="-140" width="40" height="1100" fill="#6ff0c8" opacity="0.15"/>
+    <rect x="996" y="-140" width="104" height="1100" fill="#6ff0c8" opacity="0.08"/>
   </g>
 
-  <!-- 面具后光晕 -->
-  <ellipse cx="1000" cy="440" rx="430" ry="360" fill="url(#halo)"/>
-
-  <!-- 披风 / 肩部 -->
-  <path d="M540 900 C560 690 700 596 1000 590 C1300 596 1440 690 1460 900 Z" fill="url(#cloak)"/>
-  <path d="M540 900 C556 706 690 618 1000 612 C1310 618 1444 706 1460 900"
-        fill="none" stroke="#2fa27a" stroke-opacity="0.35" stroke-width="3"/>
-
-  <!-- 兜帽 -->
-  <ellipse cx="1000" cy="400" rx="255" ry="305" fill="url(#hoodIn)"/>
-  <path d="M745 400 C745 215 860 110 1000 110 C1140 110 1255 215 1255 400 C1255 585 1140 700 1000 700 C860 700 745 585 745 400 Z"
-        fill="none" stroke="#2b8f6c" stroke-opacity="0.45" stroke-width="4"/>
-
-  <!-- 面具主体 -->
-  <path d="M1000 258 C1128 258 1180 336 1174 434 C1168 552 1104 656 1000 682 C896 656 832 552 826 434 C820 336 872 258 1000 258 Z"
-        fill="url(#metal)" stroke="#eef3f7" stroke-opacity="0.35" stroke-width="2"/>
-  <path d="M1000 258 C1128 258 1180 336 1174 434 C1168 552 1104 656 1000 682"
-        fill="none" stroke="#2a3038" stroke-opacity="0.55" stroke-width="3"/>
-
-  <!-- 面具中央棱线 -->
-  <path d="M1000 262 L1000 676" stroke="#5f6a76" stroke-opacity="0.55" stroke-width="2"/>
-  <path d="M960 268 C948 400 946 540 968 672" fill="none" stroke="#ffffff" stroke-opacity="0.10" stroke-width="8" filter="url(#soft2)"/>
-
-  <!-- 眼窝 -->
-  <path d="M872 402 C922 380 968 392 982 420 C962 442 912 450 872 434 Z" fill="url(#metalDark)"/>
-  <path d="M1128 402 C1078 380 1032 392 1018 420 C1038 442 1088 450 1128 434 Z" fill="url(#metalDark)"/>
-  <g filter="url(#soft2)">
-    <path d="M886 410 C918 398 950 404 962 420 C948 432 914 436 886 426 Z" fill="#7ff0ff" opacity="0.85"/>
-    <path d="M1114 410 C1082 398 1050 404 1038 420 C1052 432 1086 436 1114 426 Z" fill="#7ff0ff" opacity="0.85"/>
+  <!-- 哨兵剪影(远景) -->
+  <g fill="#032417" opacity="0.9" filter="url(#soft2)">
+    <g transform="translate(96,588)"><path d="M0 0 h118 l14 34 v148 h-146 V34 Z"/><path d="M22 44 h74 v34 h-74 Z" fill="#0a4c37"/><path d="M-14 182 h146 v26 h-146 Z"/></g>
+    <g transform="translate(1330,600) scale(1.1)"><path d="M0 0 h118 l14 34 v148 h-146 V34 Z"/><path d="M22 44 h74 v34 h-74 Z" fill="#0a4c37"/><path d="M-14 182 h146 v26 h-146 Z"/></g>
+    <g transform="translate(1120,650) scale(0.78)"><path d="M0 0 h118 l14 34 v148 h-146 V34 Z"/><path d="M22 44 h74 v34 h-74 Z" fill="#0a4c37"/><path d="M-14 182 h146 v26 h-146 Z"/></g>
+    <g transform="translate(300,668) scale(0.7)"><path d="M0 0 h118 l14 34 v148 h-146 V34 Z"/><path d="M22 44 h74 v34 h-74 Z" fill="#0a4c37"/><path d="M-14 182 h146 v26 h-146 Z"/></g>
   </g>
 
-  <!-- 呼吸格栅 -->
-  <g fill="#39414a" opacity="0.9">
-    <rect x="944" y="546" width="12" height="54" rx="4"/>
-    <rect x="966" y="546" width="12" height="60" rx="4"/>
-    <rect x="988" y="546" width="12" height="62" rx="4"/>
-    <rect x="1010" y="546" width="12" height="60" rx="4"/>
-    <rect x="1032" y="546" width="12" height="54" rx="4"/>
-  </g>
+  <!-- ================= 毁灭博士(绿色金属 · 金色内缘) ================= -->
+  <g transform="translate(800,566) scale(0.80)">
+    <ellipse cx="0" cy="-40" rx="430" ry="340" fill="url(#maskGlow)"/>
 
-  <!-- 铆钉 -->
-  <g fill="#dfe6ee" opacity="0.75">
-    <circle cx="1000" cy="286" r="6"/>
-    <circle cx="936" cy="300" r="5"/><circle cx="1064" cy="300" r="5"/>
-    <circle cx="880" cy="352" r="5"/><circle cx="1120" cy="352" r="5"/>
-    <circle cx="852" cy="440" r="5"/><circle cx="1148" cy="440" r="5"/>
-    <circle cx="884" cy="540" r="5"/><circle cx="1116" cy="540" r="5"/>
-    <circle cx="940" cy="628" r="5"/><circle cx="1060" cy="628" r="5"/>
-  </g>
+    <!-- 披风 -->
+    <path d="M-480 430 C-452 214 -296 116 0 110 C296 116 452 214 480 430 Z" fill="url(#cloakGreen)"/>
+    <path d="M-480 430 C-456 232 -304 136 0 130 C304 136 456 232 480 430"
+          fill="none" stroke="#39c191" stroke-opacity="0.30" stroke-width="3"/>
+    <path d="M0 144 C-98 246 -136 344 -148 430" fill="none" stroke="#08251b" stroke-opacity="0.75" stroke-width="4"/>
+    <path d="M0 144 C98 246 136 344 148 430" fill="none" stroke="#08251b" stroke-opacity="0.75" stroke-width="4"/>
 
-  <!-- 裂纹与损伤 -->
-  <g stroke="#3a4149" stroke-opacity="0.55" stroke-width="2" fill="none">
-    <path d="M916 320 L938 356 L924 380"/>
-    <path d="M1084 316 L1062 350 L1078 382"/>
-    <path d="M1000 600 L980 640 L1000 668"/>
-  </g>
+    <!-- 兜帽 -->
+    <ellipse cx="0" cy="-46" rx="208" ry="256" fill="url(#hoodGreen)"/>
+    <path d="M-208 -46 C-208 -210 -110 -304 0 -304 C110 -304 208 -210 208 -46 C208 118 110 214 0 214 C-110 214 -208 118 -208 -46 Z"
+          fill="none" stroke="#2fa87c" stroke-opacity="0.5" stroke-width="4"/>
+    <path d="M-189 -46 C-189 -194 -102 -282 0 -282 C102 -282 189 -194 189 -46 C189 104 102 194 0 194 C-102 194 -189 104 -189 -46 Z"
+          fill="none" stroke="url(#gold)" stroke-opacity="0.5" stroke-width="2.5"/>
 
-  <!-- 冷色轮廓光 -->
-  <path d="M1000 258 C1128 258 1180 336 1174 434" fill="none" stroke="#8ff2d0" stroke-opacity="0.35" stroke-width="5" filter="url(#soft2)"/>
-  <path d="M826 434 C820 336 872 258 1000 258" fill="none" stroke="#ff6b6b" stroke-opacity="0.28" stroke-width="5" filter="url(#soft2)"/>
+    <!-- 面具主体 -->
+    <path d="M0 -168 C110 -168 154 -98 148 -10 C142 94 88 184 0 206 C-88 184 -142 94 -148 -10 C-154 -98 -110 -168 0 -168 Z"
+          fill="url(#metalGreen)"/>
+    <path d="M0 -168 C110 -168 154 -98 148 -10 C142 94 88 184 0 206 C-88 184 -142 94 -148 -10 C-154 -98 -110 -168 0 -168 Z"
+          fill="url(#faceSheen)"/>
+    <path d="M0 -168 C110 -168 154 -98 148 -10 C142 94 88 184 0 206 C-88 184 -142 94 -148 -10 C-154 -98 -110 -168 0 -168 Z"
+          fill="none" stroke="#eafff5" stroke-opacity="0.36" stroke-width="2"/>
+    <path d="M0 -168 C110 -168 154 -98 148 -10 C142 94 88 184 0 206"
+          fill="none" stroke="#062018" stroke-opacity="0.6" stroke-width="3"/>
 
-  <!-- 火星粒子 -->
-  <g fill="#ffb545" opacity="0.75">
-    <circle cx="420" cy="700" r="3"/><circle cx="512" cy="612" r="2"/><circle cx="332" cy="520" r="2.5"/>
-    <circle cx="1190" cy="640" r="3"/><circle cx="1290" cy="540" r="2"/><circle cx="1360" cy="700" r="2.5"/>
-    <circle cx="640" cy="380" r="2"/><circle cx="1420" cy="360" r="2"/>
-  </g>
-  <g fill="#7ff0ff" opacity="0.55">
-    <circle cx="700" cy="250" r="2"/><circle cx="1240" cy="230" r="2.5"/><circle cx="1150" cy="160" r="2"/>
-    <circle cx="820" cy="170" r="1.8"/>
+    <!-- 眉骨阴影 + 中缝 -->
+    <path d="M-140 -60 C-80 -96 80 -96 140 -60 C80 -40 -80 -40 -140 -60 Z" fill="#0b3828" opacity="0.45"/>
+    <path d="M0 -164 L0 202" stroke="#0d3a2a" stroke-opacity="0.45" stroke-width="2"/>
+    <path d="M-40 -158 C-52 -34 -54 88 -34 196" fill="none" stroke="#ffffff" stroke-opacity="0.13" stroke-width="10" filter="url(#soft2)"/>
+
+    <!-- 眼窝 -->
+    <path d="M-118 -22 C-72 -46 -28 -34 -14 -4 C-34 18 -82 26 -118 10 Z" fill="url(#socket)"/>
+    <path d="M118 -22 C72 -46 28 -34 14 -4 C34 18 82 26 118 10 Z" fill="url(#socket)"/>
+
+    <!-- 眼睛发光(先模糊光晕,再清晰核心) -->
+    <g filter="url(#eyeglow)" opacity="0.85">
+      <path d="M-104 -14 C-72 -28 -44 -20 -32 -4 C-48 10 -78 14 -104 4 Z" fill="#8dffd0"/>
+      <path d="M104 -14 C72 -28 44 -20 32 -4 C48 10 78 14 104 4 Z" fill="#8dffd0"/>
+    </g>
+    <path d="M-104 -14 C-72 -28 -44 -20 -32 -4 C-48 10 -78 14 -104 4 Z" fill="#e9fff8"/>
+    <path d="M104 -14 C72 -28 44 -20 32 -4 C48 10 78 14 104 4 Z" fill="#e9fff8"/>
+    <g fill="#ffffff" opacity="0.9">
+      <ellipse cx="-76" cy="-12" rx="16" ry="6"/>
+      <ellipse cx="76" cy="-12" rx="16" ry="6"/>
+    </g>
+
+    <!-- 呼吸格栅 -->
+    <g fill="#0a3a2b">
+      <rect x="-52" y="106" width="11" height="48" rx="4"/>
+      <rect x="-31" y="106" width="11" height="54" rx="4"/>
+      <rect x="-10" y="106" width="11" height="56" rx="4"/>
+      <rect x="11" y="106" width="11" height="54" rx="4"/>
+      <rect x="32" y="106" width="11" height="48" rx="4"/>
+    </g>
+
+    <!-- 铆钉 -->
+    <g fill="#dcfff0" opacity="0.6">
+      <circle cx="0" cy="-142" r="5"/>
+      <circle cx="-58" cy="-130" r="4"/><circle cx="58" cy="-130" r="4"/>
+      <circle cx="-106" cy="-78" r="4"/><circle cx="106" cy="-78" r="4"/>
+      <circle cx="-128" cy="4" r="4"/><circle cx="128" cy="4" r="4"/>
+      <circle cx="-100" cy="96" r="4"/><circle cx="100" cy="96" r="4"/>
+      <circle cx="-48" cy="170" r="4"/><circle cx="48" cy="170" r="4"/>
+    </g>
+
+    <!-- 划痕 -->
+    <g stroke="#0a2e22" stroke-opacity="0.5" stroke-width="2" fill="none">
+      <path d="M-74 -110 L-54 -78 L-68 -52"/>
+      <path d="M78 -114 L58 -82 L74 -48"/>
+      <path d="M0 150 L-16 182 L0 202"/>
+    </g>
+
+    <!-- 边缘光 -->
+    <path d="M0 -168 C-110 -168 -154 -98 -148 -10" fill="none" stroke="#ff6b6b" stroke-opacity="0.26" stroke-width="6" filter="url(#soft2)"/>
+    <path d="M0 -168 C110 -168 154 -98 148 -10" fill="none" stroke="#9dffd8" stroke-opacity="0.42" stroke-width="6" filter="url(#soft2)"/>
   </g>
 
   <!-- 底部渐隐 -->
-  <rect x="0" y="620" width="1600" height="280" fill="url(#sky)" opacity="0.42"/>
-  <rect x="0" y="760" width="1600" height="140" fill="#04060b" opacity="0.75"/>
+  <rect x="0" y="540" width="1600" height="360" fill="url(#bottomFade)"/>
+
+  <!-- ================= 标识锁定(置于最上层,保证可读) ================= -->
+  <g>
+    <g transform="translate(800,68)">
+      <path d="M0 -26 L22 -13 L22 13 L0 26 L-22 13 L-22 -13 Z" fill="none" stroke="url(#gold)" stroke-width="2.5"/>
+      <path d="M0 -11 L9 -5.5 L9 5.5 L0 11 L-9 5.5 L-9 -5.5 Z" fill="url(#gold)" opacity="0.6"/>
+    </g>
+
+    <!-- AVENGERS -->
+    <text class="wm" x="800" y="266" text-anchor="middle" font-size="172" letter-spacing="22"
+          fill="url(#gold)" stroke="#04170f" stroke-width="9" paint-order="stroke" stroke-linejoin="round">AVENGERS</text>
+    <text class="wm" x="800" y="266" text-anchor="middle" font-size="172" letter-spacing="22" fill="url(#gold)">AVENGERS</text>
+    <path d="M452 306 H1148" stroke="url(#goldFade)" stroke-width="2.5"/>
+
+    <!-- DOOMSDAY(压在人物之上,带描边保证可读) -->
+    <text class="wm" x="800" y="378" text-anchor="middle" font-size="58" letter-spacing="30"
+          fill="#d8ffef" stroke="#04170f" stroke-width="7" paint-order="stroke" stroke-linejoin="round">DOOMSDAY</text>
+    <text class="wm" x="800" y="378" text-anchor="middle" font-size="58" letter-spacing="30" fill="#d8ffef" opacity="0.95">DOOMSDAY</text>
+  </g>
+
+  <!-- ================= 底部信息 ================= -->
+  <g>
+    <path d="M430 790 H1170" stroke="url(#goldFade)" stroke-width="2"/>
+    <text class="cn" x="800" y="762" text-anchor="middle" font-size="17" letter-spacing="10" fill="#9ff0cd" opacity="0.85">北美上映 · 复仇者集结</text>
+    <text class="wm" x="800" y="854" text-anchor="middle" font-size="44" letter-spacing="16" fill="url(#gold)" opacity="0.95">2026.12.18</text>
+  </g>
+
+  <!-- 火星与尘埃 -->
+  <g fill="#ffcf63" opacity="0.8">
+    <circle cx="392" cy="700" r="3"/><circle cx="486" cy="620" r="2"/><circle cx="288" cy="524" r="2.6"/>
+    <circle cx="1218" cy="640" r="3"/><circle cx="1322" cy="540" r="2"/><circle cx="1394" cy="712" r="2.6"/>
+    <circle cx="596" cy="368" r="2"/><circle cx="1428" cy="352" r="2"/>
+  </g>
+  <g fill="#8dffd0" opacity="0.55">
+    <circle cx="676" cy="238" r="2"/><circle cx="1248" cy="222" r="2.6"/><circle cx="1152" cy="156" r="2"/>
+    <circle cx="812" cy="170" r="1.8"/><circle cx="470" cy="300" r="2"/><circle cx="1120" cy="286" r="1.8"/>
+  </g>
 </svg>
