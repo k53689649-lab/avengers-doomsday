@@ -2,8 +2,8 @@
 
 > 一个纯静态、零依赖的中文漫威观影指南网站:把漫威 40 多年、跨 6 家片方的全部影视作品一次理清,并逐部告诉你**它讲了什么**、以及**它跟《复仇者联盟5:毁灭之日》有什么关系**;再配上预告确认登场与预测登场角色的完整人物介绍,以及一个带声明与管理的留言提问板。
 
-**🌐 在线访问(公网,任何人可打开):** <https://k53689649-lab.github.io/avengers-doomsday/>
-**📦 源码仓库:** <https://github.com/k53689649-lab/avengers-doomsday>
+**🌐 在线访问(公网,任何人可打开):** <https://k53689649-lab.github.io/kumiko-doomsday/>
+**📦 源码仓库:** <https://github.com/k53689649-lab/kumiko-doomsday>
 
 > 站点结构:首页 `index.html` 是**封面门户页**,提供「进入前瞻」与「留言提问板」两个入口;
 > 前瞻主站是 `guide.html`,留言板是 `comments.html`。

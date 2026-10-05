@@ -8,7 +8,7 @@
 
    可选环境变量:
      GH_OWNER   默认 k53689649-lab
-     GH_REPO    默认 avengers-doomsday
+     GH_REPO    默认 kumiko-doomsday
      GH_PRIVATE 默认 false(仅仓库不存在时用于创建)
      GH_PAGES   默认 false;设为 true 会在推送后尝试开启 GitHub Pages
 
@@ -20,7 +20,7 @@ import path from "node:path";
 
 const TOKEN = process.env.GH_TOKEN;
 const OWNER = process.env.GH_OWNER || "k53689649-lab";
-const REPO = process.env.GH_REPO || "avengers-doomsday";
+const REPO = process.env.GH_REPO || "kumiko-doomsday";
 const PRIVATE = String(process.env.GH_PRIVATE || "false") === "true";
 const ENABLE_PAGES = String(process.env.GH_PAGES || "false") === "true";
 const ROOT = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1"));
