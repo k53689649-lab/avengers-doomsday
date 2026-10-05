@@ -2,9 +2,8 @@
 
 > 一个纯静态、零依赖的中文漫威观影指南网站:把漫威 40 多年、跨 6 家片方的全部影视作品一次理清,并逐部告诉你**它讲了什么**、以及**它跟《复仇者联盟5:毁灭之日》有什么关系**;再配上预告确认登场与预测登场角色的完整人物介绍,以及一个带声明与管理的留言提问板。
 
-**🌐 在线访问(公网,任何人可打开):** <https://k53689649-lab.github.io/marvel-doomsday-guide/>
-**📦 源码仓库:** <https://github.com/k53689649-lab/marvel-doomsday-guide>
-**🔁 备用地址(Netlify):** <https://elegant-custard-c65320.netlify.app/>
+**🌐 在线访问(公网,任何人可打开):** <https://k53689649-lab.github.io/avengers-doomsday/>
+**📦 源码仓库:** <https://github.com/k53689649-lab/avengers-doomsday>
 
 > 站点结构:首页 `index.html` 是**封面门户页**,提供「进入前瞻」与「留言提问板」两个入口;
 > 前瞻主站是 `guide.html`,留言板是 `comments.html`。
@@ -13,12 +12,13 @@
 
 ## 🚪 门户首页
 
-![封面预览](assets/img/cover-preview.png)
+![封面](assets/img/cover.jpg)
 
-- 全屏封面:**绿色打底 + 金色 AVENGERS 标识**的官方海报风格(原创 SVG 概念插画,不涉及版权素材)。想换成真实海报,把图片保存为 `assets/img/cover.jpg` 即会自动优先使用
+- 全屏海报式布局:封面图作为主体(图片自带标题文字),下方接**上映倒计时**与两个入口
 - **北美上映倒计时**(2026-12-18,自动计算天/时/分/秒)
 - 两个大入口:**进入前瞻** / **留言提问板**
-- 移动端自适应
+- 封面可换:替换 `assets/img/cover.jpg` 即可(建议 1536×1024 以上);删除后会回退到原创 SVG 插画 `assets/img/cover.svg`
+- 移动端自适应(小屏时封面自动缩放完整显示,不会裁掉标题)
 
 ---
 

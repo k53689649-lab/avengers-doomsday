@@ -4,33 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>复仇者联盟5:毁灭之日 · 观影指南与影迷留言板</title>
-  <meta name="description" content="《复仇者联盟5:毁灭之日》观影门户:进入前瞻补课(103 部漫威影视作品 + 角色图鉴 + 彩蛋速报),或在留言提问板与其他影迷交流。" />
+  <meta name="description" content="《复仇者联盟5:毁灭之日》观影门户:进入前瞻补课(103 部漫威影视作品 + 角色图鉴 + 彩蛋速报),或在留言提问板与其他影迷交流。2026年12月18日北美上映。" />
   <meta property="og:title" content="复仇者联盟5:毁灭之日 · 观影指南与影迷留言板" />
   <meta property="og:description" content="看复联五之前你需要了解什么 —— 进入前瞻,或去留言板提问。" />
+  <meta property="og:image" content="assets/img/cover.jpg" />
   <meta property="og:type" content="website" />
   <link rel="stylesheet" href="assets/css/portal.css" />
 </head>
 <body class="portal">
 
-  <!-- 封面背景层:优先加载 assets/img/cover.jpg(可自行替换为官方海报),缺失时自动回退到 cover.svg -->
+  <!-- 环境光层:封面模糊放大的同款背景,营造氛围 -->
   <div class="portal-bg" aria-hidden="true">
-    <img id="coverImg" class="portal-cover" src="assets/img/cover.jpg" alt="" />
+    <img id="ambientImg" class="portal-ambient" src="assets/img/cover.jpg" alt="" />
     <div class="portal-vignette"></div>
-    <div class="portal-noise"></div>
   </div>
 
   <main class="portal-main">
-    <p class="portal-kicker">AVENGERS: DOOMSDAY · 2026.12.18</p>
 
-    <h1 class="portal-title">
-      复仇者联盟5
-      <span class="portal-title-sub">毁灭之日</span>
-    </h1>
+    <!-- 海报主体(图片自带标题,因此 HTML 标题仅保留给屏幕阅读器与搜索引擎) -->
+    <h1 class="sr-only">复仇者联盟5:毁灭之日 —— 观影指南与影迷留言板</h1>
 
-    <p class="portal-sub">
-      看之前,你需要了解的一切 —— 全部漫威影视作品的剧情与关联、预告确认与预测登场角色图鉴,<br class="only-desktop" />
-      以及一个属于影迷自己的提问交流区。
-    </p>
+    <figure class="portal-hero">
+      <img id="coverImg" class="hero-art" src="assets/img/cover.jpg"
+           alt="《复仇者联盟5:毁灭之日》——看复联五之前,你要了解什么" />
+    </figure>
+
+    <p class="portal-sub">看之前,你需要了解的一切 —— 全部漫威影视作品的剧情与关联、角色图鉴,以及影迷交流区。</p>
 
     <div class="countdown" id="countdown" aria-live="polite"></div>
 
@@ -65,18 +64,20 @@
   </main>
 
   <script>
-    /* 封面图回退:cover.jpg → cover.svg → 纯 CSS 渐变 */
+    /* 封面回退:cover.jpg → cover.svg */
     (function () {
       var img = document.getElementById("coverImg");
+      var amb = document.getElementById("ambientImg");
       if (!img) return;
       img.addEventListener("error", function () {
         if (img.dataset.fallback === "svg") { img.style.display = "none"; return; }
         img.dataset.fallback = "svg";
         img.src = "assets/img/cover.svg";
+        if (amb) amb.src = "assets/img/cover.svg";
       });
     })();
 
-    /* 上映倒计时(北美 2026-12-18;若已过则显示为「已上映」) */
+    /* 上映倒计时(北美 2026-12-18) */
     (function () {
       var target = new Date("2026-12-18T00:00:00");
       var box = document.getElementById("countdown");

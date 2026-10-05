@@ -527,7 +527,7 @@ textarea { width: 100%; min-height: 120px; resize: vertical; line-height: 1.7; }
   <div class="admin-modal" id="adminModal">
     <div class="admin-box">
       <h3>站长管理面板 <span class="admin-badge" id="adminState"></span></h3>
-      <p class="admin-desc">输入管理密码后可发布公告、置顶/回复/删除留言、导出备份。（默认密码写在 <code>assets/js/site-config.js</code>,请务必修改）</p>
+      <p class="admin-desc">输入管理密码后可发布公告、置顶/回复/删除留言、导出备份。</p>
 
       <div id="adminLogin">
         <label>管理密码</label>
@@ -573,10 +573,10 @@ window.SITE_CONFIG = {
   /* 站点名(留言板标题会用到) */
   siteName: "毁灭之日 · 观影指南",
 
-  /* 管理密码:点开留言板的「管理」按钮要用它解锁
-     ⚠️ 请务必改成你自己的密码!
-     ⚠️ 说明:这是纯前端密码保护,只能挡住普通访客,不能防技术型攻击。
-        真正的安全方案请用 Waline 云端的后台(见 README 部署指南)。 */
+  /* 管理密码:点开留言板的「站长管理」按钮要用它解锁
+     ⚠️ 请务必改成你自己的密码(建议 12 位以上、含大小写与符号)
+     ⚠️ 注意:这是纯前端密码,而且本文件会被浏览器下载 —— 懂技术的人查看源码就能看到,
+        只能挡住普通访客。要真正安全,请改用 Waline 云端的服务端后台管理(见 README)。 */
   adminPassword: "doomsday2026",
 
   /* Waline 云留言板地址(可选,强烈推荐用于正式分享)
