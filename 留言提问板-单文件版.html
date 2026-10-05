@@ -168,32 +168,85 @@ img { max-width: 100%; display: block; }
 .chip:hover { color: #fff; }
 .chip.active { background: var(--accent-2); color: #201500; border-color: var(--accent-2); font-weight: 700; }
 
-/* ---------- 影片卡片 ---------- */
-.films-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; }
-.film-card {
-  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: 0.2s;
+/* ---------- 作品海报墙 ---------- */
+.films-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); gap: 14px; }
+.poster-tile {
+  position: relative; padding: 0; cursor: pointer; overflow: hidden;
+  aspect-ratio: 2 / 3; border-radius: 12px;
+  border: 1px solid var(--line); background: #060a0e;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s;
 }
-.film-card:hover { border-color: rgba(77, 163, 255, 0.55); transform: translateY(-3px); box-shadow: var(--shadow); }
+.poster-tile img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform 0.35s ease; }
+.poster-tile:hover { transform: translateY(-4px); border-color: rgba(247, 201, 72, 0.5); box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55); }
+.poster-tile:hover img { transform: scale(1.05); }
+.poster-tile.direct { border-color: rgba(226, 54, 54, 0.55); box-shadow: 0 0 0 2px rgba(226, 54, 54, 0.18); }
+.poster-tile.direct::after {
+  content: "★"; position: absolute; top: 6px; left: 8px; font-size: 13px; color: var(--accent-2);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+.poster-tile.upcoming::after {
+  content: "待映"; position: absolute; top: 6px; left: 6px; font-size: 10px; color: #f7c948;
+  background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(247, 201, 72, 0.5); border-radius: 999px; padding: 1px 7px;
+}
+.poster-tile:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+.films-count { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.films-count b { color: var(--accent-2); }
+
 .film-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
 .film-title { font-size: 16.5px; font-weight: 800; line-height: 1.4; }
 .film-title span { display: block; font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 2px; }
 .film-meta { display: flex; gap: 6px; flex-wrap: wrap; }
 .tag { font-size: 11px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
-.tag-year { color: var(--accent-2); border-color: rgba(247, 201, 72, 0.35); }
 .tag-direct { background: rgba(226, 54, 54, 0.14); color: #ff7a7a; border-color: rgba(226, 54, 54, 0.4); }
 .tag-context { background: rgba(77, 163, 255, 0.13); color: #8ec4ff; border-color: rgba(77, 163, 255, 0.35); }
 .tag-minor { background: rgba(157, 107, 255, 0.12); color: #bd9bff; border-color: rgba(157, 107, 255, 0.35); }
 .tag-info { background: rgba(67, 209, 124, 0.12); color: #7fe2a9; border-color: rgba(67, 209, 124, 0.35); }
 .tag-rumor { background: rgba(247, 201, 72, 0.14); color: var(--accent-2); border-color: rgba(247, 201, 72, 0.4); }
-.film-plot { font-size: 13.5px; color: var(--muted); }
-.film-relation {
-  border-top: 1px dashed var(--line); padding-top: 10px; font-size: 13px;
-}
+.film-plot { font-size: 13.5px; color: #c9d6de; line-height: 1.85; }
+.film-relation { border-top: 1px dashed var(--line); padding-top: 10px; font-size: 13px; color: #c9d6de; line-height: 1.85; }
 .film-relation b { color: var(--blue); }
 .film-relation .rel-label { font-size: 11px; color: var(--accent-2); letter-spacing: 1px; display: block; margin-bottom: 4px; }
 .empty-tip { text-align: center; color: var(--muted); padding: 60px 0; }
 .hidden { display: none !important; }
+
+/* ---------- 作品详情弹层 ---------- */
+.film-modal { position: fixed; inset: 0; z-index: 80; display: none; }
+.film-modal.open { display: block; }
+.fm-backdrop { position: absolute; inset: 0; background: rgba(2, 6, 9, 0.78); backdrop-filter: blur(6px); }
+.fm-card {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(880px, calc(100vw - 32px)); max-height: min(86vh, 720px);
+  display: grid; grid-template-columns: 250px 1fr; gap: 0;
+  background: linear-gradient(160deg, #0d151c, #080d12);
+  border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+  animation: fmIn 0.22s ease;
+}
+@keyframes fmIn { from { opacity: 0; transform: translate(-50%, -46%); } to { opacity: 1; transform: translate(-50%, -50%); } }
+.fm-poster { background: #04070a; }
+.fm-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fm-body { padding: 26px 26px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+.fm-title { font-size: 22px; font-weight: 900; line-height: 1.35; }
+.fm-title span { display: block; font-size: 12.5px; color: var(--muted); font-weight: 400; margin-top: 4px; }
+.fm-close {
+  position: absolute; right: 12px; top: 12px; z-index: 2;
+  width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+  background: rgba(0, 0, 0, 0.55); border: 1px solid rgba(255, 255, 255, 0.18); color: #fff; font-size: 15px;
+}
+.fm-close:hover { background: rgba(226, 54, 54, 0.9); }
+body.no-scroll { overflow: hidden; }
+
+@media (max-width: 760px) {
+  .films-list { grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+  .fm-card {
+    grid-template-columns: 1fr; width: 100vw; max-height: 92vh;
+    left: 0; top: auto; bottom: 0; transform: none; border-radius: 18px 18px 0 0;
+  }
+  @keyframes fmIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .fm-poster { max-height: 34vh; }
+  .fm-poster img { object-position: center 18%; }
+  .fm-body { padding: 20px 18px 26px; }
+}
 
 .films-more { margin-top: 36px; }
 .films-more h3 { font-size: 20px; margin: 26px 0 14px; color: var(--accent-2); }
@@ -395,11 +448,9 @@ body.photo-bg .footer { background: rgba(6, 9, 13, 0.86); }
 }
 
 /* =========================================================
-   作品卡:纯信息卡(不做跳转播放界面)
+   作品库:海报墙 + 详情弹层(见上方 .poster-tile / .film-modal)
    ========================================================= */
 .chip-hint { font-size: 11.5px; color: var(--muted); margin-left: 4px; }
-.film-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.film-body { display: flex; flex-direction: column; gap: 10px; }
 
 </style>
   <style>

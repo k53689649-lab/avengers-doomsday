@@ -26,6 +26,18 @@ function charArtDataScript() {
   return "<script>window.CHAR_ART_DATA=" + JSON.stringify(map) + ";</script>\n";
 }
 
+/* 把 103 张作品海报打包成 data URI,单文件版才能显示 */
+function posterArtDataScript() {
+  const postersDir = path.join(dir, "assets/img/posters");
+  if (!fs.existsSync(postersDir)) return "";
+  const map = {};
+  for (const f of fs.readdirSync(postersDir)) {
+    if (!f.endsWith(".svg")) continue;
+    map[f.replace(/\.svg$/, "")] = "data:image/svg+xml;base64," + fs.readFileSync(path.join(postersDir, f)).toString("base64");
+  }
+  return "<script>window.POSTER_ART_DATA=" + JSON.stringify(map) + ";</script>\n";
+}
+
 function inline(pageFile) {
   let html = read(pageFile);
   html = html.replace(/<link rel="stylesheet" href="([^"]+)"\s*\/?>/g, (m, href) => {
@@ -69,10 +81,10 @@ function inline(pageFile) {
     const mime = MIME[path.extname(full).toLowerCase()] || "application/octet-stream";
     return "url(data:" + mime + ";base64," + fs.readFileSync(full).toString("base64") + ")";
   });
-  // 角色立绘(仅前瞻页需要):注入 data URI 映射,放在 </body> 前
+  // 角色立绘 + 作品海报(仅前瞻页需要):注入 data URI 映射,放在 </body> 前
   if (pageFile === "guide.html") {
-    const artScript = charArtDataScript();
-    if (artScript) html = html.replace(/<\/body>/, artScript + "</body>");
+    const arts = charArtDataScript() + posterArtDataScript();
+    if (arts) html = html.replace(/<\/body>/, arts + "</body>");
   }
   return html;
 }

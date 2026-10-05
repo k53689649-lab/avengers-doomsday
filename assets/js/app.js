@@ -239,6 +239,70 @@
       (f.relation ? '<p class="film-relation"><span class="rel-label">与复联5的关系</span>' + esc(f.relation) + "</p>" : "") +
       "</article>";
   }
+
+  /* ---------------- 海报 ---------------- */
+  function posterUrl(f) {
+    var ov = (window.POSTER_OVERRIDES || {})[f.id];
+    if (ov) return "assets/img/posters/" + ov;
+    if (window.POSTER_ART_DATA && window.POSTER_ART_DATA[f.id]) return window.POSTER_ART_DATA[f.id];
+    return "assets/img/posters/" + f.id + ".svg";
+  }
+  function posterTile(f) {
+    var cls = "poster-tile" + (f.rel === "direct" ? " direct" : "") + (f.status === "upcoming" ? " upcoming" : "");
+    return '<button class="' + cls + '" type="button" data-film="' + esc(f.id) + '" title="' + esc(f.title) + '">' +
+      '<img src="' + esc(posterUrl(f)) + '" alt="' + esc(f.title) + ' 海报" loading="lazy" />' +
+      "</button>";
+  }
+  function filmById(id) {
+    for (var i = 0; i < ALL.length; i++) if (ALL[i].id === id) return ALL[i];
+    return null;
+  }
+
+  /* ---------------- 详情弹层 ---------------- */
+  function ensureModal() {
+    if ($("#filmModal")) return;
+    var box = document.createElement("div");
+    box.id = "filmModal";
+    box.className = "film-modal";
+    box.innerHTML = '<div class="fm-backdrop" data-close="1"></div>' +
+      '<div class="fm-card" role="dialog" aria-modal="true">' +
+      '<button class="fm-close" type="button" data-close="1" aria-label="关闭">✕</button>' +
+      '<div class="fm-poster"><img id="fmImg" src="" alt="" /></div>' +
+      '<div class="fm-body" id="fmBody"></div>' +
+      "</div>";
+    document.body.appendChild(box);
+    box.addEventListener("click", function (e) {
+      if (e.target.closest && e.target.closest("[data-close]")) closeFilm();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeFilm();
+    });
+  }
+  function openFilm(id) {
+    var f = filmById(id);
+    if (!f) return;
+    ensureModal();
+    var m = $("#filmModal");
+    var img = $("#fmImg");
+    img.src = posterUrl(f);
+    img.alt = f.title + " 海报";
+    var statusTag = f.status === "upcoming" ? '<span class="tag tag-rumor">待映</span>' : '<span class="tag">已上映</span>';
+    var tvTag = f.isTV ? '<span class="tag">剧集</span>' : "";
+    $("#fmBody").innerHTML =
+      '<h3 class="fm-title">' + esc(f.title) + "<span>" + esc(f.en || "") + "</span></h3>" +
+      '<div class="film-meta">' + statusTag + tvTag + relTag(f.rel) + '<span class="tag">' + esc(f.studio) + "</span>" +
+      (f.phase ? '<span class="tag">' + esc(f.phase) + "</span>" : "") +
+      '<span class="tag">' + esc(f.year) + "</span></div>" +
+      (f.plot ? '<p class="film-plot"><b>讲了什么:</b>' + esc(f.plot) + "</p>" : "") +
+      (f.relation ? '<p class="film-relation"><span class="rel-label">与复联5的关系</span>' + esc(f.relation) + "</p>" : "");
+    m.classList.add("open");
+    document.body.classList.add("no-scroll");
+  }
+  function closeFilm() {
+    var m = $("#filmModal");
+    if (m) m.classList.remove("open");
+    document.body.classList.remove("no-scroll");
+  }
   function renderFilms() {
     var q = state.q.trim().toLowerCase();
     var list = ALL.filter(function (f) {
@@ -250,11 +314,12 @@
       var hay = [f.title, f.en, f.year, f.studio, f.phase, f.plot, f.relation].join(" ").toLowerCase();
       return hay.indexOf(q) !== -1;
     });
-    $("#filmsList").innerHTML = list.map(filmHtml).join("");
+    $("#filmsList").innerHTML = list.map(posterTile).join("");
     $("#emptyTip").classList.toggle("hidden", list.length > 0);
 
     var ext = FILMS.filter(function (f) { return f.status === "upcoming"; });
     $("#filmsMore").innerHTML =
+      '<p class="films-count">当前显示 <b>' + list.length + "</b> / " + ALL.length + " 部作品 · 点任意一张海报查看剧情与关联</p>" +
       "<h3>待映与说明</h3>" +
       ext.map(function (f) { return '<p class="more-note">· ' + esc(f.title) + "( " + esc(f.en) + " )— " + esc(f.plot) + "</p>"; }).join("") +
       '<p class="more-note" style="margin-top:10px">· 想看正片:漫威电影在国内的正版渠道主要是各视频平台的会员区(腾讯视频 / 爱奇艺 / 优酷 / 哔哩哔哩 等),Disney+ 覆盖最全但需要海外账号。本站只整理剧情与关联,不提供、也不链接任何盗版资源。</p>' +
@@ -387,6 +452,8 @@
       }
       var si = t.closest("[data-cast-index]");
       if (si) { state.castIndex = Number(si.dataset.castIndex); renderCast(); return; }
+      var pf = t.closest("[data-film]");
+      if (pf) { openFilm(pf.dataset.film); return; }
       if (t.closest("#castPrev")) { castGo(-1); return; }
       if (t.closest("#castNext")) { castGo(1); return; }
 
@@ -427,15 +494,28 @@
     renderEggs();
     renderRoutes();
     renderControls();
-    renderFilms();
     renderCast();
     renderFaq();
+    ensureModal();
     bind();
+
+    /* 海报覆盖清单(放了官方海报才有;读不到就用生成的 SVG) */
+    var finish = function () { renderFilms(); };
+    if (window.fetch) {
+      fetch("assets/img/posters/overrides.json")
+        .then(function (r) { return r.ok ? r.json() : {}; })
+        .then(function (j) { window.POSTER_OVERRIDES = j || {}; })
+        .catch(function () { /* 单文件版/离线时忽略 */ })
+        .then(finish);
+    } else {
+      finish();
+    }
   });
 
   /* 供测试使用 */
   window.GuideApp = {
     state: state, renderFilms: renderFilms, renderCast: renderCast, castGo: castGo,
-    castData: castData, charArtUrl: charArtUrl
+    castData: castData, charArtUrl: charArtUrl, posterUrl: posterUrl,
+    openFilm: openFilm, closeFilm: closeFilm, filmById: filmById
   };
 })();

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" width="600" height="900" role="img" aria-label="X战警3:背水一战 海报">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#0d141b"/><stop offset="52%" stop-color="#070b10"/><stop offset="100%" stop-color="#04070a"/>
+    </linearGradient>
+    <linearGradient id="plane" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4a7fd6" stop-opacity=".42"/><stop offset="100%" stop-color="#4a7fd6" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="foot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#04070a" stop-opacity="0"/><stop offset="100%" stop-color="#04070a" stop-opacity=".96"/>
+    </linearGradient>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1" fill="#ffffff" opacity="0.028"/>
+    </pattern>
+  </defs>
+
+  <rect width="600" height="900" fill="url(#bg)"/>
+  <path d="M0 900 L600 378 L600 900 Z" fill="url(#plane)"/>
+  <path d="M0 648 L600 270 L600 270 L0 648 Z" fill="#4a7fd6" opacity=".10"/>
+  <g><g stroke="#4a7fd6" stroke-width="42" stroke-linecap="round" opacity=".8">
+    <path d="M170 250 L430 610"/><path d="M430 250 L170 610"/></g>
+    <circle cx="300" cy="430" r="215" fill="none" stroke="#4a7fd6" stroke-width="6" opacity=".4"/></g>
+  <rect width="600" height="900" fill="url(#foot)"/>
+  <rect width="600" height="7" fill="#7a8894"/>
+  <rect width="600" height="900" fill="url(#scan)"/>
+  <rect x="0.5" y="0.5" width="599" height="899" fill="none" stroke="#ffffff" stroke-opacity=".10"/>
+
+  <text x="52" y="636" font-size="52" font-weight="900"
+      fill="#ffffff" letter-spacing="1">X战警3:</text><text x="52" y="700" font-size="52" font-weight="900"
+      fill="#ffffff" letter-spacing="1">背水一战</text>
+  <text x="52" y="744" font-size="19" font-family="Georgia,serif" letter-spacing="2.5"
+    fill="#9fb3c0">X-MEN: THE LAST STAND</text>
+  <text x="52" y="858" font-size="17" fill="#7d8f9c">2006 · 20世纪福克斯</text>
+  <g>
+    <rect x="450" y="838" width="98" height="28" rx="14" fill="#7a8894" opacity=".22"/>
+    <text x="499" y="858" text-anchor="middle" font-size="14" fill="#7a8894">一般关联</text>
+  </g>
+  
+  
+</svg>

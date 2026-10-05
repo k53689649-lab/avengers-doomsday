@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" width="600" height="900" role="img" aria-label="银河护卫队3 海报">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#0d141b"/><stop offset="52%" stop-color="#070b10"/><stop offset="100%" stop-color="#04070a"/>
+    </linearGradient>
+    <linearGradient id="plane" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e23636" stop-opacity=".42"/><stop offset="100%" stop-color="#e23636" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="foot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#04070a" stop-opacity="0"/><stop offset="100%" stop-color="#04070a" stop-opacity=".96"/>
+    </linearGradient>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1" fill="#ffffff" opacity="0.028"/>
+    </pattern>
+  </defs>
+
+  <rect width="600" height="900" fill="url(#bg)"/>
+  <path d="M0 900 L600 378 L600 900 Z" fill="url(#plane)"/>
+  <path d="M0 648 L600 270 L600 270 L0 648 Z" fill="#e23636" opacity=".10"/>
+  <g><path d="M300 210 L352 372 L524 372 L386 474 L438 638 L300 538 L162 638 L214 474 L76 372 L248 372 Z"
+    fill="none" stroke="#e23636" stroke-width="10" opacity=".8"/>
+    <circle cx="300" cy="430" r="215" fill="none" stroke="#e23636" stroke-width="4" opacity=".35"/></g>
+  <rect width="600" height="900" fill="url(#foot)"/>
+  <rect width="600" height="7" fill="#7a8894"/>
+  <rect width="600" height="900" fill="url(#scan)"/>
+  <rect x="0.5" y="0.5" width="599" height="899" fill="none" stroke="#ffffff" stroke-opacity=".10"/>
+
+  <text x="52" y="700" font-size="62" font-weight="900"
+      fill="#ffffff" letter-spacing="1">银河护卫队3</text>
+  <text x="52" y="744" font-size="19" font-family="Georgia,serif" letter-spacing="2.5"
+    fill="#9fb3c0">GUARDIANS OF THE GALAXY VOL. 3</text>
+  <text x="52" y="858" font-size="17" fill="#7d8f9c">2023 · 漫威影业</text>
+  <g>
+    <rect x="450" y="838" width="98" height="28" rx="14" fill="#7a8894" opacity=".22"/>
+    <text x="499" y="858" text-anchor="middle" font-size="14" fill="#7a8894">一般关联</text>
+  </g>
+  
+  
+</svg>

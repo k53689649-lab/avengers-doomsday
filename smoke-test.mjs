@@ -60,9 +60,22 @@ const countCards = (html, cls) => (html.match(new RegExp('class="' + cls + '"', 
 const countBy = (html, token) => (html.match(new RegExp(token, "g")) || []).length;
 
 const total = data.FILMS.length + data.TV_SHOWS.length;
-check("作品卡片渲染 " + total + " 条", countCards(q("#filmsList"), "film-card") === total);
-check("作品卡为纯信息卡(跳转 UI 已移除)", !q("#filmsList").includes("watch-btn") && !q("#filmsList").includes("film-poster"));
+check("作品海报渲染 " + total + " 张", countBy(q("#filmsList"), "poster-tile") === total);
+check("海报地址指向 posters 目录", /assets\/img\/posters\/ironman\.svg/.test(q("#filmsList")));
+check("直接相关的海报带标记", q("#filmsList").includes("poster-tile direct"));
+check("作品库不再有跳转 UI", !q("#filmsList").includes("watch-btn") && !q("#filmsList").includes("film-poster"));
 check("筛选器不再有播放平台行", !q("#controls").includes("chip-platform") && !q("#controls").includes("播放平台"));
+check("海报全覆盖:每部作品都有卡片", (() => {
+  const html = q("#filmsList");
+  return data.FILMS.concat(data.TV_SHOWS).every(f => html.indexOf('data-film="' + f.id + '"') !== -1);
+})());
+check("详情弹层:打开后显示剧情与关联", (() => {
+  winA.GuideApp.openFilm("ironman");
+  const body = docA.querySelector("#fmBody").innerHTML;
+  const img = docA.querySelector("#fmImg").src;
+  winA.GuideApp.closeFilm();
+  return body.includes("讲了什么") && body.includes("与复联5的关系") && /posters\/ironman\.svg/.test(img);
+})());
 
 /* 角色图鉴(PPT 式轮播) */
 const trailerN = data.TRAILER_CHARS.length;
