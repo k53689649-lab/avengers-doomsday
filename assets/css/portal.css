@@ -33,8 +33,9 @@ body.portal {
 }
 .portal-cover {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; object-position: center 38%;
-  filter: brightness(0.58) saturate(1.06) contrast(1.03) blur(0.6px);
+  object-fit: cover; object-position: center 42%;
+  /* 不再虚化,让画面保持清晰;只做很轻的压暗,保证文字可读 */
+  filter: brightness(0.92) saturate(1.06) contrast(1.04);
 }
 
 /* 遮罩:上轻下重 —— 上方保留封面标题,下方为文字提供对比度 */
@@ -206,10 +207,10 @@ body.portal {
 /* ---------- 响应式:手机改为「封面在上、内容紧随其后」的嵌入排布 ---------- */
 @media (max-width: 820px) {
   .portal-cover {
-    object-fit: contain; object-position: center top;
-    filter: blur(0.8px) brightness(0.95) saturate(1.05);
-    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 58%, rgba(0,0,0,0.35) 78%, rgba(0,0,0,0) 96%);
-    mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 58%, rgba(0,0,0,0.35) 78%, rgba(0,0,0,0) 96%);
+    object-fit: cover; object-position: center 26%;
+    filter: brightness(0.94) saturate(1.06) contrast(1.04);
+    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 62%, rgba(0,0,0,0.35) 82%, rgba(0,0,0,0) 97%);
+    mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 62%, rgba(0,0,0,0.35) 82%, rgba(0,0,0,0) 97%);
   }
   .portal-main { min-height: 100vh; justify-content: flex-start; }
   .portal-content { padding: 40vh 16px 34px; }

@@ -15,7 +15,11 @@
 
   <!-- 嵌入背景:封面图铺满整个页面,底部渐隐让文字压在图上 -->
   <div class="portal-bg" aria-hidden="true">
-    <img id="coverImg" class="portal-cover" src="assets/img/cover.jpg" alt="" />
+    <!-- 桌面用 16:9 裁切、手机用竖版原图,两种比例各自满屏铺开 -->
+    <picture>
+      <source media="(min-width: 821px)" srcset="assets/img/cover-wide.jpg" />
+      <img id="coverImg" class="portal-cover" src="assets/img/cover.jpg" alt="" />
+    </picture>
     <div class="portal-shade"></div>
   </div>
 

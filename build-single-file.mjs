@@ -47,6 +47,13 @@ function inline(pageFile) {
     const mime = MIME[path.extname(full).toLowerCase()] || "application/octet-stream";
     return 'src="data:' + mime + ";base64," + fs.readFileSync(full).toString("base64") + '"';
   });
+  // <source srcset="..."> 里的图片(响应式封面)同样要内联
+  html = html.replace(/srcset="(assets\/img\/[^"]+)"/g, (m, src) => {
+    const full = path.join(dir, src);
+    if (!fs.existsSync(full)) return m;
+    const mime = MIME[path.extname(full).toLowerCase()] || "application/octet-stream";
+    return 'srcset="data:' + mime + ";base64," + fs.readFileSync(full).toString("base64") + '"';
+  });
   // CSS 里引用的背景图(如 body.photo-bg 的 bg-page.jpg)同样要内联
   html = html.replace(/url\((["']?)\.\.\/img\/([^"')]+)\1\)/g, (m, q, file) => {
     const full = path.join(dir, "assets/img", file);
