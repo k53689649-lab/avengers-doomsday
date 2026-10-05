@@ -37,6 +37,7 @@
   var KEY_VISITOR = "dd_visitor_v1";      // 访客唯一标识(点赞去重用)
   var replyTarget = null;                 // 当前正在回复的目标 {id, name}
   var likeUnsupported = false;            // 数据库还没升级时,点赞降级
+  var v2Ready = null;                     // 数据库是否已升级(楼中楼+点赞):null=未知
 
   /* ---------------- 云端状态 ---------------- */
   var sb = null;              // Supabase 客户端
@@ -135,6 +136,75 @@
     var a = likedIds();
     if (a.indexOf(id) === -1) { a.push(id); writeJSON(KEY_LIKED, a); }
   }
+  function unmarkLiked(id) {
+    writeJSON(KEY_LIKED, likedIds().filter(function (x) { return x !== id; }));
+  }
+  function bumpLikes(id, delta) {
+    var list = getComments(), hit = false;
+    list.forEach(function (c) { if (c.id === id) { c.likes = Math.max(0, Number(c.likes || 0) + delta); hit = true; } });
+    if (hit) setComments(list);
+  }
+
+  /* 数据库升级后,把「我点过哪些赞」以数据库为准同步一次
+     —— 避免升级前点赞失败留下的本地假记录,导致升级后点不动 */
+  function syncMyLikes() {
+    if (!cloudMode() || v2Ready !== true) return Promise.resolve();
+    return sb.from("comment_likes").select("comment_id").eq("visitor_id", visitorId()).then(function (r) {
+      if (!r.error && r.data) {
+        writeJSON(KEY_LIKED, r.data.map(function (x) { return x.comment_id; }));
+        renderAll();
+      }
+    }).catch(function () { });
+  }
+
+  /* ---------------- 检测数据库是否已升级(楼中楼 + 点赞) ---------------- */
+  function probeV2() {
+    if (!cloudMode()) { v2Ready = false; renderV2Banner(); return Promise.resolve(false); }
+    return sb.from(CFG.cloud.commentsTable).select("parent_id,like_count").limit(1).then(function (r) {
+      v2Ready = !r.error;
+      renderV2Banner();
+      return v2Ready;
+    }).catch(function () { v2Ready = false; renderV2Banner(); return false; });
+  }
+  function renderV2Banner() {
+    var el = $("#v2Banner");
+    if (!el) return;
+    /* 只在云端模式且确实探测到未升级时提示;本地模式不提示(否则会误导) */
+    if (v2Ready !== false || !cloudMode()) { el.classList.remove("show"); el.innerHTML = ""; return; }
+    el.classList.add("show");
+    el.innerHTML =
+      '<div class="v2b-head">⚠️ 楼中楼与点赞还没启用:数据库差一次升级(30 秒)</div>' +
+      '<div class="v2b-body">现在留言、站长回复、置顶都正常,但<b>网友之间互相回复</b>和<b>点赞计数</b>需要先给数据库加两个字段。</div>' +
+      '<div class="v2b-steps">① 打开 supabase.com → 进入你的项目　② 左侧 <b>SQL Editor</b> → <b>New query</b>　③ 粘贴下面的脚本 → 点 <b>Run</b>　④ 回到本页刷新</div>' +
+      '<div class="v2b-actions">' +
+      '<button type="button" id="v2Copy">📋 复制升级脚本</button>' +
+      '<a href="docs/supabase-migration-v2.sql" target="_blank" rel="noopener">查看脚本原文</a>' +
+      "</div>";
+  }
+
+  /* 一键复制升级脚本,省得手动找文件 */
+  function copyMigrationSql() {
+    var url = "docs/supabase-migration-v2.sql";
+    var fallback = function (txt) {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        flashTip("升级脚本已复制 → 粘到 Supabase 的 SQL Editor 里点 Run");
+      } catch (e) { window.open(url, "_blank"); }
+    };
+    if (window.fetch) {
+      fetch(url).then(function (r) { return r.text(); }).then(function (txt) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(txt).then(function () {
+            flashTip("升级脚本已复制 → 粘到 Supabase 的 SQL Editor 里点 Run");
+          }, function () { fallback(txt); });
+        } else { fallback(txt); }
+      }).catch(function () { window.open(url, "_blank"); });
+    } else { window.open(url, "_blank"); }
+  }
 
   /* ---------------- 楼中楼:把平铺列表拼成树 ---------------- */
   function buildTree(list) {
@@ -160,26 +230,31 @@
   /* ---------------- 点赞 ---------------- */
   function likeComment(id) {
     if (!id) return;
-    if (hasLiked(id)) { flashTip("你已经点过赞啦 👍"); return; }
+    if (hasLiked(id)) { flashTip("你已经点过赞啦 👍 换一个浏览器/无痕窗口可以再点一次"); return; }
+    if (cloudMode() && v2Ready === false) {
+      flashTip("点赞还没启用:数据库需要先升级(见页面顶部橙色提示里的升级步骤)");
+      return;
+    }
+    /* 先按 +1 立刻反馈,失败再回滚 */
     markLiked(id);
+    bumpLikes(id, 1);
+    renderAll();
+
     if (cloudMode()) {
       sb.rpc("like_comment", { p_comment: id, p_visitor: visitorId() }).then(function (r) {
         if (r.error) {
           likeUnsupported = true;
-          flashTip("点赞需要先升级数据库:请执行 docs/supabase-migration-v2.sql(执行后即可点赞)");
+          unmarkLiked(id); bumpLikes(id, -1); renderAll();
+          flashTip("点赞失败:" + (r.error.message || "数据库未升级") + " —— 请先执行升级脚本");
           return;
         }
         var list = getComments(), hit = false;
-        list.forEach(function (c) { if (c.id === id) { c.likes = Number(r.data || c.likes + 1); hit = true; } });
+        list.forEach(function (c) { if (c.id === id) { c.likes = Number(r.data || 0); hit = true; } });
         if (hit) setComments(list);
         renderAll();
       });
       return;
     }
-    var list = getComments(), hit = false;
-    list.forEach(function (c) { if (c.id === id) { c.likes = Number(c.likes || 0) + 1; hit = true; } });
-    if (hit) setComments(list);
-    renderAll();
   }
   function flashTip(text) {
     var el = $("#cmTip");
@@ -349,14 +424,9 @@
       };
       sb.from(CFG.cloud.commentsTable).insert([payload]).then(function (r) {
         if (r.error) {
-          // 数据库还没升级(没有 parent_id 列)时,退化成普通留言,并提示一次
-          if (replyTarget && /parent_id|column/i.test(r.error.message || "")) {
-            delete payload.parent_id;
-            sb.from(CFG.cloud.commentsTable).insert([payload]).then(function (r2) {
-              if (r2.error) { setTip(tip, "err", "✕ 发布失败:" + r2.error.message); return; }
-              flashTip("楼中楼需要先升级数据库:执行 docs/supabase-migration-v2.sql 后即可互相回复");
-              afterOk();
-            });
+          /* 数据库还没升级(没有 parent_id 列):明确报错,不悄悄降级成普通留言 */
+          if (replyTarget && /parent_id|column|schema/i.test(r.error.message || "")) {
+            setTip(tip, "err", "✕ 楼中楼还没启用:数据库需要先执行升级脚本(见页面顶部橙色提示),升级后再发一次即可");
             return;
           }
           setTip(tip, "err", "✕ 发布失败:" + r.error.message);
@@ -709,7 +779,7 @@
         });
       }
       renderAll();
-      return refreshCloud();
+      return refreshCloud().then(function () { return probeV2(); }).then(function () { return syncMyLikes(); });
     }).catch(function (e) {
       cloudError = (e && e.message) || String(e);
       cloudReady = false;
@@ -744,6 +814,10 @@
         else if (what === "reply") replyComment(id);
         else if (what === "like") likeComment(id);
         else if (what === "replyto") {
+          if (cloudMode() && v2Ready === false) {
+            flashTip("楼中楼还没启用:数据库需要先升级(见页面顶部橙色提示),升级后任何人都能在这里互相回复");
+            return;
+          }
           var f = findComment(id);
           if (f) {
             replyTarget = { id: id, name: f.list[f.index].name };
@@ -757,6 +831,7 @@
         return;
       }
       if (t.closest("#adminToggle")) { openAdmin(); return; }
+      if (t.closest("#v2Copy")) { copyMigrationSql(); return; }
       if (t.closest("#adminClose")) { closeAdmin(); return; }
       if (t.closest("#adminModal") && !t.closest(".admin-box")) { closeAdmin(); return; }
     });
@@ -800,6 +875,8 @@
     cloudConfigured: cloudConfigured, cloudMode: cloudMode, modeName: modeName,
     normalizeComment: normalizeComment,
     buildTree: buildTree, likeComment: likeComment, hasLiked: hasLiked,
+    setV2State: function (v) { v2Ready = v; renderV2Banner(); },
+    getV2State: function () { return v2Ready; },
     setReplyTarget: function (t) { replyTarget = t; renderReplyBar(); },
     getReplyTarget: function () { return replyTarget; }
   };
