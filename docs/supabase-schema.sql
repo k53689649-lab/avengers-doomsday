@@ -87,3 +87,26 @@ create policy "ann_owner_delete" on public.announcements
 --  然后把 cloud.provider 改成 "supabase" 即可启用云端留言板。
 --  ⚠️ 绝对不要把 service_role key 填进前端(那是绕过所有策略的最高权限密钥)。
 -- ============================================================================
+
+-- ---------------------------------------------------------------- 权限授予
+-- 光有 RLS 策略还不够:角色本身也要有表级权限,否则请求会返回 401/42501。
+-- anon = 未登录访客(只能读 + 发言);authenticated = 登录用户(站长,可改/删)
+grant usage on schema public to anon, authenticated;
+
+grant select, insert on public.comments to anon, authenticated;
+grant update, delete on public.comments to authenticated;
+
+grant select on public.announcements to anon, authenticated;
+grant insert, update, delete on public.announcements to authenticated;
+
+-- 序列/自增无需授权(本表用 uuid 主键)
+
+-- ============================================================================
+--  自检(可选):执行下面两句,应当分别返回 1 行和 0 行;
+--  这能确认策略已生效、且匿名用户读得到数据。
+--  在 SQL Editor 里替换成真实查询即可:
+--    select count(*) from public.comments;      -- 应能正常返回(权限 OK)
+--    select relname, relrowsecurity from pg_class where relname in ('comments','announcements');
+--      -- relrowsecurity 必须为 true(RLS 已开启)
+-- ============================================================================
+
