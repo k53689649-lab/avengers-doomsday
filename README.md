@@ -3,6 +3,7 @@
 > 一个纯静态、零依赖的中文漫威观影指南网站:把漫威 40 多年、跨 6 家片方的全部影视作品一次理清,并逐部告诉你**它讲了什么**、以及**它跟《复仇者联盟5:毁灭之日》有什么关系**;再配上预告确认登场与预测登场角色的完整人物介绍,以及一个带声明与管理的留言提问板。
 
 **🌐 在线访问:** <https://elegant-custard-c65320.netlify.app/>
+**📦 源码仓库:** <https://github.com/k53689649-lab/marvel-doomsday-guide>
 
 ---
 
@@ -107,6 +108,19 @@ node smoke-test.mjs
 ```
 
 内置 18 项冒烟测试:用最小 DOM 桩验证主站渲染数量、彩蛋条目、角色分区是否正确,以及留言板的校验规则(广告拦截、重复刷屏拦截)、渲染与公告功能 —— 改完数据跑一遍就知道有没有改坏。
+
+### 把更新推送到 GitHub
+
+若本机到 `github.com:443` 的直连被网络环境拦截(`git push` 报 "Failed to connect"),可以用内置的 REST API 推送脚本:
+
+```powershell
+$env:GH_TOKEN="ghp_你的令牌"      # 经典令牌勾选 public_repo 即可
+node push-to-github.mjs
+```
+
+它会读取当前目录全部文件(忽略 `.git`/`node_modules`),按 UTF-8 生成一次提交推到 `main`。中文文件名与中文内容都能正确处理。
+
+> 想启用 GitHub Pages:仓库里已附模板 [`docs/github-pages-workflow.yml`](docs/github-pages-workflow.yml),把它复制成 `.github/workflows/pages.yml` 即会自动部署(在 GitHub 网页上新建文件即可,无需本地 git)。
 
 ---
 
