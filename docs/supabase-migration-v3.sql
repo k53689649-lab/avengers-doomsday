@@ -69,28 +69,39 @@ alter table public.article_favorites enable row level security;
 -- 文章:所有人只能读「已通过」的;站长能读全部(含待审核)
 drop policy if exists "articles_public_read" on public.articles;
 create policy "articles_public_read" on public.articles
-for select using (status = 'approved' or auth.uid() = 'OWNER_UID'::uuid);
+for select to anon, authenticated
+using (status = 'approved' or auth.uid() = 'OWNER_UID'::uuid);
 
 -- 投稿:任何人都能投,但只能投成「待审核」,不能自己给自己过审、不能自己置顶
+-- (用 coalesce 兜底:任何字段为 NULL 时不会让整个条件变成 NULL 而被误拒)
 drop policy if exists "articles_public_insert" on public.articles;
 create policy "articles_public_insert" on public.articles
-for insert with check (
-  status = 'pending'
-  and pinned = false
-  and char_length(title) between 4 and 120
-  and char_length(content) between 20 and 20000
-  and char_length(author) between 2 and 16
+for insert to anon, authenticated
+with check (
+  coalesce(status, 'pending') = 'pending'
+  and coalesce(pinned, false) = false
+  and coalesce(char_length(title), 0)   between 4  and 120
+  and coalesce(char_length(content), 0) between 20 and 20000
+  and coalesce(char_length(author), 0)  between 2  and 16
 );
 
 -- 只有站长能改(过审 / 驳回 / 置顶 / 改内容)与删
 drop policy if exists "articles_owner_update" on public.articles;
 create policy "articles_owner_update" on public.articles
-for update using (auth.uid() = 'OWNER_UID'::uuid)
+for update to authenticated
+using (auth.uid() = 'OWNER_UID'::uuid)
 with check (auth.uid() = 'OWNER_UID'::uuid);
 
 drop policy if exists "articles_owner_delete" on public.articles;
 create policy "articles_owner_delete" on public.articles
-for delete using (auth.uid() = 'OWNER_UID'::uuid);
+for delete to authenticated
+using (auth.uid() = 'OWNER_UID'::uuid);
+
+-- 点赞 / 收藏记录:所有人可读(前端要判断"我点过没"),写入统一走下面的函数
+drop policy if exists "alikes_readable" on public.article_likes;
+create policy "alikes_readable" on public.article_likes for select to anon, authenticated using (true);
+drop policy if exists "afavs_readable" on public.article_favorites;
+create policy "afavs_readable" on public.article_favorites for select to anon, authenticated using (true);
 
 -- 点赞 / 收藏记录:所有人可读(前端要判断"我点过没"),写入统一走下面的函数
 drop policy if exists "alikes_readable" on public.article_likes;
