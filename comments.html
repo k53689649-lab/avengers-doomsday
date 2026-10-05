@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>留言提问板 | 毁灭之日 · 观影指南</title>
-  <meta name="description" content="关于《复仇者联盟5:毁灭之日》的提问、考据与观后感交流板。支持站长置顶公告、删评与回复。" />
+  <meta name="description" content="关于《复仇者联盟5:毁灭之日》的提问、考据与观后感交流板。支持楼中楼互相回复、点赞、站长置顶公告与删评。" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/comments.css" />
 </head>
@@ -34,7 +34,7 @@
   <section class="cm-hero">
     <p class="hero-kicker">GUESTBOOK · Q&amp;A</p>
     <h1>留言提问板<br/><span>有问题,尽管问</span></h1>
-    <p>关于《复仇者联盟5:毁灭之日》的任何疑问——剧情考据、角色去向、观影顺序、彩蛋解读,或者只是想说两句观后感,都欢迎留在这里。站长会尽量逐条回复,热心网友也可以互相解答。</p>
+    <p>关于《复仇者联盟5:毁灭之日》的任何疑问——剧情考据、角色去向、观影顺序、彩蛋解读,或者只是想说两句观后感,都欢迎留在这里。站长会尽量逐条回复,<b>也欢迎网友之间楼中楼互相解答、互相点赞</b>。</p>
     <div class="cm-stats" id="cmStats"></div>
   </section>
 
@@ -52,6 +52,8 @@
         <li><b>禁止广告导流:</b>不得发布商业推广、拉群、代刷代练、账号买卖、外链引流、博彩与贷款类信息;个人作品推广请先联系站长。</li>
         <li><b>尊重版权:</b>请勿发布、索取或询问盗版影视资源、破解工具的获取方式;引用他人观点、数据或截图时请注明来源。</li>
         <li><b>保护隐私:</b>请勿在留言中透露自己或他人的真实姓名、住址、学校、单位、电话、身份证号、支付账号等敏感信息。未成年人尤其需要注意;建议所有人不要公开联系方式,谨防冒充站长的诈骗。</li>
+        <li><b>楼中楼互相回复:</b>不只是站长能回你——<b>任何人都可以点某条留言下面的「回复」</b>进行楼中楼交流,回复会缩进显示在原留言下面,并标注「回复 @对方昵称」。请尽量就事论事,别把讨论变成对线。</li>
+        <li><b>点赞:</b>每条留言和每条回复都可以点赞(爱心按钮),<b>一个访客对同一条只能点一次</b>,重复点击不会重复计数;点赞数据存在云端数据库里,所有人可见。请不要用脚本刷赞。</li>
         <li><b>提问建议:</b>提问请尽量具体(写明电影名、时间点、你想确认的细节),这样站长与网友才能高效回答。发问前建议先看看站内 Q&amp;A 与已有留言,避免重复提问。</li>
         <li><b>内容处置权:</b>留言仅代表发布者个人观点,不代表本站立场。站长作为内容管理者,有权在<strong>不事先通知</strong>的情况下删除、隐藏或置顶任何留言;对涉嫌违法或侵权的留言,本站保留保存证据并向有关部门举报、追究责任的权利。</li>
         <li><b>技术说明:</b>本站是静态站点。在未配置云端留言板的情况下,留言只保存在<strong>你自己的浏览器</strong>里(其他设备与其他访客看不到),请勿将其当作正式投稿或求助渠道;配置云端留言板后,留言将对所有访客公开。</li>
@@ -90,6 +92,7 @@
           <option value="纠错建议">纠错建议</option>
         </select>
       </div>
+      <div class="reply-bar" id="cmReplyBar"></div>
       <textarea id="cmContent" maxlength="500" placeholder="想说的话…例如:《复联5》预告里洛基那场戏到底在哪个时间点?需要先补哪几部?（4-500 字）"></textarea>
       <div class="form-foot">
         <span id="cmCounter">0/500</span>
@@ -172,6 +175,7 @@
   </footer>
 
   <script src="assets/js/site-config.js"></script>
+  <script src="assets/js/fx.js"></script>
   <script src="assets/js/comments.js"></script>
   <script>
     document.getElementById("navToggle").addEventListener("click", function () {

@@ -328,4 +328,44 @@ Waline 是主流的"无服务器评论系统":数据存云数据库,逻辑跑在
 
 《复仇者联盟5:毁灭之日》2026 年 12 月 18 日北美上映 —— 到时候见。
 
-</div>
+---
+
+## 留言板 v2:楼中楼 + 点赞
+
+留言板现在支持**网友之间互相回复(楼中楼)**与**点赞**。功能已在前端写好,但**需要先给数据库加两列一张表**,否则会自动降级成旧版(只能站长回复)。
+
+### 一次性升级步骤(约 30 秒)
+
+1. 打开 [supabase.com](https://supabase.com) → 进入你的项目
+2. 左侧点 **SQL Editor** → **New query**
+3. 打开本仓库的 [`docs/supabase-migration-v2.sql`](docs/supabase-migration-v2.sql),**全选复制**,粘贴进去
+4. 点右下角 **Run**
+5. 看到底部返回 `has_parent_id / has_like_count / has_likes_table` 三列都为 `1`,即升级成功
+
+> 脚本是幂等的(可以重复执行),**不会删除任何已有留言**。
+> 升级后:每条留言/回复都有爱心按钮,一个浏览器对同一条只能点一次;留言下面点「回复」即可楼中楼交流。
+
+### 为什么没用 Twikoo / Waline?
+
+Twikoo 与 Waline 都是很好的评论系统,但它们需要**额外的后端服务**(Vercel/Netlify Functions + MongoDB Atlas 等)才能工作,还要再注册一套账号、配置环境变量。
+本站已经有可用的 Supabase 免费数据库(评论、公告、站长登录都在上面),所以**直接在同一套数据库上实现楼中楼与点赞**更省事:
+
+| 方案 | 需要额外做的事 | 数据归属 |
+|---|---|---|
+| 本站原生(当前) | 跑一次 SQL(30 秒) | 你自己的 Supabase |
+| Twikoo | 部署云函数 + 注册 MongoDB Atlas + 配置环境变量 | 你的 MongoDB |
+| Waline | 同上(Vercel + 数据库) | 你的数据库 |
+
+如果你仍然想换成 Twikoo:在 `comments.html` 里加一段 `<div id="twikoo"></div>` 和官方脚本、把 `comments.js` 的初始渲染注释掉即可,本站的静态结构不会妨碍它。配置项 `site-config.js → walineServerURL` 也一直保留着,填上就能切到 Waline。
+
+---
+
+## 粒子特效
+
+`assets/js/fx.js` —— 毁灭博士风格的绿色魔法粒子:点击迸发火花 + 符文圈,筛选/搜索/切换角色都有反馈。
+
+- 空闲时不跑 rAF(零性能开销),同时最多 420 个粒子
+- 自动尊重系统的「减少动态效果」设置(`prefers-reduced-motion`)
+- 想调颜色/数量:改 `fx.js` 顶部的 `COLORS` 与 `burst()` 参数即可
+- 不想要:删掉三个 HTML 里的 `<script src="assets/js/fx.js"></script>` 一行即可
+

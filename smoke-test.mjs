@@ -173,8 +173,50 @@ check("normalizeComment 字段转换正确", (() => {
   const r = board.normalizeComment({
     id: "abc-123", name: "网友甲", content: "测试内容", type: "提问",
     reply: "", pinned: true, created_at: "2026-10-05T10:00:00Z",
+    parent_id: "p-1", like_count: 7,
   });
-  return r.id === "abc-123" && r.pinned === true && typeof r.ts === "number" && r.ts > 0;
+  return r.id === "abc-123" && r.pinned === true && typeof r.ts === "number" && r.ts > 0 &&
+    r.parentId === "p-1" && r.likes === 7;
+})());
+
+/* ---------- 2d. 楼中楼 + 点赞 ---------- */
+check("楼中楼:树形结构正确", (() => {
+  const tree = board.buildTree([
+    { id: "a", name: "甲", content: "主楼", ts: 3000, pinned: false, parentId: null },
+    { id: "b", name: "乙", content: "回甲1", ts: 1000, pinned: false, parentId: "a" },
+    { id: "c", name: "丙", content: "回甲2", ts: 2000, pinned: false, parentId: "a" },
+  ]);
+  const kids = tree.children["a"] || [];
+  return tree.tops.length === 1 && kids.length === 2 && kids[0].id === "b" && kids[1].id === "c";
+})());
+check("楼中楼:回复渲染成缩进子楼", (() => {
+  board.setComments([
+    { id: "a", name: "甲", content: "主楼内容", type: "提问", ts: Date.now(), pinned: false, parentId: null, likes: 0 },
+    { id: "b", name: "乙", content: "我也想知道", type: "剧情考据", ts: Date.now() + 1, pinned: false, parentId: "a", likes: 0 },
+  ]);
+  board.render();
+  const html = docB.querySelector("#cmList").innerHTML;
+  return html.includes("cm-children") && html.includes("cm-child") && html.includes("回复 @甲") && html.includes("我也想知道");
+})());
+check("点赞:计数 +1 且不会重复", (() => {
+  board.setComments([{ id: "z1", name: "甲", content: "给我点个赞", type: "提问", ts: Date.now(), pinned: false, parentId: null, likes: 3 }]);
+  board.likeComment("z1");
+  const after1 = board.getComments()[0].likes;
+  board.likeComment("z1");
+  const after2 = board.getComments()[0].likes;
+  return after1 === 4 && after2 === 4 && board.hasLiked("z1") === true;
+})());
+check("点赞:渲染出爱心与数字", (() => {
+  board.render();
+  const html = docB.querySelector("#cmList").innerHTML;
+  return html.includes("cm-like") && html.includes("❤ 4");
+})());
+check("回复目标:提示条正确显示", (() => {
+  board.setReplyTarget({ id: "z1", name: "甲" });
+  const bar = docB.querySelector("#cmReplyBar");
+  const ok = bar.innerHTML.includes("正在回复") && bar.innerHTML.includes("@甲");
+  board.setReplyTarget(null);
+  return ok;
 })());
 
 /* 当前随站发布的配置:应当已是云端模式 */

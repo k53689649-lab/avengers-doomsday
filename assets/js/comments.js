@@ -33,6 +33,10 @@
   var KEY_COUNT = "dd_visit_count_v1";
   var KEY_ADMIN = "dd_admin_session_v1";
   var KEY_PWD = "dd_admin_pwd_v1";        // 本地模式下的站长密码(SHA-256 摘要,仅存本浏览器)
+  var KEY_LIKED = "dd_liked_v1";          // 我点过赞的留言 id(本浏览器)
+  var KEY_VISITOR = "dd_visitor_v1";      // 访客唯一标识(点赞去重用)
+  var replyTarget = null;                 // 当前正在回复的目标 {id, name}
+  var likeUnsupported = false;            // 数据库还没升级时,点赞降级
 
   /* ---------------- 云端状态 ---------------- */
   var sb = null;              // Supabase 客户端
@@ -119,6 +123,69 @@
   function uid() { return "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
   function setTip(el, cls, text) { if (el) { el.className = "form-tip " + cls; el.textContent = text; } }
 
+  /* ---------------- 访客标识 & 点赞记录(本浏览器) ---------------- */
+  function visitorId() {
+    var v = store(KEY_VISITOR);
+    if (!v) { v = "v" + Date.now().toString(36) + Math.random().toString(36).slice(2, 9); store(KEY_VISITOR, v); }
+    return v;
+  }
+  function likedIds() { return readJSON(KEY_LIKED, []) || []; }
+  function hasLiked(id) { return likedIds().indexOf(id) !== -1; }
+  function markLiked(id) {
+    var a = likedIds();
+    if (a.indexOf(id) === -1) { a.push(id); writeJSON(KEY_LIKED, a); }
+  }
+
+  /* ---------------- 楼中楼:把平铺列表拼成树 ---------------- */
+  function buildTree(list) {
+    var tops = [], byParent = {};
+    list.forEach(function (c) {
+      if (c.parentId) { (byParent[c.parentId] = byParent[c.parentId] || []).push(c); }
+      else { tops.push(c); }
+    });
+    tops.sort(function (a, b) {
+      if (!!b.pinned !== !!a.pinned) return b.pinned ? 1 : -1;
+      return (b.ts || 0) - (a.ts || 0);
+    });
+    Object.keys(byParent).forEach(function (k) {
+      byParent[k].sort(function (a, b) { return (a.ts || 0) - (b.ts || 0); });
+    });
+    return { tops: tops, children: byParent };
+  }
+  function commentName(id) {
+    var f = getComments().filter(function (c) { return c.id === id; })[0];
+    return f ? f.name : "已删除的留言";
+  }
+
+  /* ---------------- 点赞 ---------------- */
+  function likeComment(id) {
+    if (!id) return;
+    if (hasLiked(id)) { flashTip("你已经点过赞啦 👍"); return; }
+    markLiked(id);
+    if (cloudMode()) {
+      sb.rpc("like_comment", { p_comment: id, p_visitor: visitorId() }).then(function (r) {
+        if (r.error) {
+          likeUnsupported = true;
+          flashTip("点赞需要先升级数据库:请执行 docs/supabase-migration-v2.sql(执行后即可点赞)");
+          return;
+        }
+        var list = getComments(), hit = false;
+        list.forEach(function (c) { if (c.id === id) { c.likes = Number(r.data || c.likes + 1); hit = true; } });
+        if (hit) setComments(list);
+        renderAll();
+      });
+      return;
+    }
+    var list = getComments(), hit = false;
+    list.forEach(function (c) { if (c.id === id) { c.likes = Number(c.likes || 0) + 1; hit = true; } });
+    if (hit) setComments(list);
+    renderAll();
+  }
+  function flashTip(text) {
+    var el = $("#cmTip");
+    if (el) { setTip(el, "ok", "✓ " + text); setTimeout(function () { if (el.textContent.indexOf(text) !== -1) setTip(el, "", ""); }, 4000); }
+  }
+
   /* ---------------- 校验(两种模式共用) ---------------- */
   function validate(name, content) {
     var L = CFG.limits;
@@ -180,36 +247,64 @@
   function renderComments() {
     var box = $("#cmList");
     if (!box) return;
-    var list = getComments().slice().sort(function (a, b) {
-      if (!!b.pinned !== !!a.pinned) return b.pinned ? 1 : -1;
-      return (b.ts || 0) - (a.ts || 0);
-    });
+    var list = getComments();
+    var tree = buildTree(list);
+    var replyCount = list.filter(function (c) { return !!c.parentId; }).length;
     var countEl = $("#cmCount");
-    if (countEl) countEl.textContent = list.length ? "(" + list.length + " 条)" : "";
+    if (countEl) countEl.textContent = list.length ? "(" + list.length + " 条 · 含 " + replyCount + " 条回复)" : "";
     if (!list.length) {
       box.innerHTML = '<p class="cm-empty">' +
         (cloudConfigured() && !cloudReady ? "正在加载云端留言…" : "还没有留言,来做第一个提问的人吧 👋") +
         "</p>";
+      renderReplyBar();
       return;
     }
     var admin = isAdmin();
-    box.innerHTML = list.map(function (c) {
-      return '<article class="cm-item' + (c.pinned ? " pinned" : "") + '" data-id="' + esc(c.id) + '">' +
+
+    function itemHtml(c, isChild) {
+      var liked = hasLiked(c.id);
+      var parentName = isChild ? commentName(c.parentId) : "";
+      return '<article class="cm-item' + (c.pinned ? " pinned" : "") + (isChild ? " cm-child" : "") +
+        '" data-id="' + esc(c.id) + '">' +
         '<div class="cm-head">' +
         '<span class="cm-name">' + esc(c.name) + "</span>" +
+        (isChild ? '<span class="cm-at">回复 @' + esc(parentName) + "</span>" : "") +
         (c.pinned ? '<span class="cm-badge pin">已置顶</span>' : "") +
         '<span class="cm-badge type">' + esc(c.type || "提问") + "</span>" +
         '<span class="cm-time">' + esc(fmt(c.ts)) + "</span>" +
         "</div>" +
         '<div class="cm-text">' + esc(c.content) + "</div>" +
         (c.reply ? '<div class="cm-reply"><b>站长回复:</b>' + esc(c.reply) + "</div>" : "") +
-        (admin ? '<div class="cm-actions">' +
-          '<button data-act="pin" data-id="' + esc(c.id) + '">' + (c.pinned ? "取消置顶" : "置顶") + "</button>" +
-          '<button data-act="reply" data-id="' + esc(c.id) + '">' + (c.reply ? "修改回复" : "回复") + "</button>" +
-          '<button data-act="del" data-id="' + esc(c.id) + '">删除</button>' +
-          "</div>" : "") +
+        '<div class="cm-actions">' +
+        '<button class="cm-like' + (liked ? " liked" : "") + '" data-act="like" data-id="' + esc(c.id) + '" ' +
+        'title="' + (liked ? "你已经赞过这条了" : "给这条留言点个赞") + '">' +
+        (liked ? "❤" : "♡") + " " + Number(c.likes || 0) + "</button>" +
+        '<button data-act="replyto" data-id="' + esc(c.id) + '">回复</button>' +
+        (admin
+          ? '<button data-act="pin" data-id="' + esc(c.id) + '">' + (c.pinned ? "取消置顶" : "置顶") + "</button>" +
+          '<button data-act="reply" data-id="' + esc(c.id) + '">' + (c.reply ? "修改站长回复" : "站长回复") + "</button>" +
+          '<button class="danger" data-act="del" data-id="' + esc(c.id) + '">删除</button>'
+          : "") +
+        "</div>" +
         "</article>";
+    }
+
+    box.innerHTML = tree.tops.map(function (c) {
+      var kids = tree.children[c.id] || [];
+      return itemHtml(c, false) +
+        (kids.length ? '<div class="cm-children">' + kids.map(function (k) { return itemHtml(k, true); }).join("") + "</div>" : "");
     }).join("");
+    renderReplyBar();
+  }
+
+  /* 正在回复谁:表单上方的一条提示 */
+  function renderReplyBar() {
+    var bar = $("#cmReplyBar");
+    if (!bar) return;
+    if (!replyTarget) { bar.classList.remove("show"); bar.innerHTML = ""; return; }
+    bar.classList.add("show");
+    bar.innerHTML = "正在回复 <b>@" + esc(replyTarget.name) + "</b> 的留言" +
+      ' <button type="button" data-act="cancelreply">取消</button>';
   }
 
   function renderStats() {
@@ -242,13 +337,32 @@
 
     if (cloudMode()) {
       setTip(tip, "", "正在发布…");
-      sb.from(CFG.cloud.commentsTable).insert([{ name: v.name, content: v.content, type: type }]).then(function (r) {
-        if (r.error) { setTip(tip, "err", "✕ 发布失败:" + r.error.message); return; }
+      var payload = { name: v.name, content: v.content, type: type };
+      if (replyTarget) payload.parent_id = replyTarget.id;
+      var afterOk = function () {
         store(KEY_LAST, String(Date.now()));
         session(KEY_COUNT, String(Number(session(KEY_COUNT) || 0) + 1));
         if (contentEl) contentEl.value = "";
+        replyTarget = null;
         setTip(tip, "ok", "✓ 留言已发布,所有访客都能看到");
         return refreshCloud();
+      };
+      sb.from(CFG.cloud.commentsTable).insert([payload]).then(function (r) {
+        if (r.error) {
+          // 数据库还没升级(没有 parent_id 列)时,退化成普通留言,并提示一次
+          if (replyTarget && /parent_id|column/i.test(r.error.message || "")) {
+            delete payload.parent_id;
+            sb.from(CFG.cloud.commentsTable).insert([payload]).then(function (r2) {
+              if (r2.error) { setTip(tip, "err", "✕ 发布失败:" + r2.error.message); return; }
+              flashTip("楼中楼需要先升级数据库:执行 docs/supabase-migration-v2.sql 后即可互相回复");
+              afterOk();
+            });
+            return;
+          }
+          setTip(tip, "err", "✕ 发布失败:" + r.error.message);
+          return;
+        }
+        afterOk();
       });
       return true;
     }
@@ -256,12 +370,14 @@
     var list = getComments();
     list.push({
       id: uid(), name: v.name, content: v.content, type: type,
-      ts: Date.now(), pinned: false, reply: ""
+      ts: Date.now(), pinned: false, reply: "",
+      parentId: replyTarget ? replyTarget.id : null, likes: 0
     });
     setComments(list);
     store(KEY_LAST, String(Date.now()));
     session(KEY_COUNT, String(Number(session(KEY_COUNT) || 0) + 1));
     if (contentEl) contentEl.value = "";
+    replyTarget = null;
     setTip(tip, "ok", "✓ 留言已发布(当前为本地模式:仅你自己能看到)");
     renderAll();
     return true;
@@ -285,14 +401,17 @@
     setComments(f.list); renderAll();
   }
   function removeComment(id) {
-    if (!window.confirm("确定删除这条留言?删除后不可恢复。")) return;
+    var kids = getComments().filter(function (c) { return c.parentId === id; }).length;
+    var msg = kids ? "确定删除这条留言?它下面的 " + kids + " 条回复会一起删除,且不可恢复。" : "确定删除这条留言?删除后不可恢复。";
+    if (!window.confirm(msg)) return;
     if (cloudMode()) {
       sb.from(CFG.cloud.commentsTable).delete().eq("id", id)
         .then(function (r) { if (r.error) window.alert("删除失败:" + r.error.message); else refreshCloud(); });
       return;
     }
     var f = findComment(id); if (!f) return;
-    f.list.splice(f.index, 1); setComments(f.list); renderAll();
+    f.list = f.list.filter(function (c) { return c.id !== id && c.parentId !== id; });
+    setComments(f.list); renderAll();
   }
   function replyComment(id) {
     var f = findComment(id);
@@ -552,7 +671,9 @@
     return {
       id: row.id, name: row.name, content: row.content,
       type: row.type || "提问", reply: row.reply || "",
-      pinned: !!row.pinned, ts: Date.parse(row.created_at) || Date.now()
+      pinned: !!row.pinned, ts: Date.parse(row.created_at) || Date.now(),
+      parentId: row.parent_id || null,                 /* 楼中楼:回复的父留言 */
+      likes: Number(row.like_count || 0)               /* 点赞数 */
     };
   }
   function normalizeAnnouncement(row) {
@@ -617,9 +738,22 @@
       var act = t.closest("[data-act]");
       if (act) {
         var id = act.dataset.id;
-        if (act.dataset.act === "pin") togglePin(id);
-        else if (act.dataset.act === "del") removeComment(id);
-        else if (act.dataset.act === "reply") replyComment(id);
+        var what = act.dataset.act;
+        if (what === "pin") togglePin(id);
+        else if (what === "del") removeComment(id);
+        else if (what === "reply") replyComment(id);
+        else if (what === "like") likeComment(id);
+        else if (what === "replyto") {
+          var f = findComment(id);
+          if (f) {
+            replyTarget = { id: id, name: f.list[f.index].name };
+            renderReplyBar();
+            var ta = $("#cmContent");
+            if (ta) { ta.focus(); ta.scrollIntoView({ block: "center", behavior: "smooth" }); }
+          }
+        } else if (what === "cancelreply") {
+          replyTarget = null; renderReplyBar();
+        }
         return;
       }
       if (t.closest("#adminToggle")) { openAdmin(); return; }
@@ -664,6 +798,9 @@
     attemptLogin: attemptLogin, hashPwd: hashPwd, hasLocalPassword: hasLocalPassword,
     changeAdminPwd: changeAdminPwd,
     cloudConfigured: cloudConfigured, cloudMode: cloudMode, modeName: modeName,
-    normalizeComment: normalizeComment
+    normalizeComment: normalizeComment,
+    buildTree: buildTree, likeComment: likeComment, hasLiked: hasLiked,
+    setReplyTarget: function (t) { replyTarget = t; renderReplyBar(); },
+    getReplyTarget: function () { return replyTarget; }
   };
 })();
