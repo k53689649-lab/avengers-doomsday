@@ -1,30 +1,58 @@
 /* =========================================================
    留言提问板 · 逻辑
-   - 默认模式:浏览器本地存储(适合演示与自用)
-   - 云端模式:配置 SITE_CONFIG.walineServerURL 后自动启用 Waline(留言存云端、支持社交登录与后台管理)
-   - 管理功能:置顶 / 删除 / 发布公告 / 导出数据
+   两种工作模式(自动判断):
+   ① 云端模式 —— 配置 SITE_CONFIG.cloud(provider:"supabase")后启用:
+      所有人共享同一份留言(谁都能看到所有提问与站长回复),
+      站长用邮箱+密码登录 Supabase 账号管理(密码在服务器端校验,前端看不到);
+   ② 本地模式 —— 未配置云端时的兜底:留言只存在访客自己的浏览器里(仅供演示)。
    ========================================================= */
 (function () {
   "use strict";
 
+  var rawCfg = window.SITE_CONFIG || {};
   var CFG = Object.assign({
     siteName: "毁灭之日 · 观影指南",
-    adminPassword: "doomsday2026",
+    adminPassword: "",
     walineServerURL: "",
     socialLogin: { wechat: false, qq: false },
     presetAnnouncements: [],
     limits: { maxLength: 500, minLength: 4, cooldownSeconds: 30, maxPerVisit: 20 },
     blockedWords: []
-  }, window.SITE_CONFIG || {});
+  }, rawCfg);
+  CFG.cloud = Object.assign({
+    provider: "",              // "" = 本地模式;"supabase" = 云端模式
+    supabaseUrl: "",
+    supabaseAnonKey: "",
+    commentsTable: "comments",
+    announceTable: "announcements"
+  }, rawCfg.cloud || {});
 
   var KEY_CM = "dd_comments_v1";
   var KEY_ANN = "dd_announcements_v1";
   var KEY_LAST = "dd_last_post_v1";
   var KEY_COUNT = "dd_visit_count_v1";
   var KEY_ADMIN = "dd_admin_session_v1";
-  var KEY_PWD = "dd_admin_pwd_v1";        // 站长密码(仅存本浏览器的 SHA-256 摘要)
+  var KEY_PWD = "dd_admin_pwd_v1";        // 本地模式下的站长密码(SHA-256 摘要,仅存本浏览器)
 
-  /* ---------------- 存储层(带内存兜底) ---------------- */
+  /* ---------------- 云端状态 ---------------- */
+  var sb = null;              // Supabase 客户端
+  var cloudUser = null;       // 已登录的站长账号
+  var cloudReady = false;
+  var cloudComments = [];
+  var cloudAnns = [];
+  var cloudError = "";
+
+  function cloudConfigured() {
+    return CFG.cloud.provider === "supabase" && !!CFG.cloud.supabaseUrl && !!CFG.cloud.supabaseAnonKey;
+  }
+  function cloudMode() { return cloudConfigured() && cloudReady; }
+  function modeName() {
+    if (cloudMode()) return "云端";
+    if (cloudConfigured() && !cloudReady) return "连接中";
+    return "本地";
+  }
+
+  /* ---------------- 存储层(本地模式 / 内存兜底) ---------------- */
   var memory = {};
   function store(key, value) {
     try {
@@ -53,16 +81,26 @@
   }
   function writeJSON(key, val) { store(key, JSON.stringify(val)); }
 
-  function getComments() { return readJSON(KEY_CM, []); }
-  function setComments(list) { writeJSON(KEY_CM, list); }
+  /* ---------------- 数据读取(两种模式统一出口) ---------------- */
+  function getComments() {
+    return cloudMode() ? cloudComments : readJSON(KEY_CM, []);
+  }
+  function setComments(list) {
+    if (cloudMode()) { cloudComments = list; return; }
+    writeJSON(KEY_CM, list);
+  }
   function getAnnouncements() {
+    if (cloudMode()) return cloudAnns;
     var own = readJSON(KEY_ANN, null);
     if (own && own.length) return own;
     return (CFG.presetAnnouncements || []).map(function (a, i) {
       return { id: "preset" + i, text: a.text, time: a.time || "" };
     });
   }
-  function setAnnouncements(list) { writeJSON(KEY_ANN, list); }
+  function setAnnouncements(list) {
+    if (cloudMode()) { cloudAnns = list; return; }
+    writeJSON(KEY_ANN, list);
+  }
 
   /* ---------------- 工具 ---------------- */
   function $(sel) { return document.querySelector(sel); }
@@ -79,8 +117,9 @@
     return t.getFullYear() + "-" + p(t.getMonth() + 1) + "-" + p(t.getDate()) + " " + p(t.getHours()) + ":" + p(t.getMinutes());
   }
   function uid() { return "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function setTip(el, cls, text) { if (el) { el.className = "form-tip " + cls; el.textContent = text; } }
 
-  /* ---------------- 校验 ---------------- */
+  /* ---------------- 校验(两种模式共用) ---------------- */
   function validate(name, content) {
     var L = CFG.limits;
     name = (name || "").trim();
@@ -96,20 +135,33 @@
         return { ok: false, msg: "留言包含被禁止的内容(" + CFG.blockedWords[i] + "),请修改后再发布" };
       }
     }
-    // 与已有留言完全重复 → 视为刷屏
-    var dup = getComments().some(function (c) { return c.content.trim() === content; });
+    var dup = getComments().some(function (c) { return (c.content || "").trim() === content; });
     if (dup) return { ok: false, msg: "这条内容已经发过了,请勿重复刷屏" };
-    // 冷却时间
     var last = Number(store(KEY_LAST) || 0);
     var wait = CFG.limits.cooldownSeconds * 1000 - (Date.now() - last);
     if (last && wait > 0) return { ok: false, msg: "发布太频繁了,请 " + Math.ceil(wait / 1000) + " 秒后再试" };
-    // 单次访问条数上限
     var cnt = Number(session(KEY_COUNT) || 0);
     if (cnt >= CFG.limits.maxPerVisit) return { ok: false, msg: "本次访问的留言数已达上限(" + CFG.limits.maxPerVisit + " 条),请稍后再来" };
     return { ok: true, name: name, content: content };
   }
 
-  /* ---------------- 渲染:公告 ---------------- */
+  /* ---------------- 渲染 ---------------- */
+  function renderStatus() {
+    var box = $("#cloudStatus");
+    if (!box) return;
+    if (cloudMode()) {
+      box.className = "cloud-status ok";
+      box.innerHTML = "☁️ <b>云端已连接</b> —— 所有人的提问与回复都在这里,其他访客也能看到。";
+    } else if (cloudConfigured() && !cloudReady) {
+      box.className = "cloud-status pending";
+      box.innerHTML = "⏳ 正在连接云端留言板…" + (cloudError ? "<br /><span class=\"cloud-err\">连接失败:" + esc(cloudError) + "</span>" : "");
+    } else {
+      box.className = "cloud-status local";
+      box.innerHTML = "💾 <b>当前为本地模式(未配置云端)</b> —— 留言只保存在你自己的浏览器里,站长发不出去、也收不到别人的提问。" +
+        "<br />站长若要让所有人共享留言,请按 README 的「Supabase 云端留言板」配置 <code>site-config.js</code>。";
+    }
+  }
+
   function renderAnnouncements() {
     var box = $("#announceList");
     if (!box) return;
@@ -125,7 +177,6 @@
     }).join("");
   }
 
-  /* ---------------- 渲染:留言列表 ---------------- */
   function renderComments() {
     var box = $("#cmList");
     if (!box) return;
@@ -136,7 +187,9 @@
     var countEl = $("#cmCount");
     if (countEl) countEl.textContent = list.length ? "(" + list.length + " 条)" : "";
     if (!list.length) {
-      box.innerHTML = '<p class="cm-empty">还没有留言,来做第一个提问的人吧 👋</p>';
+      box.innerHTML = '<p class="cm-empty">' +
+        (cloudConfigured() && !cloudReady ? "正在加载云端留言…" : "还没有留言,来做第一个提问的人吧 👋") +
+        "</p>";
       return;
     }
     var admin = isAdmin();
@@ -144,7 +197,6 @@
       return '<article class="cm-item' + (c.pinned ? " pinned" : "") + '" data-id="' + esc(c.id) + '">' +
         '<div class="cm-head">' +
         '<span class="cm-name">' + esc(c.name) + "</span>" +
-        (c.admin ? '<span class="cm-badge admin">站长</span>' : "") +
         (c.pinned ? '<span class="cm-badge pin">已置顶</span>' : "") +
         '<span class="cm-badge type">' + esc(c.type || "提问") + "</span>" +
         '<span class="cm-time">' + esc(fmt(c.ts)) + "</span>" +
@@ -169,31 +221,48 @@
       '<div class="stat"><b>' + list.length + '</b><span>条留言</span></div>' +
       '<div class="stat"><b>' + list.filter(function (c) { return !c.reply; }).length + '</b><span>待回复</span></div>' +
       '<div class="stat"><b>' + anns.length + '</b><span>条公告</span></div>' +
-      '<div class="stat"><b>' + (CFG.walineServerURL ? "云端" : "本地") + '</b><span>存储模式</span></div>';
+      '<div class="stat"><b>' + modeName() + '</b><span>存储模式</span></div>';
   }
 
-  function renderAll() { renderAnnouncements(); renderComments(); renderStats(); }
+  function renderAll() { renderStatus(); renderAnnouncements(); renderComments(); renderStats(); }
 
   /* ---------------- 管理员状态 ---------------- */
-  function isAdmin() { return session(KEY_ADMIN) === "1"; }
+  function isAdmin() {
+    if (cloudConfigured()) return !!cloudUser;
+    return session(KEY_ADMIN) === "1";
+  }
   function setAdmin(v) { session(KEY_ADMIN, v ? "1" : "0"); }
 
   /* ---------------- 发布留言 ---------------- */
   function submit() {
     var nameEl = $("#cmName"), contentEl = $("#cmContent"), typeEl = $("#cmType"), tip = $("#cmTip");
     var v = validate(nameEl ? nameEl.value : "", contentEl ? contentEl.value : "");
-    if (!v.ok) { if (tip) { tip.className = "form-tip err"; tip.textContent = "✕ " + v.msg; } return false; }
+    if (!v.ok) { setTip(tip, "err", "✕ " + v.msg); return false; }
+    var type = (typeEl && typeEl.value) || "提问";
+
+    if (cloudMode()) {
+      setTip(tip, "", "正在发布…");
+      sb.from(CFG.cloud.commentsTable).insert([{ name: v.name, content: v.content, type: type }]).then(function (r) {
+        if (r.error) { setTip(tip, "err", "✕ 发布失败:" + r.error.message); return; }
+        store(KEY_LAST, String(Date.now()));
+        session(KEY_COUNT, String(Number(session(KEY_COUNT) || 0) + 1));
+        if (contentEl) contentEl.value = "";
+        setTip(tip, "ok", "✓ 留言已发布,所有访客都能看到");
+        return refreshCloud();
+      });
+      return true;
+    }
+
     var list = getComments();
     list.push({
-      id: uid(), name: v.name, content: v.content,
-      type: (typeEl && typeEl.value) || "提问",
-      ts: Date.now(), pinned: false, admin: isAdmin(), reply: ""
+      id: uid(), name: v.name, content: v.content, type: type,
+      ts: Date.now(), pinned: false, reply: ""
     });
     setComments(list);
     store(KEY_LAST, String(Date.now()));
     session(KEY_COUNT, String(Number(session(KEY_COUNT) || 0) + 1));
     if (contentEl) contentEl.value = "";
-    if (tip) { tip.className = "form-tip ok"; tip.textContent = "✓ 留言已发布" + (CFG.walineServerURL ? "" : "(当前为本地模式:仅你自己能看到)"); }
+    setTip(tip, "ok", "✓ 留言已发布(当前为本地模式:仅你自己能看到)");
     renderAll();
     return true;
   }
@@ -205,20 +274,37 @@
     return null;
   }
   function togglePin(id) {
+    if (cloudMode()) {
+      var cur = getComments().filter(function (c) { return c.id === id; })[0];
+      sb.from(CFG.cloud.commentsTable).update({ pinned: !(cur && cur.pinned) }).eq("id", id)
+        .then(function (r) { if (r.error) window.alert("操作失败:" + r.error.message); else refreshCloud(); });
+      return;
+    }
     var f = findComment(id); if (!f) return;
     f.list[f.index].pinned = !f.list[f.index].pinned;
     setComments(f.list); renderAll();
   }
   function removeComment(id) {
-    var f = findComment(id); if (!f) return;
     if (!window.confirm("确定删除这条留言?删除后不可恢复。")) return;
+    if (cloudMode()) {
+      sb.from(CFG.cloud.commentsTable).delete().eq("id", id)
+        .then(function (r) { if (r.error) window.alert("删除失败:" + r.error.message); else refreshCloud(); });
+      return;
+    }
+    var f = findComment(id); if (!f) return;
     f.list.splice(f.index, 1); setComments(f.list); renderAll();
   }
   function replyComment(id) {
-    var f = findComment(id); if (!f) return;
-    var cur = f.list[f.index].reply || "";
+    var f = findComment(id);
+    var cur = f ? (f.list[f.index].reply || "") : "";
     var txt = window.prompt("输入站长回复内容(留空则清除回复):", cur);
     if (txt === null) return;
+    if (cloudMode()) {
+      sb.from(CFG.cloud.commentsTable).update({ reply: txt.trim() }).eq("id", id)
+        .then(function (r) { if (r.error) window.alert("回复失败:" + r.error.message); else refreshCloud(); });
+      return;
+    }
+    if (!f) return;
     f.list[f.index].reply = txt.trim();
     setComments(f.list); renderAll();
   }
@@ -226,15 +312,24 @@
     var el = $("#annText"); if (!el) return;
     var text = (el.value || "").trim();
     if (text.length < 4) { window.alert("公告内容至少 4 个字"); return; }
+    if (cloudMode()) {
+      sb.from(CFG.cloud.announceTable).insert([{ text: text }]).then(function (r) {
+        if (r.error) { window.alert("发布失败:" + r.error.message); return; }
+        el.value = "";
+        window.alert("公告已发布(所有访客可见)");
+        refreshCloud();
+      });
+      return;
+    }
     var list = getAnnouncements();
     list.unshift({ id: uid(), text: text, time: fmt(now()) });
     setAnnouncements(list);
     el.value = "";
     renderAll();
-    window.alert("公告已发布(显示在公告区最上方)");
+    window.alert("公告已发布(当前为本地模式:仅你自己可见)");
   }
   function exportData() {
-    var data = { exportAt: fmt(now()), comments: getComments(), announcements: getAnnouncements() };
+    var data = { exportAt: fmt(now()), mode: modeName(), comments: getComments(), announcements: getAnnouncements() };
     try {
       var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       var a = document.createElement("a");
@@ -245,10 +340,15 @@
   }
   function clearAll() {
     if (!window.confirm("确定清空全部留言(公告保留)?此操作不可恢复!")) return;
+    if (cloudMode()) {
+      sb.from(CFG.cloud.commentsTable).delete().neq("id", "00000000-0000-0000-0000-000000000000")
+        .then(function (r) { if (r.error) window.alert("清空失败:" + r.error.message); else refreshCloud(); });
+      return;
+    }
     setComments([]); renderAll();
   }
 
-  /* ---------------- 站长密码:不写进代码,存在本浏览器 ---------------- */
+  /* ---------------- 本地模式的站长密码(不写进代码) ---------------- */
   function weakHash(s) {
     var h = 5381, i;
     for (i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
@@ -269,26 +369,35 @@
   }
   function hasLocalPassword() { return !!store(KEY_PWD); }
 
-  /* 登录核心逻辑(可测试):
-     返回 empty / short / set(首次设置成功) / ok / wrong */
+  /* 登录核心逻辑(可测试):empty / short / set(首次设置) / ok / wrong */
   function attemptLogin(pwd, cb) {
     pwd = (pwd || "").trim();
     if (!pwd) return cb("empty");
-    if (CFG.adminPassword) {                 // 兼容:配置里写死了固定密码(公开可见,不推荐)
-      var good = pwd === CFG.adminPassword;
-      setAdmin(good);
-      return cb(good ? "ok" : "wrong");
+    if (CFG.adminPassword) {
+      var ok1 = pwd === CFG.adminPassword;
+      setAdmin(ok1);
+      return cb(ok1 ? "ok" : "wrong");
     }
     var saved = store(KEY_PWD);
-    if (!saved) {                            // 首次使用:设置密码
+    if (!saved) {
       if (pwd.length < 6) return cb("short");
       hashPwd(pwd, function (h) { store(KEY_PWD, h); setAdmin(true); cb("set"); });
       return;
     }
     hashPwd(pwd, function (h) {
-      var good = h === saved;
-      setAdmin(good);
-      cb(good ? "ok" : "wrong");
+      var ok2 = h === saved;
+      setAdmin(ok2);
+      cb(ok2 ? "ok" : "wrong");
+    });
+  }
+  function changeAdminPwd() {
+    var np = window.prompt("设置新的管理密码(至少 6 位,留空取消):", "");
+    if (np === null) return;
+    np = np.trim();
+    if (np.length < 6) { window.alert("密码至少 6 位,未修改"); return; }
+    hashPwd(np, function (h) {
+      store(KEY_PWD, h);
+      window.alert("✓ 管理密码已更新(仅保存在本浏览器)");
     });
   }
 
@@ -305,38 +414,62 @@
     var on = isAdmin();
     login.style.display = on ? "none" : "block";
     panel.style.display = on ? "block" : "none";
+    // 云端模式:用邮箱+密码登录 Supabase 账号;本地模式:用本机设置的密码
+    var emailEl = $("#adminEmail"), emailLbl = $("#adminEmailLabel"), hint = $("#adminLoginHint");
+    var cloud = cloudConfigured();
+    if (emailEl) emailEl.style.display = cloud ? "block" : "none";
+    if (emailLbl) emailLbl.style.display = cloud ? "block" : "none";
+    if (hint) {
+      hint.textContent = cloud
+        ? "云端模式:请用站长 Supabase 账号(邮箱 + 密码)登录 —— 密码在服务器端校验,前端看不到,别人也无法冒充。"
+        : "本地模式:首次使用即设置密码,密码只保存在你自己的浏览器里,不会上传。";
+    }
+    var cp = $("#changePwdBtn");
+    if (cp) cp.style.display = cloud ? "none" : "inline-block";
   }
   function tryLogin() {
-    var el = $("#adminPwd"), tip = $("#adminTip");
+    var tip = $("#adminTip");
+    var el = $("#adminPwd");
     var pwd = el ? el.value : "";
+
+    if (cloudConfigured()) {
+      var emailEl = $("#adminEmail");
+      var email = emailEl ? emailEl.value.trim() : "";
+      if (!email) { setTip(tip, "err", "✕ 请输入站长邮箱"); return; }
+      if (!pwd) { setTip(tip, "err", "✕ 请输入密码"); return; }
+      if (!sb) { setTip(tip, "err", "✕ 云端尚未连接完成,请稍候重试"); return; }
+      setTip(tip, "", "正在登录…");
+      sb.auth.signInWithPassword({ email: email, password: pwd }).then(function (r) {
+        if (r.error) { setTip(tip, "err", "✕ 登录失败:" + r.error.message); return; }
+        cloudUser = r.data && r.data.user ? r.data.user : null;
+        if (el) el.value = "";
+        syncAdminUI(); renderAll();
+        setTip(tip, "ok", "✓ 已登录(管理员),现在可以回复/置顶/删除留言");
+      });
+      return;
+    }
+
     var firstTime = !CFG.adminPassword && !hasLocalPassword();
     attemptLogin(pwd, function (res) {
-      if (!tip) return;
-      if (res === "empty") { tip.className = "form-tip err"; tip.textContent = "✕ 请输入密码"; return; }
-      if (res === "short") { tip.className = "form-tip err"; tip.textContent = "✕ 密码至少 6 位"; return; }
-      if (res === "wrong") { tip.className = "form-tip err"; tip.textContent = "✕ 密码错误"; return; }
+      if (res === "empty") { setTip(tip, "err", "✕ 请输入密码"); return; }
+      if (res === "short") { setTip(tip, "err", "✕ 密码至少 6 位"); return; }
+      if (res === "wrong") { setTip(tip, "err", "✕ 密码错误"); return; }
       if (el) el.value = "";
       syncAdminUI(); renderAll();
-      tip.className = "form-tip ok";
-      tip.textContent = res === "set"
+      setTip(tip, "ok", res === "set"
         ? "✓ 已设置管理密码并进入管理模式(密码只保存在本浏览器,不会上传)"
-        : "✓ 已进入管理模式";
+        : "✓ 已进入管理模式");
       if (firstTime && res === "set") {
-        window.alert("管理密码设置成功!\n\n请记住它 —— 密码以摘要形式保存在你自己的浏览器里:\n· 换浏览器 / 清除浏览数据后需要重新设置\n· 留言板接上 Waline 云端后,请改用 Waline 服务端后台管理");
+        window.alert("管理密码设置成功!\n\n请记住它 —— 密码以摘要形式保存在你自己的浏览器里,换浏览器或清除数据后需要重新设置。");
       }
     });
   }
-
-  /* 修改管理密码 */
-  function changeAdminPwd() {
-    var np = window.prompt("设置新的管理密码(至少 6 位,留空取消):", "");
-    if (np === null) return;
-    np = np.trim();
-    if (np.length < 6) { window.alert("密码至少 6 位,未修改"); return; }
-    hashPwd(np, function (h) {
-      store(KEY_PWD, h);
-      window.alert("✓ 管理密码已更新(仅保存在本浏览器)");
-    });
+  function logout() {
+    if (cloudConfigured() && sb) {
+      sb.auth.signOut().then(function () { cloudUser = null; syncAdminUI(); renderAll(); });
+      return;
+    }
+    setAdmin(false); syncAdminUI(); renderAll();
   }
 
   /* ---------------- 登录入口说明 ---------------- */
@@ -346,7 +479,7 @@
     var enabled = CFG.socialLogin && CFG.socialLogin[provider];
     var lines;
     if (enabled && CFG.walineServerURL) {
-      lines = ["【" + label + "登录】已开启。", "", "请使用页面下方的留言框,点击登录按钮选择" + label + "授权即可。", "登录后你的昵称与头像会自动带上,并可收到回复提醒。"];
+      lines = ["【" + label + "登录】已开启。", "", "请使用页面下方的留言框,点击登录按钮选择" + label + "授权即可。"];
     } else {
       lines = [
         "【" + label + "登录】当前未开启 —— 说明如下",
@@ -359,14 +492,13 @@
         "③ 微信小程序版留言板 —— 个人可免费注册小程序,在小程序内调用微信登录 + 云开发数据库,这是个人开发者唯一能真正使用「微信登录」的正规途径;",
         "④ 若日后有营业执照 —— 申请" + plat + ",把 AppID/密钥配置到 Waline 社交登录,即可实现网页扫码登录。",
         "",
-        "本站当前使用『昵称留言』模式:无需登录,任何人都可以直接提问。",
-        "部署步骤详见项目 README 的「留言板部署指南」。"
+        "本站当前使用『昵称留言』模式:无需登录,任何人都可以直接提问。"
       ];
     }
     window.alert(lines.join("\n"));
   }
 
-  /* ---------------- Waline 云端模式 ---------------- */
+  /* ---------------- Waline 云端模式(可选,另一种云端方案) ---------------- */
   function bootWaline() {
     if (!CFG.walineServerURL) return false;
     var wrap = $("#walineWrap"), localForm = $("#localFormSection"), localList = $("#localListSection");
@@ -374,22 +506,15 @@
     if (localForm) localForm.classList.add("hidden");
     if (localList) localList.classList.add("hidden");
     var note = $("#walineNote");
-    if (note) {
-      note.textContent = "已连接云端留言板(Waline):" + CFG.walineServerURL + " —— 留言会保存到云端数据库,所有访客可见;社交登录与后台管理请在 Waline 服务端配置。";
-    }
+    if (note) note.textContent = "已连接云端留言板(Waline):" + CFG.walineServerURL + " —— 留言保存到云端数据库,所有访客可见;社交登录与后台管理请在 Waline 服务端配置。";
     try {
       var s = document.createElement("script");
       s.src = "https://unpkg.com/@waline/client@v3/dist/waline.js";
       s.onload = function () {
         if (window.Waline && window.Waline.init) {
           window.Waline.init({
-            el: "#waline",
-            serverURL: CFG.walineServerURL,
-            lang: "zh-CN",
-            meta: ["nick", "mail", "link"],
-            requiredMeta: ["nick"],
-            login: "enable",
-            pageview: false
+            el: "#waline", serverURL: CFG.walineServerURL, lang: "zh-CN",
+            meta: ["nick", "mail", "link"], requiredMeta: ["nick"], login: "enable", pageview: false
           });
         }
       };
@@ -400,6 +525,75 @@
       document.head.appendChild(link);
     } catch (e) { /* 离线环境忽略 */ }
     return true;
+  }
+
+  /* ---------------- Supabase 云端:连接与同步 ---------------- */
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = function () { reject(new Error("无法加载 " + src)); };
+      document.head.appendChild(s);
+      setTimeout(function () { reject(new Error("加载超时")); }, 12000);
+    });
+  }
+  function loadSupabaseLib() {
+    if (window.supabase) return Promise.resolve();
+    var cdns = [
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
+      "https://unpkg.com/@supabase/supabase-js@2"
+    ];
+    return cdns.reduce(function (chain, url) {
+      return chain.catch(function () { return loadScript(url); });
+    }, Promise.reject(new Error("start")));
+  }
+  function normalizeComment(row) {
+    return {
+      id: row.id, name: row.name, content: row.content,
+      type: row.type || "提问", reply: row.reply || "",
+      pinned: !!row.pinned, ts: Date.parse(row.created_at) || Date.now()
+    };
+  }
+  function normalizeAnnouncement(row) {
+    return { id: row.id, text: row.text, time: fmt(row.created_at) };
+  }
+  function refreshCloud() {
+    if (!cloudMode()) return Promise.resolve();
+    return Promise.all([
+      sb.from(CFG.cloud.commentsTable).select("*").order("created_at", { ascending: false }).limit(500),
+      sb.from(CFG.cloud.announceTable).select("*").order("created_at", { ascending: false }).limit(50)
+    ]).then(function (res) {
+      var c = res[0], a = res[1];
+      if (c.error) { cloudError = c.error.message; }
+      else { cloudComments = (c.data || []).map(normalizeComment); }
+      if (!a.error) { cloudAnns = (a.data || []).map(normalizeAnnouncement); }
+      renderAll();
+    }).catch(function (e) { cloudError = e.message; renderAll(); });
+  }
+  function initCloud() {
+    return loadSupabaseLib().then(function () {
+      if (!window.supabase) throw new Error("supabase-js 未就绪");
+      sb = window.supabase.createClient(CFG.cloud.supabaseUrl, CFG.cloud.supabaseAnonKey, {
+        auth: { persistSession: true, autoRefreshToken: true }
+      });
+      return sb.auth.getSession();
+    }).then(function (s) {
+      cloudUser = s && s.data && s.data.session ? s.data.session.user : null;
+      cloudReady = true;
+      if (sb && sb.auth && sb.auth.onAuthStateChange) {
+        sb.auth.onAuthStateChange(function (_evt, sess) {
+          cloudUser = sess ? sess.user : null;
+          syncAdminUI(); renderAll();
+        });
+      }
+      renderAll();
+      return refreshCloud();
+    }).catch(function (e) {
+      cloudError = (e && e.message) || String(e);
+      cloudReady = false;
+      renderAll();
+    });
   }
 
   /* ---------------- 事件绑定 ---------------- */
@@ -440,8 +634,7 @@
     var ab = $("#annPost"); if (ab) ab.addEventListener("click", postAnnouncement);
     var ex = $("#exportBtn"); if (ex) ex.addEventListener("click", exportData);
     var cl = $("#clearBtn"); if (cl) cl.addEventListener("click", clearAll);
-    var lo = $("#logoutBtn");
-    if (lo) lo.addEventListener("click", function () { setAdmin(false); syncAdminUI(); renderAll(); });
+    var lo = $("#logoutBtn"); if (lo) lo.addEventListener("click", logout);
     var back = document.createElement("button");
     back.id = "backTop"; back.textContent = "↑"; back.title = "回到顶部";
     document.body.appendChild(back);
@@ -450,9 +643,11 @@
 
   /* ---------------- 启动 ---------------- */
   function init() {
-    if (bootWaline()) { renderAnnouncements(); renderStats(); bind(); return; }
+    if (bootWaline()) { renderStatus(); renderAnnouncements(); renderStats(); bind(); return; }
     renderAll();
     bind();
+    syncAdminUI();
+    if (cloudConfigured()) initCloud();
   }
 
   if (document.readyState === "loading") {
@@ -467,6 +662,8 @@
     getAnnouncements: getAnnouncements, setAnnouncements: setAnnouncements,
     render: renderAll, isAdmin: isAdmin, setAdmin: setAdmin, config: CFG,
     attemptLogin: attemptLogin, hashPwd: hashPwd, hasLocalPassword: hasLocalPassword,
-    changeAdminPwd: changeAdminPwd
+    changeAdminPwd: changeAdminPwd,
+    cloudConfigured: cloudConfigured, cloudMode: cloudMode, modeName: modeName,
+    normalizeComment: normalizeComment
   };
 })();

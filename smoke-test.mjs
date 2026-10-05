@@ -114,6 +114,37 @@ const rNew = await login("reset-pass-2026");
 check("重置密码:旧密码失效", rOld === "wrong");
 check("重置密码:新密码生效", rNew === "ok");
 
+/* ---------- 2c. 云端模式(Supabase)配置识别 ---------- */
+check("默认未配置云端 → 本地模式", board.cloudConfigured() === false && board.modeName() === "本地");
+check("normalizeComment 字段转换正确", (() => {
+  const r = board.normalizeComment({
+    id: "abc-123", name: "网友甲", content: "测试内容", type: "提问",
+    reply: "", pinned: true, created_at: "2026-10-05T10:00:00Z",
+  });
+  return r.id === "abc-123" && r.pinned === true && typeof r.ts === "number" && r.ts > 0;
+})());
+
+const cloudCfgSrc = configSrc
+  .replace('provider: "",', 'provider: "supabase",')
+  .replace('supabaseUrl: "",', 'supabaseUrl: "https://demo.supabase.co",')
+  .replace('supabaseAnonKey: "",', 'supabaseAnonKey: "demo-anon-key",');
+check("云端配置注入成功(测试自身)", cloudCfgSrc !== configSrc);
+if (cloudCfgSrc !== configSrc) {
+  const docC = makeDoc();
+  const winC = {
+    localStorage: { getItem: () => null, setItem() {}, removeItem() {} },
+    sessionStorage: { getItem: () => null, setItem() {} },
+    addEventListener() {}, confirm: () => true, prompt: () => "", alert() {},
+    crypto: globalThis.crypto, TextEncoder: globalThis.TextEncoder,
+  };
+  new Function("window", "document", cloudCfgSrc + "\n" + commentsSrc)(winC, docC);
+  const boardC = winC.CommentsBoard;
+  check("云端模式:配置被正确识别", boardC.cloudConfigured() === true);
+  check("云端模式:未连接时显示「连接中」", boardC.modeName() === "连接中");
+  check("云端模式:未登录时无管理权限", boardC.isAdmin() === false);
+  check("云端模式:渲染未抛错(可降级)", typeof docC.querySelector("#cloudStatus").innerHTML === "string");
+}
+
 /* ---------- 3. 页面文件与单文件版检查 ---------- */
 const pages = ["index.html", "guide.html", "comments.html"];
 for (const p of pages) {

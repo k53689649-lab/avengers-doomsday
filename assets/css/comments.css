@@ -114,6 +114,18 @@ textarea { width: 100%; min-height: 120px; resize: vertical; line-height: 1.7; }
 
 .waline-note { font-size: 13px; color: var(--muted); background: var(--card); border: 1px dashed var(--line); border-radius: 10px; padding: 14px 16px; }
 
+/* ---------- 云同步状态条 ---------- */
+.cloud-status {
+  font-size: 13px; line-height: 1.8; border-radius: 12px; padding: 12px 16px; margin-bottom: 14px;
+  border: 1px solid var(--line); background: var(--card); color: var(--muted);
+}
+.cloud-status b { color: var(--text); }
+.cloud-status code { background: rgba(255,255,255,0.07); padding: 1px 6px; border-radius: 5px; font-size: 12px; }
+.cloud-status.ok { border-color: rgba(47, 211, 154, 0.45); background: rgba(47, 211, 154, 0.08); color: #bfe9d8; }
+.cloud-status.pending { border-color: rgba(247, 201, 72, 0.4); background: rgba(247, 201, 72, 0.07); color: #eddca8; }
+.cloud-status.local { border-color: rgba(255, 255, 255, 0.14); }
+.cloud-status .cloud-err { color: #ff8b8b; }
+
 /* ---------- 管理面板:安全说明 ---------- */
 .admin-secure {
   margin-top: 16px; padding: 14px 16px; border-radius: 12px;

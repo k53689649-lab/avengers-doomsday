@@ -70,9 +70,10 @@
     <div class="announce-list" id="announceList"></div>
   </section>
 
-  <!-- ======= 留言表单(本地模式) ======= -->
+  <!-- ======= 留言表单(本地/云端模式共用) ======= -->
   <section class="cm-section" id="localFormSection">
     <h2>我要提问 / 留言</h2>
+    <p class="cloud-status local" id="cloudStatus"></p>
     <div class="cm-form-card">
       <div class="login-row">
         <span>登录方式:</span>
@@ -116,11 +117,14 @@
     <div class="admin-box">
       <h3>站长管理面板 <span class="admin-badge" id="adminState"></span></h3>
       <p class="admin-desc">
-        输入管理密码后可发布公告、置顶/回复/删除留言、导出备份。<br />
-        🔐 <strong>首次使用即设置密码</strong>:密码以摘要形式保存在<strong>你自己的浏览器</strong>里,不会上传到服务器,也不会写进网页源码 —— 别人从源码里拿不到您的密码。
+        输入管理密码后可发布公告、置顶/回复/删除留言、导出备份。
+        <span id="adminModeHint"></span>
       </p>
 
       <div id="adminLogin">
+        <p class="form-tip" id="adminLoginHint" style="margin-bottom:12px"></p>
+        <label id="adminEmailLabel" style="display:none">站长邮箱(云端模式)</label>
+        <input id="adminEmail" type="email" placeholder="you@example.com" style="display:none" />
         <label>管理密码</label>
         <input id="adminPwd" type="password" placeholder="请输入管理密码" />
         <div class="admin-actions">
@@ -146,13 +150,12 @@
         <p class="admin-desc" style="margin-top:14px">提示:留言列表出现管理员的「置顶 / 回复 / 删除」按钮后,即可对每条留言单独操作。删除与清空不可恢复,建议先导出备份。</p>
 
         <div class="admin-secure">
-          <h4>🔐 关于这个密码的安全性</h4>
+          <h4>🔐 关于管理权限与密码</h4>
           <ul>
-            <li><b>存在哪里:</b>密码以 SHA-256 摘要形式保存在<b>你这台设备的浏览器</b>里,<b>不会上传</b>到任何服务器,也<b>不写进网页源码</b> —— 别人查看代码或抓包都拿不到。</li>
-            <li><b>为什么安全:</b>校验完全在你的浏览器里完成,密码从不离开设备;别的设备没有这份摘要,也就无法登录。</li>
-            <li><b>使用边界:</b>换浏览器 / 清除浏览数据后需要重新设置;用完建议点「退出管理模式」。</li>
-            <li><b>更进一步:</b>若想多人共享留言、并把管理权限放到服务器端(前端完全看不到任何凭据),请部署 Waline 云端留言板 —— 详见项目 README 的「留言板部署指南」。</li>
-            <li><b>账号保护建议:</b>给 GitHub 开启两步验证(2FA)、使用密码管理器生成 16 位以上随机密码、不要把密码写进仓库里的任何文件。</li>
+            <li><b>云端模式(推荐,已配置时):</b>站长用<b>邮箱 + 密码</b>登录自己的 Supabase 账号,密码由服务器校验,<b>前端完全看不到</b>,别人无法冒充;所有访客都能看到彼此的提问与站长的回复。</li>
+            <li><b>本地模式(未配置云端时):</b>首次输入即设置密码,密码以 SHA-256 摘要保存在<b>你这台设备的浏览器</b>里,不上传、不写进源码;但留言同样只存在本机,站长收不到别人的提问。</li>
+            <li><b>数据库层面的保护:</b>云端模式下,删除/置顶/回复等写操作受数据库 RLS 策略限制,只有站长账号的 UID 能执行 —— 即使有人知道接口地址也改不了任何留言。</li>
+            <li><b>账号保护建议:</b>给 Supabase / GitHub 都开启两步验证(2FA),使用密码管理器生成 16 位以上随机密码,不要把任何密钥写进公开仓库。</li>
           </ul>
         </div>
       </div>

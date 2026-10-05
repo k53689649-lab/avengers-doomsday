@@ -181,15 +181,54 @@ git push -u origin main
 
 ## 💬 留言板部署指南
 
-留言板有三种工作模式,按需要选:
+留言板有四档工作模式,按需要选(默认是 A,想"所有人共享留言"就选 B):
+
+> **一句话说明**:GitHub Pages 只能放静态文件,存不了别人的留言。所以"网友提问 → 站长看到并回复 → 大家都能看到"这种效果,必须有云端数据库。
 
 ### 模式 A:本地存储模式(默认,零配置)
 
 - 留言保存在访客自己的浏览器 `localStorage` 里。
-- **适合**:自用、演示、先跑起来看看效果。
-- **注意**:其他访客看不到你的留言,你发的留言别人也看不到。
+- **适合**:自用、演示。
+- **注意**:⚠️ 每个浏览器各存各的 —— **站长收不到别人的提问,其他访客也看不到别人的留言**。
 
-### 模式 B:Waline 云端模式(推荐,免费)
+---
+
+### 模式 B:Supabase 云端留言板(⭐ 推荐:公开留言板,免费)
+
+效果:**所有访客共享同一份留言板**,谁都能看到所有提问与站长的回复;站长用邮箱+密码登录(密码在服务器端校验,前端看不到)。
+
+**搭建步骤(约 15 分钟,全程免费):**
+
+1. **注册**:打开 <https://supabase.com> → 用 GitHub 或邮箱注册 → `New project`(Region 建议选 Singapore / 离中国近的节点,记住数据库密码)。
+2. **创建站长账号**:项目里 → `Authentication` → `Users` → `Add user` → `Create new user`,填你的邮箱 + 一个强密码,**勾选 Auto Confirm**;建好后复制这个用户的 **User UID**。
+3. **建表**(关键一步):左侧 `SQL Editor` → `New query` → 打开本仓库的 [`docs/supabase-schema.sql`](docs/supabase-schema.sql) → 全部粘贴进去 → 把里面的 `OWNER_UID` 替换成第 2 步复制的 UID → 点 `Run`。
+   - 这段 SQL 会建好 `comments` / `announcements` 两张表,并配好权限策略:人人可读可发言、只有站长能删除/置顶/回复/发公告。
+4. **关闭公开注册**(防止陌生人注册账号):`Authentication` → `Sign In / Providers`(或 Settings)→ 关闭 **Allow new users to sign up**。
+5. **拿 API 信息**:`Project Settings` → `API` → 复制 **Project URL** 与 **anon public** key。
+6. **填配置**:打开 `assets/js/site-config.js`,改成:
+
+   ```js
+   cloud: {
+     provider: "supabase",
+     supabaseUrl: "https://xxxx.supabase.co",     // 第 5 步的 Project URL
+     supabaseAnonKey: "eyJhbGciOi...",            // 第 5 步的 anon public key
+     commentsTable: "comments",
+     announceTable: "announcements"
+   },
+   ```
+
+7. **推送上线**:`node build-single-file.mjs && node push-to-github.mjs`,刷新留言板:
+   - 顶部状态条显示 **☁️ 云端已连接** = 成功
+   - 随便发一条留言 → 换手机/换浏览器打开 → 也能看到 = 全员共享成功
+   - 点「站长管理」→ 输入**邮箱 + 密码** → 即可回复/置顶/删除/发公告
+
+> 🔐 `anon` key 是**设计上就可以公开**的(它会出现在网页里),真正的安全由数据库 RLS 策略保证:删除、置顶、回复这些写操作只允许站长 UID 执行。**千万不要**把 `service_role` key 填进前端 —— 那是绕过所有策略的最高权限密钥。
+>
+> 🌐 **国内访问提示**:`supabase.co` 在国内时快时慢。若加载不稳定,可改用下面的 Waline(选 LeanCloud 国际版)或腾讯云开发。
+
+---
+
+### 模式 C:Waline 云端模式(另一种云端方案,免费)
 
 Waline 是主流的"无服务器评论系统":数据存云数据库,逻辑跑在免费 Serverless 上,自带后台管理。
 
@@ -205,7 +244,7 @@ Waline 是主流的"无服务器评论系统":数据存云数据库,逻辑跑在
 
 **收益**:所有人可见、多端同步、支持社交登录、官方管理后台可回复与删评、支持邮件/微信通知。
 
-### 模式 C:Twikoo 自建(喜欢自己掌控数据时)
+### 模式 D:Twikoo 自建(喜欢自己掌控数据时)
 
 部署 [Twikoo](https://twikoo.js.org/) 服务端,再把其前端容器嵌入页面即可,思路与 Waline 相同。
 

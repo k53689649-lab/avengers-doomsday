@@ -14,11 +14,24 @@ window.SITE_CONFIG = {
         (例如想在多台设备上用同一个密码),否则建议保持留空。 */
   adminPassword: "",
 
-  /* Waline 云留言板地址(可选,强烈推荐用于正式分享)
-     留空 = 使用浏览器本地存储模式(留言只存在访客自己的浏览器里,仅供演示)
-     填写示例:"https://your-waline.vercel.app"
-     填上之后:留言会存到云端(LeanCloud/Supabase),所有人都能看到;
-     并且支持社交登录(QQ / 微博 / GitHub 等,取决于你在 Waline 服务端的配置)。 */
+  /* ============ 云端留言板(公开模式,推荐) ============
+     配置后:所有人的提问与回复都存在云端,任何访客都能看到,站长可回复/置顶/删除。
+     未配置:退化为「本地模式」——留言只存在各自的浏览器里(站长收不到别人的提问)。
+
+     怎么填见 README 的「Supabase 云端留言板(公开模式)」:
+       supabaseUrl     = https://xxxx.supabase.co
+       supabaseAnonKey = eyJhbGciOi...   ← 这个 key 是设计上就可公开的,配合 RLS 策略保证安全
+     ⚠️ 千万不要把 service_role key 填进来(那是最高权限密钥,只能放服务器)。
+  */
+  cloud: {
+    provider: "",            // 填 "supabase" 即启用云端模式
+    supabaseUrl: "",
+    supabaseAnonKey: "",
+    commentsTable: "comments",
+    announceTable: "announcements"
+  },
+
+  /* Waline 云留言板地址(另一种云端方案,二选一即可;与上面的 cloud 不冲突) */
   walineServerURL: "",
 
   /* 登录入口开关:是否在页面上显示「微信登录 / QQ 登录」按钮
