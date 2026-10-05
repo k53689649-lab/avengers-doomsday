@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>留言提问板 | 毁灭之日 · 观影指南</title>
+  <meta name="description" content="关于《复仇者联盟5:毁灭之日》的提问、考据与观后感交流板。支持站长置顶公告、删评与回复。" />
+  <style>
+/* =========================================================
+   毁灭之日观影指南 — 全局样式
+   ========================================================= */
+:root {
+  --bg: #0b0e14;
+  --bg-alt: #10141d;
+  --card: #151a26;
+  --card-2: #1b2233;
+  --line: rgba(255, 255, 255, 0.08);
+  --text: #e8ecf4;
+  --muted: #9aa5b8;
+  --accent: #e23636;      /* 漫威红 */
+  --accent-2: #f7c948;    /* 金 */
+  --blue: #4da3ff;
+  --green: #43d17c;
+  --purple: #9d6bff;
+  --radius: 14px;
+  --maxw: 1180px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+a { color: var(--blue); text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* ---------- 顶栏 ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(11, 14, 20, 0.82);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 0 20px;
+  height: 64px; display: flex; align-items: center; justify-content: space-between;
+}
+.brand { display: flex; align-items: center; gap: 10px; color: var(--text); font-weight: 800; font-size: 17px; letter-spacing: 0.5px; }
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--accent), #7a1010);
+  color: #fff; font-family: serif; font-size: 20px; font-weight: 900;
+  box-shadow: 0 0 18px rgba(226, 54, 54, 0.5);
+}
+.nav { display: flex; gap: 4px; }
+.nav a {
+  color: var(--muted); font-size: 14px; padding: 8px 12px; border-radius: 8px;
+  transition: 0.2s;
+}
+.nav a:hover { color: #fff; background: rgba(255, 255, 255, 0.06); }
+.nav-toggle { display: none; background: none; border: 0; color: #fff; font-size: 22px; cursor: pointer; }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; overflow: hidden; padding: 110px 20px 90px; }
+.hero-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(700px 400px at 85% 15%, rgba(226, 54, 54, 0.22), transparent 60%),
+    radial-gradient(600px 400px at 10% 85%, rgba(77, 163, 255, 0.14), transparent 60%),
+    radial-gradient(400px 300px at 60% 60%, rgba(247, 201, 72, 0.08), transparent 60%);
+}
+.hero-inner { position: relative; max-width: var(--maxw); margin: 0 auto; }
+.hero-kicker {
+  font-family: "Segoe UI", sans-serif; letter-spacing: 4px; font-size: 13px;
+  color: var(--accent-2); font-weight: 700; margin-bottom: 18px;
+}
+.hero h1 {
+  font-size: clamp(34px, 6vw, 64px); line-height: 1.15; font-weight: 900; letter-spacing: 1px;
+}
+.hero h1 span {
+  background: linear-gradient(120deg, var(--accent) 20%, var(--accent-2) 90%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero-sub { max-width: 760px; margin: 22px 0 30px; color: var(--muted); font-size: clamp(15px, 2vw, 18px); }
+.hero-sub strong { color: var(--text); }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn {
+  display: inline-block; padding: 13px 26px; border-radius: 10px; font-weight: 700; font-size: 15px;
+  transition: 0.2s; cursor: pointer;
+}
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 6px 20px rgba(226, 54, 54, 0.35); }
+.btn-primary:hover { transform: translateY(-2px); background: #ff4747; }
+.btn-ghost { border: 1px solid var(--line); color: var(--text); }
+.btn-ghost:hover { border-color: var(--accent); color: #fff; }
+.hero-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 46px; }
+.stat {
+  background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line);
+  border-radius: 12px; padding: 12px 20px; min-width: 130px;
+}
+.stat b { display: block; font-size: 24px; color: #fff; }
+.stat span { font-size: 12px; color: var(--muted); }
+
+/* ---------- 通用 section ---------- */
+.section { padding: 84px 20px; max-width: var(--maxw); margin: 0 auto; }
+.section.alt { max-width: none; background: var(--bg-alt); }
+.section.alt > * { max-width: var(--maxw); margin-left: auto; margin-right: auto; }
+.section-head { margin-bottom: 40px; }
+.eyebrow {
+  color: var(--accent); font-weight: 800; letter-spacing: 3px; font-size: 12px; margin-bottom: 8px;
+}
+.section-head h2 { font-size: clamp(26px, 4vw, 40px); font-weight: 900; margin-bottom: 12px; }
+.section-desc { color: var(--muted); max-width: 820px; font-size: 15px; }
+
+/* ---------- 速览卡片 ---------- */
+.fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+.fact-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 22px; transition: 0.2s;
+}
+.fact-card:hover { border-color: rgba(226, 54, 54, 0.5); transform: translateY(-3px); }
+.fact-card .fact-label { font-size: 12px; color: var(--muted); letter-spacing: 1px; margin-bottom: 8px; }
+.fact-card .fact-value { font-size: 17px; font-weight: 700; }
+.fact-card .fact-value small { display: block; font-weight: 400; color: var(--muted); font-size: 12.5px; margin-top: 4px; }
+
+/* ---------- 路线 ---------- */
+.route-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+.route-tab {
+  background: var(--card); border: 1px solid var(--line); color: var(--muted);
+  padding: 10px 18px; border-radius: 999px; font-size: 14px; cursor: pointer; transition: 0.2s;
+}
+.route-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.route-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.route-item {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start;
+}
+.route-num {
+  flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(226, 54, 54, 0.15); color: var(--accent);
+  display: grid; place-items: center; font-weight: 800; font-size: 14px;
+}
+.route-item h4 { font-size: 15.5px; margin-bottom: 3px; }
+.route-item p { font-size: 13px; color: var(--muted); }
+
+/* ---------- 筛选控制条 ---------- */
+.controls { position: sticky; top: 64px; z-index: 30; background: rgba(11, 14, 20, 0.92); backdrop-filter: blur(10px); padding: 14px 0; margin-bottom: 26px; border-radius: 12px; }
+.search-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+.search-input {
+  flex: 1; min-width: 220px; background: var(--card); border: 1px solid var(--line);
+  color: var(--text); padding: 11px 16px; border-radius: 10px; font-size: 14.5px; outline: none;
+}
+.search-input:focus { border-color: var(--accent); }
+.filter-groups { display: flex; flex-direction: column; gap: 8px; }
+.filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.filter-label { font-size: 12px; color: var(--muted); width: 56px; flex: 0 0 auto; }
+.chip {
+  background: var(--card); border: 1px solid var(--line); color: var(--muted);
+  padding: 5px 13px; border-radius: 999px; font-size: 12.5px; cursor: pointer; transition: 0.15s;
+}
+.chip:hover { color: #fff; }
+.chip.active { background: var(--accent-2); color: #201500; border-color: var(--accent-2); font-weight: 700; }
+
+/* ---------- 影片卡片 ---------- */
+.films-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; }
+.film-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: 0.2s;
+}
+.film-card:hover { border-color: rgba(77, 163, 255, 0.55); transform: translateY(-3px); box-shadow: var(--shadow); }
+.film-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.film-title { font-size: 16.5px; font-weight: 800; line-height: 1.4; }
+.film-title span { display: block; font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+.film-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: 11px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.tag-year { color: var(--accent-2); border-color: rgba(247, 201, 72, 0.35); }
+.tag-direct { background: rgba(226, 54, 54, 0.14); color: #ff7a7a; border-color: rgba(226, 54, 54, 0.4); }
+.tag-context { background: rgba(77, 163, 255, 0.13); color: #8ec4ff; border-color: rgba(77, 163, 255, 0.35); }
+.tag-minor { background: rgba(157, 107, 255, 0.12); color: #bd9bff; border-color: rgba(157, 107, 255, 0.35); }
+.tag-info { background: rgba(67, 209, 124, 0.12); color: #7fe2a9; border-color: rgba(67, 209, 124, 0.35); }
+.tag-rumor { background: rgba(247, 201, 72, 0.14); color: var(--accent-2); border-color: rgba(247, 201, 72, 0.4); }
+.film-plot { font-size: 13.5px; color: var(--muted); }
+.film-relation {
+  border-top: 1px dashed var(--line); padding-top: 10px; font-size: 13px;
+}
+.film-relation b { color: var(--blue); }
+.film-relation .rel-label { font-size: 11px; color: var(--accent-2); letter-spacing: 1px; display: block; margin-bottom: 4px; }
+.empty-tip { text-align: center; color: var(--muted); padding: 60px 0; }
+.hidden { display: none !important; }
+
+.films-more { margin-top: 36px; }
+.films-more h3 { font-size: 20px; margin: 26px 0 14px; color: var(--accent-2); }
+.more-note { font-size: 13px; color: var(--muted); }
+
+/* ---------- 角色卡 ---------- */
+.char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.char-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 22px; transition: 0.2s; position: relative; overflow: hidden;
+}
+.char-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  opacity: 0.85;
+}
+.char-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: rgba(226, 54, 54, 0.5); }
+.char-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.char-name { font-size: 17px; font-weight: 800; }
+.char-name span { display: block; font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+.char-badges { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.char-actor { font-size: 12.5px; color: var(--accent-2); margin-bottom: 8px; }
+.char-bio { font-size: 13.5px; color: var(--muted); }
+.char-bio + .char-bio { margin-top: 8px; }
+.char-bio b { color: var(--text); }
+.char-evidence { margin-top: 10px; font-size: 12px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 9px; }
+.char-evidence em { color: var(--accent-2); font-style: normal; }
+.char-evidence .prob { display: inline-block; margin-left: 6px; }
+.prob-high { color: var(--green); }
+.prob-mid { color: var(--accent-2); }
+.prob-low { color: var(--muted); }
+
+/* ---------- FAQ ---------- */
+.faq-list { display: flex; flex-direction: column; gap: 12px; }
+.faq-item { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.faq-q {
+  width: 100%; text-align: left; background: none; border: 0; color: var(--text);
+  padding: 18px 22px; font-size: 15.5px; font-weight: 700; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+}
+.faq-q::after { content: "+"; color: var(--accent); font-size: 20px; transition: 0.25s; flex: 0 0 auto; }
+.faq-item.open .faq-q::after { transform: rotate(45deg); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.faq-a-inner { padding: 0 22px 20px; color: var(--muted); font-size: 14px; }
+.faq-a-inner b { color: var(--text); }
+
+/* ---------- Footer ---------- */
+.footer { border-top: 1px solid var(--line); padding: 40px 20px 60px; background: var(--bg-alt); }
+.footer-inner { max-width: var(--maxw); margin: 0 auto; font-size: 12.5px; color: var(--muted); }
+.footer-inner p + p { margin-top: 10px; }
+.footer-inner strong { color: var(--accent-2); }
+
+/* ---------- 返回顶部 ---------- */
+#backTop {
+  position: fixed; right: 22px; bottom: 22px; z-index: 60;
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--card-2); color: #fff; font-size: 18px; cursor: pointer;
+  opacity: 0; pointer-events: none; transition: 0.25s;
+}
+#backTop.show { opacity: 1; pointer-events: auto; }
+#backTop:hover { background: var(--accent); }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 860px) {
+  .nav {
+    position: absolute; top: 64px; left: 0; right: 0;
+    background: var(--bg-alt); flex-direction: column; padding: 10px 16px 16px;
+    border-bottom: 1px solid var(--line); display: none;
+  }
+  .nav.open { display: flex; }
+  .nav a { padding: 12px; }
+  .nav-toggle { display: block; }
+  .section { padding: 60px 16px; }
+  .hero { padding: 80px 16px 70px; }
+  .controls { top: 64px; }
+  .films-list, .char-grid { grid-template-columns: 1fr; }
+  .egg-card { flex-direction: column; gap: 8px; }
+  .egg-num { min-width: 0; }
+}
+
+/* ---------- 彩蛋速报 ---------- */
+.egg-list { display: flex; flex-direction: column; gap: 14px; }
+.egg-card {
+  display: flex; gap: 18px; padding: 20px 22px;
+  background: linear-gradient(120deg, rgba(226, 54, 54, 0.08), rgba(247, 201, 72, 0.05));
+  border: 1px solid var(--line); border-left: 3px solid var(--accent);
+  border-radius: var(--radius); transition: 0.2s;
+}
+.egg-card:hover { border-left-color: var(--accent-2); transform: translateX(3px); }
+.egg-num {
+  flex: 0 0 auto; min-width: 46px; font-family: "Segoe UI", sans-serif;
+  font-size: 30px; font-weight: 900; line-height: 1; color: rgba(226, 54, 54, 0.55);
+}
+.egg-title { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
+.egg-film { font-size: 12px; color: var(--accent-2); margin-bottom: 8px; }
+.egg-text { font-size: 14px; color: var(--text); margin-bottom: 8px; }
+.egg-rel { font-size: 13px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 9px; }
+
+</style>
+  <style>
+/* =========================================================
+   留言提问板 · 样式
+   ========================================================= */
+.cm-hero { padding: 70px 20px 40px; max-width: 1180px; margin: 0 auto; }
+.cm-hero h1 { font-size: clamp(28px, 5vw, 46px); font-weight: 900; line-height: 1.2; }
+.cm-hero h1 span { background: linear-gradient(120deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cm-hero p { color: var(--muted); margin-top: 14px; max-width: 760px; font-size: 15px; }
+.cm-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+
+.cm-section { max-width: 1180px; margin: 0 auto; padding: 34px 20px; }
+.cm-section > h2 { font-size: 21px; font-weight: 800; margin-bottom: 16px; }
+
+/* ---------- 声明面板 ---------- */
+.notice-panel {
+  background: linear-gradient(160deg, rgba(226, 54, 54, 0.10), rgba(247, 201, 72, 0.05));
+  border: 1px solid rgba(226, 54, 54, 0.35); border-radius: var(--radius); padding: 24px 26px;
+}
+.notice-panel h2 { font-size: 19px; margin-bottom: 6px; }
+.notice-sub { font-size: 12.5px; color: var(--accent-2); margin-bottom: 14px; }
+.notice-list { list-style: none; counter-reset: rule; }
+.notice-list li {
+  counter-increment: rule; position: relative; padding-left: 34px;
+  font-size: 13.5px; color: var(--muted); margin-bottom: 10px; line-height: 1.75;
+}
+.notice-list li::before {
+  content: counter(rule); position: absolute; left: 0; top: 3px;
+  width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center;
+  background: rgba(226, 54, 54, 0.18); color: #ff8080; font-size: 12px; font-weight: 800;
+}
+.notice-list li b { color: var(--text); }
+.notice-foot { font-size: 12.5px; color: var(--accent-2); border-top: 1px dashed var(--line); padding-top: 12px; margin-top: 6px; }
+
+/* ---------- 公告 ---------- */
+.announce-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.announce-list { display: flex; flex-direction: column; gap: 10px; }
+.announce-item {
+  background: var(--card); border: 1px solid rgba(247, 201, 72, 0.4);
+  border-left: 3px solid var(--accent-2); border-radius: 12px; padding: 16px 18px;
+}
+.announce-item .a-meta { font-size: 12px; color: var(--accent-2); margin-bottom: 6px; }
+.announce-item .a-text { font-size: 14px; color: var(--text); white-space: pre-wrap; }
+.announce-empty { font-size: 13px; color: var(--muted); }
+
+/* ---------- 表单 ---------- */
+.cm-form-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+.login-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px dashed var(--line); }
+.login-row > span:first-child { font-size: 13px; color: var(--muted); }
+.btn-wechat, .btn-qq {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px;
+  border: 0; cursor: pointer; font-size: 13.5px; font-weight: 700; color: #fff; transition: 0.2s;
+}
+.btn-wechat { background: #07c160; }
+.btn-wechat:hover { background: #06ad56; }
+.btn-qq { background: #12b7f5; }
+.btn-qq:hover { background: #0ea5de; }
+.login-hint { font-size: 11.5px; color: var(--muted); }
+.form-grid { display: grid; grid-template-columns: 1fr 140px; gap: 10px; margin-bottom: 10px; }
+.form-grid input, .form-grid select, textarea {
+  background: var(--card-2); border: 1px solid var(--line); color: var(--text);
+  border-radius: 10px; padding: 11px 14px; font-size: 14px; outline: none; font-family: inherit;
+}
+.form-grid input:focus, .form-grid select:focus, textarea:focus { border-color: var(--accent); }
+textarea { width: 100%; min-height: 120px; resize: vertical; line-height: 1.7; }
+.form-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+#cmCounter { font-size: 12px; color: var(--muted); }
+.form-tip { font-size: 12.5px; margin-top: 10px; min-height: 18px; }
+.form-tip.err { color: #ff7a7a; }
+.form-tip.ok { color: var(--green); }
+
+/* ---------- 留言列表 ---------- */
+.cm-list { display: flex; flex-direction: column; gap: 12px; }
+.cm-item {
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px;
+}
+.cm-item.pinned { border-color: rgba(247, 201, 72, 0.45); background: rgba(247, 201, 72, 0.05); }
+.cm-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.cm-name { font-weight: 800; font-size: 14.5px; }
+.cm-badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.cm-badge.admin { background: rgba(226, 54, 54, 0.16); border-color: rgba(226, 54, 54, 0.4); color: #ff8b8b; }
+.cm-badge.pin { background: rgba(247, 201, 72, 0.16); border-color: rgba(247, 201, 72, 0.4); color: var(--accent-2); }
+.cm-badge.type { background: rgba(77, 163, 255, 0.13); border-color: rgba(77, 163, 255, 0.35); color: #8ec4ff; }
+.cm-time { font-size: 11.5px; color: var(--muted); margin-left: auto; }
+.cm-text { font-size: 14px; color: var(--text); white-space: pre-wrap; word-break: break-word; }
+.cm-reply { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: rgba(226, 54, 54, 0.08); border-left: 3px solid var(--accent); font-size: 13px; color: var(--text); }
+.cm-reply b { color: var(--accent-2); }
+.cm-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.cm-actions button {
+  background: none; border: 1px solid var(--line); color: var(--muted);
+  font-size: 12px; padding: 4px 12px; border-radius: 999px; cursor: pointer; transition: 0.15s;
+}
+.cm-actions button:hover { color: #fff; border-color: var(--accent); }
+.cm-empty { color: var(--muted); font-size: 14px; padding: 40px 0; text-align: center; }
+
+/* ---------- 管理面板 ---------- */
+.admin-modal {
+  position: fixed; inset: 0; z-index: 100; background: rgba(5, 7, 11, 0.78);
+  display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);
+}
+.admin-modal.open { display: flex; }
+.admin-box { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; width: 100%; max-width: 520px; max-height: 86vh; overflow: auto; }
+.admin-box h3 { font-size: 18px; margin-bottom: 6px; }
+.admin-box .admin-desc { font-size: 12.5px; color: var(--muted); margin-bottom: 16px; }
+.admin-box label { display: block; font-size: 12.5px; color: var(--muted); margin: 12px 0 6px; }
+.admin-box input, .admin-box textarea {
+  width: 100%; background: var(--card); border: 1px solid var(--line); color: var(--text);
+  border-radius: 10px; padding: 10px 13px; font-size: 14px; font-family: inherit; outline: none;
+}
+.admin-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 14px; }
+.admin-grid button { width: 100%; }
+.btn-sm { padding: 10px 16px; font-size: 13.5px; }
+.btn-danger { background: rgba(226, 54, 54, 0.9); color: #fff; }
+.admin-badge { display: inline-block; font-size: 11.5px; color: var(--green); margin-left: 8px; }
+
+.waline-note { font-size: 13px; color: var(--muted); background: var(--card); border: 1px dashed var(--line); border-radius: 10px; padding: 14px 16px; }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 860px) {
+  .cm-hero { padding: 50px 16px 26px; }
+  .cm-section { padding: 24px 16px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .notice-panel { padding: 20px 18px; }
+}
+
+</style>
+</head>
+<body>
+
+  <!-- ======= 顶部导航 ======= -->
+  <header class="topbar" id="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">D</span>
+        <span class="brand-text">毁灭之日 · 观影指南</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="index.html#overview">电影速览</a>
+        <a href="index.html#eggs">彩蛋速报</a>
+        <a href="index.html#films">全作品库</a>
+        <a href="index.html#trailer-cast">预告角色</a>
+        <a href="index.html#faq">Q&amp;A</a>
+        <a href="comments.html">留言提问</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button>
+    </div>
+  </header>
+
+  <!-- ======= 页首 ======= -->
+  <section class="cm-hero">
+    <p class="hero-kicker">GUESTBOOK · Q&amp;A</p>
+    <h1>留言提问板<br/><span>有问题,尽管问</span></h1>
+    <p>关于《复仇者联盟5:毁灭之日》的任何疑问——剧情考据、角色去向、观影顺序、彩蛋解读,或者只是想说两句观后感,都欢迎留在这里。站长会尽量逐条回复,热心网友也可以互相解答。</p>
+    <div class="cm-stats" id="cmStats"></div>
+  </section>
+
+  <!-- ======= 声明 ======= -->
+  <section class="cm-section" id="rules">
+    <div class="notice-panel">
+      <h2>📢 留言须知与免责声明</h2>
+      <p class="notice-sub">请在发言前花一分钟读完。继续提交留言,即视为你已阅读并同意以下全部条款。</p>
+      <ol class="notice-list">
+        <li><b>本站性质:</b>本留言板是影迷自发搭建的非官方交流区,与漫威影业、迪士尼、索尼影业等公司无任何隶属或合作关系;站内所有影片信息、票房、剧情推测均整理自公开报道与上映内容,最终请以官方公布和电影正片为准。</li>
+        <li><b>友善交流:</b>禁止人身攻击、辱骂、嘲讽、恶意挑衅、地域/性别/民族/宗教歧视、网络暴力与恶意引战。意见可以尖锐,态度请保持体面。</li>
+        <li><b>剧透规范:</b>涉及<strong>未上映影片</strong>(如《复仇者联盟5:毁灭之日》)的重大剧情、结局、彩蛋与泄露内容时,请在开头标注「<strong>剧透</strong>」,给还没看的朋友留一点余地。</li>
+        <li><b>严禁违法内容:</b>不得发布任何违反法律法规的内容,包括但不限于色情低俗、暴力血腥、恐怖主义、赌博博彩、毒品、诈骗、传销、洗钱、涉枪涉爆、危害国家安全与公共利益的言论。</li>
+        <li><b>禁止刷屏灌水:</b>同一内容反复提交、无意义字符、纯表情霸屏、连续多楼占用版面、恶意顶帖等行为一律删除;本站设有防刷机制:两次留言间隔不少于 <strong>30 秒</strong>,单次访问最多 <strong>20 条</strong>,重复内容会被自动拦截。</li>
+        <li><b>禁止广告导流:</b>不得发布商业推广、拉群、代刷代练、账号买卖、外链引流、博彩与贷款类信息;个人作品推广请先联系站长。</li>
+        <li><b>尊重版权:</b>请勿发布、索取或询问盗版影视资源、破解工具的获取方式;引用他人观点、数据或截图时请注明来源。</li>
+        <li><b>保护隐私:</b>请勿在留言中透露自己或他人的真实姓名、住址、学校、单位、电话、身份证号、支付账号等敏感信息。未成年人尤其需要注意;建议所有人不要公开联系方式,谨防冒充站长的诈骗。</li>
+        <li><b>提问建议:</b>提问请尽量具体(写明电影名、时间点、你想确认的细节),这样站长与网友才能高效回答。发问前建议先看看站内 Q&amp;A 与已有留言,避免重复提问。</li>
+        <li><b>内容处置权:</b>留言仅代表发布者个人观点,不代表本站立场。站长作为内容管理者,有权在<strong>不事先通知</strong>的情况下删除、隐藏或置顶任何留言;对涉嫌违法或侵权的留言,本站保留保存证据并向有关部门举报、追究责任的权利。</li>
+        <li><b>技术说明:</b>本站是静态站点。在未配置云端留言板的情况下,留言只保存在<strong>你自己的浏览器</strong>里(其他设备与其他访客看不到),请勿将其当作正式投稿或求助渠道;配置云端留言板后,留言将对所有访客公开。</li>
+        <li><b>举报与纠错:</b>发现违规留言、事实错误或版权问题,欢迎在留言中@站长说明,我们会尽快核实处理。感谢你一起维护这里的氛围 🙏</li>
+      </ol>
+      <p class="notice-foot">⚠️ 继续发布留言即视为已阅读并同意以上全部条款;如不同意,请勿发言。</p>
+    </div>
+  </section>
+
+  <!-- ======= 公告 ======= -->
+  <section class="cm-section" id="announce">
+    <div class="announce-head">
+      <h2>📌 站长公告</h2>
+      <button class="btn btn-ghost btn-sm" id="adminToggle">站长管理</button>
+    </div>
+    <div class="announce-list" id="announceList"></div>
+  </section>
+
+  <!-- ======= 留言表单(本地模式) ======= -->
+  <section class="cm-section" id="localFormSection">
+    <h2>我要提问 / 留言</h2>
+    <div class="cm-form-card">
+      <div class="login-row">
+        <span>登录方式:</span>
+        <button class="btn-wechat" data-provider="wechat">💬 微信登录</button>
+        <button class="btn-qq" data-provider="qq">🐧 QQ 登录</button>
+        <span class="login-hint">(点按可查看当前配置状态;未配置时可直接用昵称留言)</span>
+      </div>
+      <div class="form-grid">
+        <input id="cmName" type="text" maxlength="16" placeholder="你的昵称(2-16 字,请勿用真实姓名)" />
+        <select id="cmType">
+          <option value="提问">提问</option>
+          <option value="剧情考据">剧情考据</option>
+          <option value="观后感">观后感</option>
+          <option value="纠错建议">纠错建议</option>
+        </select>
+      </div>
+      <textarea id="cmContent" maxlength="500" placeholder="想说的话…例如:《复联5》预告里洛基那场戏到底在哪个时间点?需要先补哪几部?（4-500 字）"></textarea>
+      <div class="form-foot">
+        <span id="cmCounter">0/500</span>
+        <button class="btn btn-primary btn-sm" id="cmSubmit">发布留言</button>
+      </div>
+      <p class="form-tip" id="cmTip"></p>
+    </div>
+  </section>
+
+  <!-- ======= 留言列表(本地模式) ======= -->
+  <section class="cm-section" id="localListSection">
+    <h2>全部留言 <span id="cmCount" style="color:var(--muted);font-size:15px"></span></h2>
+    <div class="cm-list" id="cmList"></div>
+  </section>
+
+  <!-- ======= 云端留言板(配置 Waline 后显示) ======= -->
+  <section class="cm-section hidden" id="walineWrap">
+    <h2>云端留言板</h2>
+    <p class="waline-note" id="walineNote"></p>
+    <div id="waline" style="margin-top:16px"></div>
+  </section>
+
+  <!-- ======= 管理面板 ======= -->
+  <div class="admin-modal" id="adminModal">
+    <div class="admin-box">
+      <h3>站长管理面板 <span class="admin-badge" id="adminState"></span></h3>
+      <p class="admin-desc">输入管理密码后可发布公告、置顶/回复/删除留言、导出备份。（默认密码写在 <code>assets/js/site-config.js</code>,请务必修改）</p>
+
+      <div id="adminLogin">
+        <label>管理密码</label>
+        <input id="adminPwd" type="password" placeholder="请输入管理密码" />
+        <div class="admin-actions">
+          <button class="btn btn-primary btn-sm" id="adminLoginBtn">解锁</button>
+          <button class="btn btn-ghost btn-sm" id="adminClose">关闭</button>
+        </div>
+        <p class="form-tip" id="adminTip"></p>
+      </div>
+
+      <div id="adminPanel" style="display:none">
+        <label>发布公告(会置顶显示在公告区)</label>
+        <textarea id="annText" maxlength="300" placeholder="例如:本站已更新《复联4加码臻享版》4 个彩蛋的解析,欢迎前往首页「彩蛋速报」查看。"></textarea>
+        <div class="admin-actions">
+          <button class="btn btn-primary btn-sm" id="annPost">发布公告</button>
+        </div>
+        <div class="admin-grid">
+          <button class="btn btn-ghost btn-sm" id="exportBtn">导出留言备份(JSON)</button>
+          <button class="btn btn-ghost btn-sm btn-danger" id="clearBtn">清空全部留言</button>
+          <button class="btn btn-ghost btn-sm" id="logoutBtn">退出管理模式</button>
+          <button class="btn btn-ghost btn-sm" id="adminClose2" onclick="document.getElementById('adminModal').classList.remove('open')">关闭面板</button>
+        </div>
+        <p class="admin-desc" style="margin-top:14px">提示:留言列表出现管理员的「置顶 / 回复 / 删除」按钮后,即可对每条留言单独操作。删除与清空不可恢复,建议先导出备份。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= Footer ======= -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p><strong>免责声明:</strong>本留言板内容由访客自行发布,不代表本站立场。本站为非官方粉丝站点,与漫威/迪士尼/索尼等公司无隶属关系;影片信息以官方公布与正片为准。</p>
+      <p>📖 返回主站:<a href="index.html">《复仇者联盟5:毁灭之日》观影指南 →</a></p>
+      <p>© 2026 毁灭之日观影指南 · 请文明发言,理性讨论 · Marvel 及相关角色版权归漫威/迪士尼所有</p>
+    </div>
+  </footer>
+
+  <script>
+/* =========================================================
+   站点配置 —— 站长在这里改
+   ========================================================= */
+window.SITE_CONFIG = {
+  /* 站点名(留言板标题会用到) */
+  siteName: "毁灭之日 · 观影指南",
+
+  /* 管理密码:点开留言板的「管理」按钮要用它解锁
+     ⚠️ 请务必改成你自己的密码!
+     ⚠️ 说明:这是纯前端密码保护,只能挡住普通访客,不能防技术型攻击。
+        真正的安全方案请用 Waline 云端的后台(见 README 部署指南)。 */
+  adminPassword: "doomsday2026",
+
+  /* Waline 云留言板地址(可选,强烈推荐用于正式分享)
+     留空 = 使用浏览器本地存储模式(留言只存在访客自己的浏览器里,仅供演示)
+     填写示例:"https://your-waline.vercel.app"
+     填上之后:留言会存到云端(LeanCloud/Supabase),所有人都能看到;
+     并且支持社交登录(QQ / 微博 / GitHub 等,取决于你在 Waline 服务端的配置)。 */
+  walineServerURL: "",
+
+  /* 登录入口开关:是否在页面上显示「微信登录 / QQ 登录」按钮
+     说明:网站使用微信扫码登录需要「微信开放平台-网站应用」,个人开发者无法申请,
+          需要企业主体 + 认证费;QQ 互联同理。因此这里默认显示按钮并给出说明,
+          配置好 Waline 社交登录后把对应项改成 true 即可引导用户去登录。 */
+  socialLogin: { wechat: false, qq: false },
+
+  /* 公告(可在页面上由站长发布,也可以在下面预置一条)
+     预置格式:{ text: "公告内容", time: "2026-08-27" } */
+  presetAnnouncements: [],
+
+  /* 留言限制 */
+  limits: {
+    maxLength: 500,        // 单条留言最大字数
+    minLength: 4,          // 最小字数
+    cooldownSeconds: 30,   // 两次留言间隔(秒),防刷屏
+    maxPerVisit: 20        // 单次访问最多留言条数
+  },
+
+  /* 敏感词/禁止内容简单过滤(命中会被拒绝并提示)
+     注意:这只是最基础的本地过滤,不能替代人工审核。 */
+  blockedWords: ["代刷", "博彩", "赌博", "加微信", "私聊收费", "外挂", "出售账号", "贷款"]
+};
+
+</script>
+  <script>
+/* =========================================================
+   留言提问板 · 逻辑
+   - 默认模式:浏览器本地存储(适合演示与自用)
+   - 云端模式:配置 SITE_CONFIG.walineServerURL 后自动启用 Waline(留言存云端、支持社交登录与后台管理)
+   - 管理功能:置顶 / 删除 / 发布公告 / 导出数据
+   ========================================================= */
+(function () {
+  "use strict";
+
+  var CFG = Object.assign({
+    siteName: "毁灭之日 · 观影指南",
+    adminPassword: "doomsday2026",
+    walineServerURL: "",
+    socialLogin: { wechat: false, qq: false },
+    presetAnnouncements: [],
+    limits: { maxLength: 500, minLength: 4, cooldownSeconds: 30, maxPerVisit: 20 },
+    blockedWords: []
+  }, window.SITE_CONFIG || {});
+
+  var KEY_CM = "dd_comments_v1";
+  var KEY_ANN = "dd_announcements_v1";
+  var KEY_LAST = "dd_last_post_v1";
+  var KEY_COUNT = "dd_visit_count_v1";
+  var KEY_ADMIN = "dd_admin_session_v1";
+
+  /* ---------------- 存储层(带内存兜底) ---------------- */
+  var memory = {};
+  function store(key, value) {
+    try {
+      if (value === undefined) {
+        var raw = window.localStorage.getItem(key);
+        return raw === null ? (memory[key] === undefined ? null : memory[key]) : raw;
+      }
+      memory[key] = value;
+      window.localStorage.setItem(key, value);
+      return value;
+    } catch (e) {
+      return value === undefined ? (memory[key] === undefined ? null : memory[key]) : value;
+    }
+  }
+  function session(key, value) {
+    try {
+      if (value === undefined) return window.sessionStorage.getItem(key);
+      window.sessionStorage.setItem(key, value);
+      return value;
+    } catch (e) { return null; }
+  }
+  function readJSON(key, fallback) {
+    var raw = store(key);
+    if (!raw) return fallback;
+    try { var v = JSON.parse(raw); return v == null ? fallback : v; } catch (e) { return fallback; }
+  }
+  function writeJSON(key, val) { store(key, JSON.stringify(val)); }
+
+  function getComments() { return readJSON(KEY_CM, []); }
+  function setComments(list) { writeJSON(KEY_CM, list); }
+  function getAnnouncements() {
+    var own = readJSON(KEY_ANN, null);
+    if (own && own.length) return own;
+    return (CFG.presetAnnouncements || []).map(function (a, i) {
+      return { id: "preset" + i, text: a.text, time: a.time || "" };
+    });
+  }
+  function setAnnouncements(list) { writeJSON(KEY_ANN, list); }
+
+  /* ---------------- 工具 ---------------- */
+  function $(sel) { return document.querySelector(sel); }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function now() { return new Date(); }
+  function fmt(d) {
+    var t = d instanceof Date ? d : new Date(d);
+    if (isNaN(t.getTime())) return "";
+    function p(n) { return n < 10 ? "0" + n : "" + n; }
+    return t.getFullYear() + "-" + p(t.getMonth() + 1) + "-" + p(t.getDate()) + " " + p(t.getHours()) + ":" + p(t.getMinutes());
+  }
+  function uid() { return "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+  /* ---------------- 校验 ---------------- */
+  function validate(name, content) {
+    var L = CFG.limits;
+    name = (name || "").trim();
+    content = (content || "").trim();
+    if (name.length < 2) return { ok: false, msg: "昵称至少 2 个字(可用网名,请勿使用真实姓名)" };
+    if (name.length > 16) return { ok: false, msg: "昵称最多 16 个字" };
+    if (content.length < L.minLength) return { ok: false, msg: "留言至少 " + L.minLength + " 个字,请把问题说清楚一点~" };
+    if (content.length > L.maxLength) return { ok: false, msg: "留言最多 " + L.maxLength + " 个字" };
+    if (/^(.)\1{3,}$/.test(content)) return { ok: false, msg: "请勿发布重复字符刷屏内容" };
+    var low = (name + " " + content).toLowerCase();
+    for (var i = 0; i < (CFG.blockedWords || []).length; i++) {
+      if (low.indexOf(String(CFG.blockedWords[i]).toLowerCase()) !== -1) {
+        return { ok: false, msg: "留言包含被禁止的内容(" + CFG.blockedWords[i] + "),请修改后再发布" };
+      }
+    }
+    // 与已有留言完全重复 → 视为刷屏
+    var dup = getComments().some(function (c) { return c.content.trim() === content; });
+    if (dup) return { ok: false, msg: "这条内容已经发过了,请勿重复刷屏" };
+    // 冷却时间
+    var last = Number(store(KEY_LAST) || 0);
+    var wait = CFG.limits.cooldownSeconds * 1000 - (Date.now() - last);
+    if (last && wait > 0) return { ok: false, msg: "发布太频繁了,请 " + Math.ceil(wait / 1000) + " 秒后再试" };
+    // 单次访问条数上限
+    var cnt = Number(session(KEY_COUNT) || 0);
+    if (cnt >= CFG.limits.maxPerVisit) return { ok: false, msg: "本次访问的留言数已达上限(" + CFG.limits.maxPerVisit + " 条),请稍后再来" };
+    return { ok: true, name: name, content: content };
+  }
+
+  /* ---------------- 渲染:公告 ---------------- */
+  function renderAnnouncements() {
+    var box = $("#announceList");
+    if (!box) return;
+    var list = getAnnouncements();
+    if (!list.length) {
+      box.innerHTML = '<p class="announce-empty">暂无公告。站长登录后可在管理面板发布公告(会置顶显示在这里)。</p>';
+      return;
+    }
+    box.innerHTML = list.map(function (a) {
+      return '<div class="announce-item">' +
+        '<div class="a-meta">📌 站长公告' + (a.time ? " · " + esc(a.time) : "") + "</div>" +
+        '<div class="a-text">' + esc(a.text) + "</div></div>";
+    }).join("");
+  }
+
+  /* ---------------- 渲染:留言列表 ---------------- */
+  function renderComments() {
+    var box = $("#cmList");
+    if (!box) return;
+    var list = getComments().slice().sort(function (a, b) {
+      if (!!b.pinned !== !!a.pinned) return b.pinned ? 1 : -1;
+      return (b.ts || 0) - (a.ts || 0);
+    });
+    var countEl = $("#cmCount");
+    if (countEl) countEl.textContent = list.length ? "(" + list.length + " 条)" : "";
+    if (!list.length) {
+      box.innerHTML = '<p class="cm-empty">还没有留言,来做第一个提问的人吧 👋</p>';
+      return;
+    }
+    var admin = isAdmin();
+    box.innerHTML = list.map(function (c) {
+      return '<article class="cm-item' + (c.pinned ? " pinned" : "") + '" data-id="' + esc(c.id) + '">' +
+        '<div class="cm-head">' +
+        '<span class="cm-name">' + esc(c.name) + "</span>" +
+        (c.admin ? '<span class="cm-badge admin">站长</span>' : "") +
+        (c.pinned ? '<span class="cm-badge pin">已置顶</span>' : "") +
+        '<span class="cm-badge type">' + esc(c.type || "提问") + "</span>" +
+        '<span class="cm-time">' + esc(fmt(c.ts)) + "</span>" +
+        "</div>" +
+        '<div class="cm-text">' + esc(c.content) + "</div>" +
+        (c.reply ? '<div class="cm-reply"><b>站长回复:</b>' + esc(c.reply) + "</div>" : "") +
+        (admin ? '<div class="cm-actions">' +
+          '<button data-act="pin" data-id="' + esc(c.id) + '">' + (c.pinned ? "取消置顶" : "置顶") + "</button>" +
+          '<button data-act="reply" data-id="' + esc(c.id) + '">' + (c.reply ? "修改回复" : "回复") + "</button>" +
+          '<button data-act="del" data-id="' + esc(c.id) + '">删除</button>' +
+          "</div>" : "") +
+        "</article>";
+    }).join("");
+  }
+
+  function renderStats() {
+    var box = $("#cmStats");
+    if (!box) return;
+    var list = getComments();
+    var anns = getAnnouncements();
+    box.innerHTML =
+      '<div class="stat"><b>' + list.length + '</b><span>条留言</span></div>' +
+      '<div class="stat"><b>' + list.filter(function (c) { return !c.reply; }).length + '</b><span>待回复</span></div>' +
+      '<div class="stat"><b>' + anns.length + '</b><span>条公告</span></div>' +
+      '<div class="stat"><b>' + (CFG.walineServerURL ? "云端" : "本地") + '</b><span>存储模式</span></div>';
+  }
+
+  function renderAll() { renderAnnouncements(); renderComments(); renderStats(); }
+
+  /* ---------------- 管理员状态 ---------------- */
+  function isAdmin() { return session(KEY_ADMIN) === "1"; }
+  function setAdmin(v) { session(KEY_ADMIN, v ? "1" : "0"); }
+
+  /* ---------------- 发布留言 ---------------- */
+  function submit() {
+    var nameEl = $("#cmName"), contentEl = $("#cmContent"), typeEl = $("#cmType"), tip = $("#cmTip");
+    var v = validate(nameEl ? nameEl.value : "", contentEl ? contentEl.value : "");
+    if (!v.ok) { if (tip) { tip.className = "form-tip err"; tip.textContent = "✕ " + v.msg; } return false; }
+    var list = getComments();
+    list.push({
+      id: uid(), name: v.name, content: v.content,
+      type: (typeEl && typeEl.value) || "提问",
+      ts: Date.now(), pinned: false, admin: isAdmin(), reply: ""
+    });
+    setComments(list);
+    store(KEY_LAST, String(Date.now()));
+    session(KEY_COUNT, String(Number(session(KEY_COUNT) || 0) + 1));
+    if (contentEl) contentEl.value = "";
+    if (tip) { tip.className = "form-tip ok"; tip.textContent = "✓ 留言已发布" + (CFG.walineServerURL ? "" : "(当前为本地模式:仅你自己能看到)"); }
+    renderAll();
+    return true;
+  }
+
+  /* ---------------- 管理操作 ---------------- */
+  function findComment(id) {
+    var list = getComments();
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return { list: list, index: i };
+    return null;
+  }
+  function togglePin(id) {
+    var f = findComment(id); if (!f) return;
+    f.list[f.index].pinned = !f.list[f.index].pinned;
+    setComments(f.list); renderAll();
+  }
+  function removeComment(id) {
+    var f = findComment(id); if (!f) return;
+    if (!window.confirm("确定删除这条留言?删除后不可恢复。")) return;
+    f.list.splice(f.index, 1); setComments(f.list); renderAll();
+  }
+  function replyComment(id) {
+    var f = findComment(id); if (!f) return;
+    var cur = f.list[f.index].reply || "";
+    var txt = window.prompt("输入站长回复内容(留空则清除回复):", cur);
+    if (txt === null) return;
+    f.list[f.index].reply = txt.trim();
+    setComments(f.list); renderAll();
+  }
+  function postAnnouncement() {
+    var el = $("#annText"); if (!el) return;
+    var text = (el.value || "").trim();
+    if (text.length < 4) { window.alert("公告内容至少 4 个字"); return; }
+    var list = getAnnouncements();
+    list.unshift({ id: uid(), text: text, time: fmt(now()) });
+    setAnnouncements(list);
+    el.value = "";
+    renderAll();
+    window.alert("公告已发布(显示在公告区最上方)");
+  }
+  function exportData() {
+    var data = { exportAt: fmt(now()), comments: getComments(), announcements: getAnnouncements() };
+    try {
+      var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "留言板备份-" + new Date().toISOString().slice(0, 10) + ".json";
+      document.body.appendChild(a); a.click(); a.remove();
+    } catch (e) { window.alert("导出失败:" + e.message); }
+  }
+  function clearAll() {
+    if (!window.confirm("确定清空全部留言(公告保留)?此操作不可恢复!")) return;
+    setComments([]); renderAll();
+  }
+
+  /* ---------------- 管理弹窗 ---------------- */
+  function openAdmin() {
+    var m = $("#adminModal"); if (!m) return;
+    m.classList.add("open");
+    syncAdminUI();
+  }
+  function closeAdmin() { var m = $("#adminModal"); if (m) m.classList.remove("open"); }
+  function syncAdminUI() {
+    var login = $("#adminLogin"), panel = $("#adminPanel");
+    if (!login || !panel) return;
+    var on = isAdmin();
+    login.style.display = on ? "none" : "block";
+    panel.style.display = on ? "block" : "none";
+  }
+  function tryLogin() {
+    var el = $("#adminPwd"), tip = $("#adminTip");
+    var pwd = el ? el.value : "";
+    if (pwd === CFG.adminPassword) {
+      setAdmin(true); syncAdminUI(); renderAll();
+      if (tip) { tip.className = "form-tip ok"; tip.textContent = "✓ 已进入管理模式"; }
+    } else {
+      if (tip) { tip.className = "form-tip err"; tip.textContent = "✕ 密码错误"; }
+    }
+  }
+
+  /* ---------------- 登录入口说明 ---------------- */
+  function handleLogin(provider) {
+    var label = provider === "wechat" ? "微信" : "QQ";
+    var enabled = CFG.socialLogin && CFG.socialLogin[provider];
+    var lines;
+    if (enabled && CFG.walineServerURL) {
+      lines = ["【" + label + "登录】已开启。", "", "请使用页面下方的 Waline 留言框,点击登录按钮选择" + label + "授权即可。", "登录后你的昵称与头像会自动带上,并可收到回复提醒。"];
+    } else {
+      lines = [
+        "【" + label + "登录】当前尚未配置。",
+        "",
+        "为什么不能直接用?" + label + "网站登录需要" + (provider === "wechat" ? "「微信开放平台-网站应用」" : "「QQ 互联(网站应用)」") + ",该资质要求企业/组织主体认证(个人开发者无法申请),并且需要网站备案信息。",
+        "",
+        "站长可选的三种方案:",
+        "1) 部署 Waline 云留言板(免费),在服务端开启社交登录(支持 QQ / 微博 / GitHub 等,取决于配置);",
+        "2) 用 Twikoo 自建评论系统,自定义登录渠道;",
+        "3) 保持现在的『昵称留言』模式——无需登录,任何人都能提问(推荐给小站起步)。",
+        "",
+        "详细部署步骤见项目 README 的「留言板部署指南」。"
+      ];
+    }
+    window.alert(lines.join("\n"));
+  }
+
+  /* ---------------- Waline 云端模式 ---------------- */
+  function bootWaline() {
+    if (!CFG.walineServerURL) return false;
+    var wrap = $("#walineWrap"), localForm = $("#localFormSection"), localList = $("#localListSection");
+    if (wrap) wrap.classList.remove("hidden");
+    if (localForm) localForm.classList.add("hidden");
+    if (localList) localList.classList.add("hidden");
+    var note = $("#walineNote");
+    if (note) {
+      note.textContent = "已连接云端留言板(Waline):" + CFG.walineServerURL + " —— 留言会保存到云端数据库,所有访客可见;社交登录与后台管理请在 Waline 服务端配置。";
+    }
+    try {
+      var s = document.createElement("script");
+      s.src = "https://unpkg.com/@waline/client@v3/dist/waline.js";
+      s.onload = function () {
+        if (window.Waline && window.Waline.init) {
+          window.Waline.init({
+            el: "#waline",
+            serverURL: CFG.walineServerURL,
+            lang: "zh-CN",
+            meta: ["nick", "mail", "link"],
+            requiredMeta: ["nick"],
+            login: "enable",
+            pageview: false
+          });
+        }
+      };
+      document.body.appendChild(s);
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://unpkg.com/@waline/client@v3/dist/waline.css";
+      document.head.appendChild(link);
+    } catch (e) { /* 离线环境忽略 */ }
+    return true;
+  }
+
+  /* ---------------- 事件绑定 ---------------- */
+  function bind() {
+    var btnSubmit = $("#cmSubmit");
+    if (btnSubmit) btnSubmit.addEventListener("click", submit);
+
+    var ta = $("#cmContent"), counter = $("#cmCounter");
+    if (ta && counter) {
+      counter.textContent = "0/" + CFG.limits.maxLength;
+      ta.addEventListener("input", function () {
+        counter.textContent = ta.value.length + "/" + CFG.limits.maxLength;
+      });
+    }
+
+    document.addEventListener("click", function (e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var loginBtn = t.closest("[data-provider]");
+      if (loginBtn) { handleLogin(loginBtn.dataset.provider); return; }
+      var act = t.closest("[data-act]");
+      if (act) {
+        var id = act.dataset.id;
+        if (act.dataset.act === "pin") togglePin(id);
+        else if (act.dataset.act === "del") removeComment(id);
+        else if (act.dataset.act === "reply") replyComment(id);
+        return;
+      }
+      if (t.closest("#adminToggle")) { openAdmin(); return; }
+      if (t.closest("#adminClose")) { closeAdmin(); return; }
+      if (t.closest("#adminModal") && !t.closest(".admin-box")) { closeAdmin(); return; }
+    });
+
+    var lb = $("#adminLoginBtn"); if (lb) lb.addEventListener("click", tryLogin);
+    var pwd = $("#adminPwd");
+    if (pwd) pwd.addEventListener("keydown", function (e) { if (e.key === "Enter") tryLogin(); });
+    var ab = $("#annPost"); if (ab) ab.addEventListener("click", postAnnouncement);
+    var ex = $("#exportBtn"); if (ex) ex.addEventListener("click", exportData);
+    var cl = $("#clearBtn"); if (cl) cl.addEventListener("click", clearAll);
+    var lo = $("#logoutBtn");
+    if (lo) lo.addEventListener("click", function () { setAdmin(false); syncAdminUI(); renderAll(); });
+    var back = document.createElement("button");
+    back.id = "backTop"; back.textContent = "↑"; back.title = "回到顶部";
+    document.body.appendChild(back);
+    back.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
+  }
+
+  /* ---------------- 启动 ---------------- */
+  function init() {
+    if (bootWaline()) { renderAnnouncements(); renderStats(); bind(); return; }
+    renderAll();
+    bind();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+  /* 供测试与站长调试使用 */
+  window.CommentsBoard = {
+    validate: validate, getComments: getComments, setComments: setComments,
+    getAnnouncements: getAnnouncements, setAnnouncements: setAnnouncements,
+    render: renderAll, isAdmin: isAdmin, setAdmin: setAdmin, config: CFG
+  };
+})();
+
+</script>
+  <script>
+    document.getElementById("navToggle").addEventListener("click", function () {
+      document.getElementById("nav").classList.toggle("open");
+    });
+  </script>
+</body>
+</html>

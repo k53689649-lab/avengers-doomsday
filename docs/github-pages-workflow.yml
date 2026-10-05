@@ -1,0 +1,51 @@
+# GitHub Pages 部署工作流(启用方法二选一)
+#
+# 方法一(推荐,全自动):
+#   在 GitHub 网页上新建文件,路径填: .github/workflows/pages.yml
+#   内容复制本站下方 "--- 复制以下内容 ---" 之后的部分 → Commit
+#   然后仓库 Settings → Pages → Source 选 "GitHub Actions" 即可自动部署
+#
+# 方法二:让 AI 助手帮你创建(需要在 GitHub 生成令牌时额外勾选 workflow 权限)
+#
+# 说明:本站是纯静态站点,不需要任何构建步骤,工作流只是把仓库内容原样发布为 Pages 站点。
+# 部署完成后地址为:https://<用户名>.github.io/marvel-doomsday-guide/
+
+--- 复制以下内容(不要复制本行)---
+
+name: Deploy static site to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
