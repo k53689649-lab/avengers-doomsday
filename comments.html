@@ -115,7 +115,10 @@
   <div class="admin-modal" id="adminModal">
     <div class="admin-box">
       <h3>站长管理面板 <span class="admin-badge" id="adminState"></span></h3>
-      <p class="admin-desc">输入管理密码后可发布公告、置顶/回复/删除留言、导出备份。</p>
+      <p class="admin-desc">
+        输入管理密码后可发布公告、置顶/回复/删除留言、导出备份。<br />
+        🔐 <strong>首次使用即设置密码</strong>:密码以摘要形式保存在<strong>你自己的浏览器</strong>里,不会上传到服务器,也不会写进网页源码 —— 别人从源码里拿不到您的密码。
+      </p>
 
       <div id="adminLogin">
         <label>管理密码</label>
@@ -134,6 +137,7 @@
           <button class="btn btn-primary btn-sm" id="annPost">发布公告</button>
         </div>
         <div class="admin-grid">
+          <button class="btn btn-ghost btn-sm" id="changePwdBtn">修改管理密码</button>
           <button class="btn btn-ghost btn-sm" id="exportBtn">导出留言备份(JSON)</button>
           <button class="btn btn-ghost btn-sm btn-danger" id="clearBtn">清空全部留言</button>
           <button class="btn btn-ghost btn-sm" id="logoutBtn">退出管理模式</button>

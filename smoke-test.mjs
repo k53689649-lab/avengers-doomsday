@@ -66,10 +66,15 @@ const commentsSrc = read("assets/js/comments.js");
 const mem = {};
 const storage = { getItem: k => (k in mem ? mem[k] : null), setItem: (k, v) => { mem[k] = String(v); }, removeItem: k => { delete mem[k]; } };
 const docB = makeDoc();
-const winB = { localStorage: storage, sessionStorage: { getItem: () => null, setItem: () => {} }, addEventListener() {}, confirm: () => true, prompt: () => "测试回复", alert: () => {} };
+const winB = {
+  localStorage: storage,
+  sessionStorage: { getItem: () => null, setItem: () => {} },
+  addEventListener() {}, confirm: () => true, prompt: () => "测试回复", alert: () => {},
+  crypto: globalThis.crypto, TextEncoder: globalThis.TextEncoder,
+};
 new Function("window", "document", configSrc + "\n" + commentsSrc)(winB, docB);
 const board = winB.CommentsBoard;
-check("留言板初始化", !!board && board.config.adminPassword.length > 0);
+check("留言板初始化", !!board && typeof board.config.adminPassword === "string");
 check("校验:过短内容被拒", board.validate("测试者", "短").ok === false);
 check("校验:正常提问通过", board.validate("测试者", "请问复联5需要先补哪几部电影?").ok === true);
 check("校验:广告词被拦截", board.validate("测试者", "加微信代刷票请找我哦").ok === false);
@@ -82,6 +87,22 @@ check("公告空态渲染", docB.querySelector("#announceList").innerHTML.includ
 board.setAnnouncements([{ id: "a1", text: "测试公告:欢迎提问", time: "2026-08-27" }]);
 board.render();
 check("公告发布并渲染", docB.querySelector("#announceList").innerHTML.includes("测试公告"));
+
+/* ---------- 2b. 站长密码流程(不写进代码,只存本浏览器) ---------- */
+check("配置里不再存明文密码", !board.config.adminPassword);
+const login = pwd => new Promise(res => board.attemptLogin(pwd, res));
+const rShort = await login("123");
+const rSet = await login("mypass123");
+const rOk = await login("mypass123");
+const rWrong = await login("wrong-password");
+check("密码:过短被拒", rShort === "short");
+check("密码:首次设置成功", rSet === "set");
+check("密码:再次登录通过(SHA-256 校验)", rOk === "ok");
+check("密码:错误密码被拒", rWrong === "wrong");
+check("密码:已写入本浏览器摘要且非明文", (() => {
+  const raw = mem["dd_admin_pwd_v1"] || "";
+  return raw.length === 64 && raw !== "mypass123";
+})());
 
 /* ---------- 3. 页面文件与单文件版检查 ---------- */
 const pages = ["index.html", "guide.html", "comments.html"];

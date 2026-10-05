@@ -22,6 +22,7 @@
   var KEY_LAST = "dd_last_post_v1";
   var KEY_COUNT = "dd_visit_count_v1";
   var KEY_ADMIN = "dd_admin_session_v1";
+  var KEY_PWD = "dd_admin_pwd_v1";        // 站长密码(仅存本浏览器的 SHA-256 摘要)
 
   /* ---------------- 存储层(带内存兜底) ---------------- */
   var memory = {};
@@ -247,6 +248,50 @@
     setComments([]); renderAll();
   }
 
+  /* ---------------- 站长密码:不写进代码,存在本浏览器 ---------------- */
+  function weakHash(s) {
+    var h = 5381, i;
+    for (i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+    return "weak:" + h.toString(16);
+  }
+  function hashPwd(pwd, cb) {
+    var s = "doomsday-guide::" + String(pwd);
+    var c = window.crypto;
+    if (c && c.subtle && typeof window.TextEncoder !== "undefined") {
+      c.subtle.digest("SHA-256", new window.TextEncoder().encode(s)).then(function (buf) {
+        var bytes = new Uint8Array(buf), hex = "", i;
+        for (i = 0; i < bytes.length; i++) hex += ("0" + bytes[i].toString(16)).slice(-2);
+        cb(hex);
+      }).catch(function () { cb(weakHash(s)); });
+    } else {
+      cb(weakHash(s));
+    }
+  }
+  function hasLocalPassword() { return !!store(KEY_PWD); }
+
+  /* 登录核心逻辑(可测试):
+     返回 empty / short / set(首次设置成功) / ok / wrong */
+  function attemptLogin(pwd, cb) {
+    pwd = (pwd || "").trim();
+    if (!pwd) return cb("empty");
+    if (CFG.adminPassword) {                 // 兼容:配置里写死了固定密码(公开可见,不推荐)
+      var good = pwd === CFG.adminPassword;
+      setAdmin(good);
+      return cb(good ? "ok" : "wrong");
+    }
+    var saved = store(KEY_PWD);
+    if (!saved) {                            // 首次使用:设置密码
+      if (pwd.length < 6) return cb("short");
+      hashPwd(pwd, function (h) { store(KEY_PWD, h); setAdmin(true); cb("set"); });
+      return;
+    }
+    hashPwd(pwd, function (h) {
+      var good = h === saved;
+      setAdmin(good);
+      cb(good ? "ok" : "wrong");
+    });
+  }
+
   /* ---------------- 管理弹窗 ---------------- */
   function openAdmin() {
     var m = $("#adminModal"); if (!m) return;
@@ -264,12 +309,34 @@
   function tryLogin() {
     var el = $("#adminPwd"), tip = $("#adminTip");
     var pwd = el ? el.value : "";
-    if (pwd === CFG.adminPassword) {
-      setAdmin(true); syncAdminUI(); renderAll();
-      if (tip) { tip.className = "form-tip ok"; tip.textContent = "✓ 已进入管理模式"; }
-    } else {
-      if (tip) { tip.className = "form-tip err"; tip.textContent = "✕ 密码错误"; }
-    }
+    var firstTime = !CFG.adminPassword && !hasLocalPassword();
+    attemptLogin(pwd, function (res) {
+      if (!tip) return;
+      if (res === "empty") { tip.className = "form-tip err"; tip.textContent = "✕ 请输入密码"; return; }
+      if (res === "short") { tip.className = "form-tip err"; tip.textContent = "✕ 密码至少 6 位"; return; }
+      if (res === "wrong") { tip.className = "form-tip err"; tip.textContent = "✕ 密码错误"; return; }
+      if (el) el.value = "";
+      syncAdminUI(); renderAll();
+      tip.className = "form-tip ok";
+      tip.textContent = res === "set"
+        ? "✓ 已设置管理密码并进入管理模式(密码只保存在本浏览器,不会上传)"
+        : "✓ 已进入管理模式";
+      if (firstTime && res === "set") {
+        window.alert("管理密码设置成功!\n\n请记住它 —— 密码以摘要形式保存在你自己的浏览器里:\n· 换浏览器 / 清除浏览数据后需要重新设置\n· 留言板接上 Waline 云端后,请改用 Waline 服务端后台管理");
+      }
+    });
+  }
+
+  /* 修改管理密码 */
+  function changeAdminPwd() {
+    var np = window.prompt("设置新的管理密码(至少 6 位,留空取消):", "");
+    if (np === null) return;
+    np = np.trim();
+    if (np.length < 6) { window.alert("密码至少 6 位,未修改"); return; }
+    hashPwd(np, function (h) {
+      store(KEY_PWD, h);
+      window.alert("✓ 管理密码已更新(仅保存在本浏览器)");
+    });
   }
 
   /* ---------------- 登录入口说明 ---------------- */
@@ -367,6 +434,7 @@
     });
 
     var lb = $("#adminLoginBtn"); if (lb) lb.addEventListener("click", tryLogin);
+    var cp = $("#changePwdBtn"); if (cp) cp.addEventListener("click", changeAdminPwd);
     var pwd = $("#adminPwd");
     if (pwd) pwd.addEventListener("keydown", function (e) { if (e.key === "Enter") tryLogin(); });
     var ab = $("#annPost"); if (ab) ab.addEventListener("click", postAnnouncement);
@@ -397,6 +465,7 @@
   window.CommentsBoard = {
     validate: validate, getComments: getComments, setComments: setComments,
     getAnnouncements: getAnnouncements, setAnnouncements: setAnnouncements,
-    render: renderAll, isAdmin: isAdmin, setAdmin: setAdmin, config: CFG
+    render: renderAll, isAdmin: isAdmin, setAdmin: setAdmin, config: CFG,
+    attemptLogin: attemptLogin, hashPwd: hashPwd, hasLocalPassword: hasLocalPassword
   };
 })();
