@@ -1,40 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="冬兵(巴基·巴恩斯) 立绘背景">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="70 60 760 1140" width="760" height="1140" role="img" aria-label="冬兵(巴基·巴恩斯) 人物立绘(透明底)">
   <defs>
-    <linearGradient id="g1" x1="0" y1="0" x2="0.6" y2="1">
-      <stop offset="0%" stop-color="#1d2530"/><stop offset="55%" stop-color="#050d0a"/><stop offset="100%" stop-color="#020706"/>
-    </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="42%" r="60%">
-      <stop offset="0%" stop-color="#9aa7b5" stop-opacity=".30"/><stop offset="60%" stop-color="#9aa7b5" stop-opacity=".08"/>
-      <stop offset="100%" stop-color="#9aa7b5" stop-opacity="0"/>
-    </radialGradient>
     <linearGradient id="fig" x1="0.2" y1="0" x2="0.8" y2="1">
-      <stop offset="0%" stop-color="#9aa7b5" stop-opacity=".95"/>
-      <stop offset="45%" stop-color="#9aa7b5" stop-opacity=".62"/>
-      <stop offset="100%" stop-color="#1d2530" stop-opacity=".95"/>
-    </linearGradient>
-    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#020706" stop-opacity="0"/><stop offset="70%" stop-color="#020706" stop-opacity=".55"/>
-      <stop offset="100%" stop-color="#020706" stop-opacity=".92"/>
+      <stop offset="0%" stop-color="#9aa7b5" stop-opacity=".98"/>
+      <stop offset="45%" stop-color="#9aa7b5" stop-opacity=".72"/>
+      <stop offset="100%" stop-color="#1d2530" stop-opacity=".98"/>
     </linearGradient>
     <filter id="soft2" x="-45%" y="-45%" width="190%" height="190%"><feGaussianBlur stdDeviation="12"/></filter>
-    <pattern id="hex" width="52" height="45" patternUnits="userSpaceOnUse">
-      <path d="M26 0 L52 13 L52 32 L26 45 L0 32 L0 13 Z" fill="none" stroke="#9aa7b5" stroke-opacity=".085" stroke-width="1"/>
-    </pattern>
+    <filter id="drop" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="22" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
   </defs>
-  <rect width="900" height="1200" fill="url(#g1)"/>
-  <rect width="900" height="1200" fill="url(#hex)"/>
-  <rect width="900" height="1200" fill="url(#glow)"/>
-  <text x="450" y="880" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="700"
-        font-weight="700" fill="#ffffff" opacity="0.045">BU</text>
-  
-  <g><ellipse cx="450" cy="500" rx="134" ry="160" fill="url(#fig)"/>
+  <g filter="url(#drop)">
+    
+    <g><ellipse cx="450" cy="500" rx="134" ry="160" fill="url(#fig)"/>
   <rect x="396" y="640" width="108" height="90" fill="url(#fig)"/>
   <path d="M130 1200 C158 900 300 828 450 828 C600 828 742 900 770 1200 Z" fill="url(#fig)"/></g>
-  <path d="M316 500 C316 412 374 340 450 340" fill="none" stroke="#ffffff" stroke-opacity=".38" stroke-width="8" filter="url(#soft2)"/>
+    <path d="M316 500 C316 412 374 340 450 340" fill="none" stroke="#ffffff" stroke-opacity=".38" stroke-width="8" filter="url(#soft2)"/>
   <path d="M584 500 C584 412 526 340 450 340" fill="none" stroke="#9aa7b5" stroke-opacity=".85" stroke-width="9" filter="url(#soft2)"/>
   <path d="M130 1200 C158 900 300 828 450 828" fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width="9" filter="url(#soft2)"/>
-  <g><path d="M640 820 C720 850 760 930 742 1040 C724 1130 660 1180 596 1180 L596 1080 C648 1076 682 1030 682 960 C682 900 660 866 620 848 Z" fill="#6c7784"/>
+    <g><path d="M640 820 C720 850 760 930 742 1040 C724 1130 660 1180 596 1180 L596 1080 C648 1076 682 1030 682 960 C682 900 660 866 620 848 Z" fill="#6c7784"/>
       <g stroke="#9aa7b5" stroke-width="5" fill="none" opacity=".8"><path d="M632 862 L700 902"/><path d="M620 926 L738 972"/><path d="M616 1000 L742 1040"/></g>
       <g fill="#9aa7b5" opacity=".9"><circle cx="700" cy="902" r="9"/><circle cx="736" cy="972" r="9"/><circle cx="740" cy="1040" r="9"/></g></g>
-  <rect width="900" height="1200" fill="url(#fade)"/>
+  </g>
 </svg>

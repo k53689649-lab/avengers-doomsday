@@ -47,6 +47,19 @@ function inline(pageFile) {
     const mime = MIME[path.extname(full).toLowerCase()] || "application/octet-stream";
     return 'src="data:' + mime + ";base64," + fs.readFileSync(full).toString("base64") + '"';
   });
+  // CSS 里引用的背景图(如 body.photo-bg 的 bg-page.jpg)同样要内联
+  html = html.replace(/url\((["']?)\.\.\/img\/([^"')]+)\1\)/g, (m, q, file) => {
+    const full = path.join(dir, "assets/img", file);
+    if (!fs.existsSync(full)) return m;
+    const mime = MIME[path.extname(full).toLowerCase()] || "application/octet-stream";
+    return "url(data:" + mime + ";base64," + fs.readFileSync(full).toString("base64") + ")";
+  });
+  html = html.replace(/url\((["']?)assets\/img\/([^"')]+)\1\)/g, (m, q, file) => {
+    const full = path.join(dir, "assets/img", file);
+    if (!fs.existsSync(full)) return m;
+    const mime = MIME[path.extname(full).toLowerCase()] || "application/octet-stream";
+    return "url(data:" + mime + ";base64," + fs.readFileSync(full).toString("base64") + ")";
+  });
   // 角色立绘(仅前瞻页需要):注入 data URI 映射,放在 </body> 前
   if (pageFile === "guide.html") {
     const artScript = charArtDataScript();

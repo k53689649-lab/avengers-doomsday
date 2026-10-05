@@ -144,7 +144,7 @@ const ART = {
     <g fill="none" stroke="${a}" stroke-width="7" opacity=".55"><ellipse cx="450" cy="640" rx="300" ry="90" transform="rotate(-18 450 640)"/></g>`
 };
 
-/* ------------------ 生成 ------------------ */
+/* ------------------ 生成:透明背景「纯人像」抠图 ------------------ */
 /* 需要画在人物「后面」的造型(氛围类);其余画在人物「前面」(五官/道具类) */
 const BACK_ART = new Set(["web", "cloak", "telepath", "forcefield", "stretch", "chaos", "mystic", "cosmic", "gamma", "wings"]);
 
@@ -157,44 +157,30 @@ for (const c of CHARS) {
   const art = (ART[cfg.art] || ART.mask)(a);
   const artBack = BACK_ART.has(cfg.art) ? art : "";
   const artFront = BACK_ART.has(cfg.art) ? "" : art;
-  const mono = cfg.id.slice(0, 2).toUpperCase();
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${c.name} 立绘背景">
+  /* 只有人物本体 + 配件,没有任何背景色块/网格/文字 → 透明底,可直接当抠图用
+     viewBox 收紧到人物范围,避免四周留白 */
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="70 60 760 1140" width="760" height="1140" role="img" aria-label="${c.name} 人物立绘(透明底)">
   <defs>
-    <linearGradient id="g1" x1="0" y1="0" x2="0.6" y2="1">
-      <stop offset="0%" stop-color="${a2}"/><stop offset="55%" stop-color="#050d0a"/><stop offset="100%" stop-color="#020706"/>
-    </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="42%" r="60%">
-      <stop offset="0%" stop-color="${a}" stop-opacity=".30"/><stop offset="60%" stop-color="${a}" stop-opacity=".08"/>
-      <stop offset="100%" stop-color="${a}" stop-opacity="0"/>
-    </radialGradient>
     <linearGradient id="fig" x1="0.2" y1="0" x2="0.8" y2="1">
-      <stop offset="0%" stop-color="${a}" stop-opacity=".95"/>
-      <stop offset="45%" stop-color="${a}" stop-opacity=".62"/>
-      <stop offset="100%" stop-color="${a2}" stop-opacity=".95"/>
-    </linearGradient>
-    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#020706" stop-opacity="0"/><stop offset="70%" stop-color="#020706" stop-opacity=".55"/>
-      <stop offset="100%" stop-color="#020706" stop-opacity=".92"/>
+      <stop offset="0%" stop-color="${a}" stop-opacity=".98"/>
+      <stop offset="45%" stop-color="${a}" stop-opacity=".72"/>
+      <stop offset="100%" stop-color="${a2}" stop-opacity=".98"/>
     </linearGradient>
     <filter id="soft2" x="-45%" y="-45%" width="190%" height="190%"><feGaussianBlur stdDeviation="12"/></filter>
-    <pattern id="hex" width="52" height="45" patternUnits="userSpaceOnUse">
-      <path d="M26 0 L52 13 L52 32 L26 45 L0 32 L0 13 Z" fill="none" stroke="${a}" stroke-opacity=".085" stroke-width="1"/>
-    </pattern>
+    <filter id="drop" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="22" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
   </defs>
-  <rect width="${W}" height="${H}" fill="url(#g1)"/>
-  <rect width="${W}" height="${H}" fill="url(#hex)"/>
-  <rect width="${W}" height="${H}" fill="url(#glow)"/>
-  <text x="450" y="880" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="700"
-        font-weight="700" fill="#ffffff" opacity="0.045">${mono}</text>
-  ${artBack}
-  <g>${head}</g>
-  ${rim(a)}
-  ${artFront}
-  <rect width="${W}" height="${H}" fill="url(#fade)"/>
+  <g filter="url(#drop)">
+    ${artBack}
+    <g>${head}</g>
+    ${rim(a)}
+    ${artFront}
+  </g>
 </svg>`;
   fs.writeFileSync(path.join(OUT_DIR, cfg.id + ".svg"), svg, "utf8");
   count++;
 }
-console.log("OK - 生成 " + count + " 张角色立绘 → assets/img/chars/");
+console.log("OK - 生成 " + count + " 张透明底人物立绘 → assets/img/chars/");
 console.log("   角色:" + CHARS.map(c => ctx.CHAR_ART[c.name].id).join(", "));

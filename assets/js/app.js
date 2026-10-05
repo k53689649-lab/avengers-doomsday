@@ -235,7 +235,7 @@
     var platformChips = '<div class="filter-group"><span class="filter-label">播放平台</span>' +
       WATCH.map(function (p) {
         return '<button class="chip chip-platform' + (state.platform === p.id ? " active" : "") + '" data-platform="' + esc(p.id) + '">' + esc(p.name) + "</button>";
-      }).join("") + '<span class="chip-hint">(点封面 ▶ 会跳到这里搜索)</span></div>';
+      }).join("") + '<span class="chip-hint">(点作品卡上的 ▶ 会去这里搜索)</span></div>';
 
     $("#controls").innerHTML =
       '<div class="search-row"><input class="search-input" id="searchInput" type="search" placeholder="搜索片名 / 英文名 / 年份 / 简介关键词…" value="' + esc(state.q) + '" /></div>' +
@@ -259,19 +259,16 @@
     if (!p) return "#";
     return p.url.replace("{q}", encodeURIComponent(f.title)).replace("{qen}", encodeURIComponent(f.en || f.title));
   }
-  function posterHtml(f) {
-    var color = studioColor(f.studio);
-    var platform = currentPlatform();
-    var play = (f.status === "upcoming")
-      ? '<span class="poster-play poster-soon" title="还没上映">🔒</span>'
-      : '<a class="poster-play" href="' + esc(watchUrl(f)) + '" target="_blank" rel="noopener noreferrer" title="去' + esc(platform ? platform.name : "") + '搜索这部剧">▶</a>';
-    return '<div class="film-poster" style="--pa:' + color + '">' +
-      '<div class="poster-glow"></div>' +
-      '<div class="poster-body">' +
-      '<span class="poster-studio">' + esc((f.studio || "").replace(/\(.*?\)/, "")) + "</span>" +
-      '<span class="poster-title">' + esc(f.title) + "</span>" +
-      '<span class="poster-year">' + esc(f.year) + (f.isTV ? " · 剧集" : "") + "</span>" +
-      "</div>" + play + "</div>";
+  function posterHtml(f) { return ""; }
+  /* 播放按钮:带片名去正版平台搜索(本站不提供任何盗版资源) */
+  function watchBtnHtml(f) {
+    var p = currentPlatform();
+    var pname = p ? p.name : "平台";
+    if (f.status === "upcoming") {
+      return '<span class="watch-btn watch-soon" title="还没上映">🔒 待上映</span>';
+    }
+    return '<a class="watch-btn" href="' + esc(watchUrl(f)) + '" target="_blank" rel="noopener noreferrer" ' +
+      'title="去' + esc(pname) + '搜索这部剧">▶ 去' + esc(pname) + "查</a>";
   }
   function filmHtml(f) {
     var statusTag = f.status === "upcoming"
@@ -279,16 +276,16 @@
       : '<span class="tag">已上映</span>';
     var tvTag = f.isTV ? '<span class="tag">剧集</span>' : "";
     return '<article class="film-card" data-id="' + esc(f.id) + '">' +
-      posterHtml(f) +
-      '<div class="film-body">' +
-      '<div class="film-top"><h3 class="film-title">' + esc(f.title) +
+      '<div class="film-top">' +
+      '<h3 class="film-title">' + esc(f.title) +
       '<span>' + esc(f.en || "") + "</span></h3>" +
-      '<div class="film-meta">' + statusTag + tvTag + "</div></div>" +
-      '<div class="film-meta">' + relTag(f.rel) + '<span class="tag">' + esc(f.studio) + "</span>" +
+      watchBtnHtml(f) +
+      "</div>" +
+      '<div class="film-meta">' + statusTag + tvTag + relTag(f.rel) + '<span class="tag">' + esc(f.studio) + "</span>" +
       (f.phase ? '<span class="tag">' + esc(f.phase) + "</span>" : "") + "</div>" +
       (f.plot ? '<p class="film-plot"><b>讲了什么:</b>' + esc(f.plot) + "</p>" : "") +
       (f.relation ? '<p class="film-relation"><span class="rel-label">与复联5的关系</span>' + esc(f.relation) + "</p>" : "") +
-      "</div></article>";
+      "</article>";
   }
   function renderFilms() {
     var q = state.q.trim().toLowerCase();
@@ -308,7 +305,7 @@
     $("#filmsMore").innerHTML =
       "<h3>待映与说明</h3>" +
       ext.map(function (f) { return '<p class="more-note">· ' + esc(f.title) + "( " + esc(f.en) + " )— " + esc(f.plot) + "</p>"; }).join("") +
-      '<p class="more-note" style="margin-top:10px">· 关于播放按钮:点封面上的 ▶ 会带片名去您选择的<b>正版平台</b>搜索(腾讯视频 / 爱奇艺 / 优酷 / B站 / Disney+ / JustWatch)。本站<b>不提供、也不链接任何盗版资源</b> —— 盗版站不稳定、随时失效,而且违法。</p>' +
+      '<p class="more-note" style="margin-top:10px">· 关于播放按钮:点每张卡片右上角的 ▶ 会带片名去您选择的<b>正版平台</b>搜索(腾讯视频 / 爱奇艺 / 优酷 / B站 / Disney+ / JustWatch)。本站<b>不提供、也不链接任何盗版资源</b> —— 盗版站不稳定、随时失效,而且违法。</p>' +
       '<p class="more-note">· 未收录说明:①1994年科尔曼版《神奇四侠》从未正式公映(仅按合约拍摄),仅作历史注脚收录;②1998年《复仇者》(费因斯/瑟曼)改编自英国同名间谍剧,与漫威无关,已排除;③各厂直发DVD的漫威动画长片(如《钢铁侠:科技达人》《终极复仇者》等)非院线作品,未收录;④2003年《夜魔侠》等老片与MCU不共享宇宙,但其角色已在《死侍与金刚狼》中以"老宇宙"身份回归。</p>';
   }
 
@@ -319,9 +316,9 @@
     if (window.CHAR_ART_DATA && window.CHAR_ART_DATA[cfg.id]) return window.CHAR_ART_DATA[cfg.id];
     return "assets/img/chars/" + cfg.id + ".svg";
   }
-  function charArtJpg(c) {
+  function charArtId(c) {
     var cfg = (window.CHAR_ART || {})[c.name];
-    return cfg && cfg.id ? "assets/img/chars/" + cfg.id + ".jpg" : "";
+    return cfg && cfg.id ? cfg.id : "";
   }
   function castData() {
     return state.castTab === "predicted" ? window.PREDICTED_CHARS : window.TRAILER_CHARS;
@@ -354,10 +351,9 @@
       ? "基于官方卡司、泄露设定、片场照与媒体报道的预测,标注了每条推断的依据与可信度。传闻仅供参考,以正片为准。"
       : "依据已发布的两支预告与官方卡司整理,每位角色的预告画面、背景介绍与「为什么与复联5有关」都在这里。";
 
-    var art = charArtUrl(c), jpg = charArtJpg(c);
+    var art = charArtUrl(c), id = charArtId(c);
     $("#castStage").innerHTML =
-      '<div class="cast-bg"><img class="cast-img" ' + (jpg ? 'data-jpg="' + esc(jpg) + '" ' : "") +
-      'src="' + esc(art) + '" alt="" /></div>' +
+      '<div class="cast-bg"><img class="cast-img" src="' + esc(art) + '" alt="' + esc(c.name) + ' 人物立绘" /></div>' +
       '<div class="cast-shade"></div>' +
       '<article class="cast-body">' +
       '<div class="cast-head"><h3 class="cast-name">' + esc(c.name) + "<span>" + esc(c.en || "") + "</span></h3>" +
@@ -369,11 +365,19 @@
       (c.evidence ? '<p class="cast-evidence">' + c.evidence + "</p>" : "") +
       "</article>";
 
+    /* 想换成自己的透明底抠图:把 <id>.png(或 .jpg)放进 assets/img/chars/ 即可自动优先使用 */
     var img = $("#castStage .cast-img");
-    if (img && img.dataset && img.dataset.jpg && typeof window.Image === "function") {
-      var probe = new window.Image();
-      probe.onload = function () { img.src = img.dataset.jpg; };
-      probe.src = img.dataset.jpg;
+    if (img && id && typeof window.Image === "function") {
+      var png = "assets/img/chars/" + id + ".png";
+      var jpg = "assets/img/chars/" + id + ".jpg";
+      var t1 = new window.Image();
+      t1.onload = function () { img.src = png; };
+      t1.onerror = function () {
+        var t2 = new window.Image();
+        t2.onload = function () { img.src = jpg; };
+        t2.src = jpg;
+      };
+      t1.src = png;
     }
 
     $("#castPos").textContent = (state.castIndex + 1) + " / " + list.length;
