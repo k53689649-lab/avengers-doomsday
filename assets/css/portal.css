@@ -206,14 +206,17 @@ body.portal {
 
 /* ---------- 响应式:手机改为「封面在上、内容紧随其后」的嵌入排布 ---------- */
 @media (max-width: 820px) {
+  /* 手机:海报完整可见(4:5 海报与手机竖屏比例不同,用 contain 才不会把人物裁掉),
+     海报边缘本身是深色,所以看起来依然是满屏的;底部渐隐融进深色背景 */
   .portal-cover {
-    object-fit: cover; object-position: center 26%;
-    filter: brightness(0.94) saturate(1.06) contrast(1.04);
-    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 62%, rgba(0,0,0,0.35) 82%, rgba(0,0,0,0) 97%);
-    mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 62%, rgba(0,0,0,0.35) 82%, rgba(0,0,0,0) 97%);
+    object-fit: contain; object-position: center top;
+    filter: brightness(0.96) saturate(1.06) contrast(1.04);
+    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 72%, rgba(0,0,0,0.45) 88%, rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 72%, rgba(0,0,0,0.45) 88%, rgba(0,0,0,0) 100%);
   }
   .portal-main { min-height: 100vh; justify-content: flex-start; }
-  .portal-content { padding: 40vh 16px 34px; }
+  /* 内容从海报下沿开始(海报高 = 宽度 × 1.25);横屏平板等超矮屏幕用 78vh 兜底,避免要滚很久 */
+  .portal-content { padding: min(calc(100vw * 1.25 + 16px), 78vh) 16px 34px; }
   .portal-choices { grid-template-columns: 1fr; gap: 12px; margin-top: 18px; }
   .choice { padding: 20px 18px 18px; border-radius: 15px; }
   .countdown { gap: 8px; margin: 14px 0 2px; }
