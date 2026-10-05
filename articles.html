@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>影迷投稿板块 | 复仇者联盟5:毁灭之日 资讯与考据</title>
+  <meta name="description" content="影迷投稿板块:上传你发现的新资讯、考据与观后感,可附网址跳转,支持评论、点赞与收藏(站长审核后公开)。" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/comments.css" />
+  <link rel="stylesheet" href="assets/css/articles.css" />
+</head>
+<body class="photo-bg articles">
+
+  <!-- ======= 顶部导航 ======= -->
+  <header class="topbar" id="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">D</span>
+        <span class="brand-text">毁灭之日 · 观影指南</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="index.html">← 首页</a>
+        <a href="guide.html#overview">电影速览</a>
+        <a href="guide.html#eggs">彩蛋速报</a>
+        <a href="guide.html#films">全作品库</a>
+        <a href="guide.html#trailer-cast">角色图鉴</a>
+        <a href="comments.html">留言提问</a>
+        <a href="articles.html" class="active">影迷投稿</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button>
+    </div>
+  </header>
+
+  <!-- ======= 页首 ======= -->
+  <section class="cm-hero">
+    <p class="eyebrow">FAN ARTICLES</p>
+    <h1>影迷投稿板块 <span>把你发现的新资讯写下来</span></h1>
+    <p class="cm-hero-desc">
+      发现了一条新预告解析、考据、片场照或官方访谈?在这里写成文章分享出来。<br />
+      支持附加<strong>原始网址</strong>(点击可直接跳转),文章下面可以<strong>评论、点赞、收藏</strong>;
+      所有投稿经<strong>站长审核</strong>后对所有人公开。
+    </p>
+    <div class="cm-stats" id="artStats"></div>
+  </section>
+
+  <!-- ======= 两个板块切换 ======= -->
+  <nav class="board-switch" aria-label="板块切换">
+    <a href="comments.html" class="bs-item">
+      <b>提问 / 观后感</b>
+      <span>剧情疑问、考据讨论、观后感交流</span>
+    </a>
+    <a href="articles.html" class="bs-item active">
+      <b>影迷投稿</b>
+      <span>写文章、附网址、可评论点赞收藏</span>
+    </a>
+  </nav>
+
+  <!-- ======= 数据库升级提示(v3 未跑时出现) ======= -->
+  <section class="cm-section" id="v3NoticeSection" style="display:none">
+    <div class="v2-banner show">
+      <div class="v2b-head">⚠️ 投稿板块还没启用:数据库差一次升级(30 秒)</div>
+      <div class="v2b-body">本次需要新增「文章表 / 文章评论 / 点赞 / 收藏」相关内容。跑完脚本后本提示会自动消失。</div>
+      <div class="v2b-steps">① 打开 supabase.com → 进入你的项目　② 左侧 <b>SQL Editor</b> → <b>New query</b>　③ 粘贴 <b>docs/supabase-migration-v3.sql</b> → 点 <b>Run</b>　④ 回到本页刷新</div>
+      <div class="v2b-actions">
+        <button type="button" id="v3Copy">📋 复制升级脚本</button>
+        <a href="docs/supabase-migration-v3.sql" target="_blank" rel="noopener">查看脚本原文</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= 工具条 ======= -->
+  <section class="cm-section" id="artToolbar">
+    <div class="art-tools">
+      <input class="search-input" id="artSearch" type="search" placeholder="搜索标题 / 作者 / 摘要关键词…" />
+      <div class="art-tool-actions">
+        <button class="btn btn-primary btn-sm" id="btnSubmit">✍️ 我要投稿</button>
+        <button class="btn btn-ghost btn-sm" id="btnMine">📄 我的投稿</button>
+        <button class="btn btn-ghost btn-sm" id="btnFav">⭐ 我的收藏</button>
+        <button class="btn btn-ghost btn-sm" id="btnAdmin">🔐 站长管理</button>
+      </div>
+    </div>
+    <div class="art-filters">
+      <div class="filter-group" id="artCats"></div>
+      <div class="filter-group" id="artSorts"></div>
+    </div>
+  </section>
+
+  <!-- ======= 列表视图 ======= -->
+  <section class="cm-section" id="artListView">
+    <h2>全部投稿 <span id="artCount" class="art-count"></span></h2>
+    <div class="art-list" id="artList"></div>
+    <p class="cm-empty hidden" id="artEmpty"></p>
+  </section>
+
+  <!-- ======= 详情视图 ======= -->
+  <section class="cm-section hidden" id="artDetailView">
+    <button class="btn btn-ghost btn-sm" id="btnBack">← 返回列表</button>
+    <article class="art-detail" id="artDetail"></article>
+    <div class="art-comment-wrap">
+      <h3 class="art-sub">💬 评论 <span id="artCmCount" class="art-count"></span></h3>
+      <div class="reply-bar" id="artReplyBar"></div>
+      <div class="cm-form-card art-cm-form">
+        <div class="form-grid">
+          <input id="acName" type="text" maxlength="16" placeholder="你的昵称(2-16 字)" />
+        </div>
+        <textarea id="acContent" maxlength="500" placeholder="说说你的看法…(4-500 字)"></textarea>
+        <div class="form-foot">
+          <span id="acCounter">0/500</span>
+          <button class="btn btn-primary btn-sm" id="acSubmit">发表评论</button>
+        </div>
+        <p class="form-tip" id="acTip"></p>
+      </div>
+      <div class="cm-list" id="artCmList"></div>
+    </div>
+  </section>
+
+  <!-- ======= 投稿表单视图 ======= -->
+  <section class="cm-section hidden" id="artSubmitView">
+    <button class="btn btn-ghost btn-sm" id="btnSubmitBack">← 返回列表</button>
+    <h2>✍️ 投稿一篇文章</h2>
+    <div class="notice-card art-rules">
+      <p><b>投稿规范:</b>只发你<strong>真实看到</strong>的资讯(预告解析、官方访谈、片场照、考据等),请注明来源;禁止盗用他人文章、禁止标题党、禁止广告与盗版资源。所有投稿<strong>需站长审核</strong>后才公开,一般 1-2 天内处理。</p>
+    </div>
+    <div class="cm-form-card">
+      <div class="form-grid">
+        <input id="arName" type="text" maxlength="16" placeholder="你的昵称(2-16 字,请勿用真实姓名)" />
+        <select id="arCat">
+          <option value="资讯">资讯</option>
+          <option value="预告解析">预告解析</option>
+          <option value="剧情考据">剧情考据</option>
+          <option value="演员动态">演员动态</option>
+          <option value="观后感">观后感</option>
+        </select>
+      </div>
+      <input id="arTitle" type="text" maxlength="120" placeholder="文章标题(4-120 字,别用「震惊体」)" />
+      <input id="arSummary" type="text" maxlength="120" placeholder="一句话摘要(选填,列表里会显示)" />
+      <textarea id="arContent" maxlength="20000" class="art-textarea" placeholder="正文(20 字以上)。支持换行分段;如需插入原始网页,请填在下面的「附加网址」里。"></textarea>
+
+      <div class="art-links">
+        <div class="art-links-head">
+          <b>🔗 附加网址(选填,最多 3 条)</b>
+          <button class="btn btn-ghost btn-sm" id="arAddLink" type="button">+ 添加一条</button>
+        </div>
+        <div id="arLinkRows"></div>
+        <p class="art-hint">只会跳转 http/https 网址;为避免引流,请填写与文章直接相关的来源(如官方频道、知名媒体)。</p>
+      </div>
+
+      <label class="art-spoiler"><input type="checkbox" id="arSpoiler" /> 本文含<strong>剧透</strong>内容(会在标题旁标注)</label>
+      <div class="form-foot">
+        <span id="arCounter">0/20000</span>
+        <button class="btn btn-primary btn-sm" id="arSubmit">提交审核</button>
+      </div>
+      <p class="form-tip" id="arTip"></p>
+    </div>
+  </section>
+
+  <!-- ======= 我的投稿 / 我的收藏 ======= -->
+  <section class="cm-section hidden" id="artMineView">
+    <button class="btn btn-ghost btn-sm" id="btnMineBack">← 返回列表</button>
+    <h2 id="mineTitle">📄 我的投稿</h2>
+    <p class="art-hint" id="mineHint"></p>
+    <div class="art-list" id="mineList"></div>
+  </section>
+
+  <!-- ======= 站长管理视图 ======= -->
+  <section class="cm-section hidden" id="artAdminView">
+    <button class="btn btn-ghost btn-sm" id="btnAdminBack">← 返回列表</button>
+    <h2>🔐 站长管理</h2>
+    <div class="admin-modal-inline" id="artAdminLogin">
+      <p class="admin-desc">用你的 Supabase 站长账号登录后,即可审核投稿、置顶与删除。</p>
+      <div class="admin-field"><label id="artAdminEmailLabel">站长邮箱</label><input id="artAdminEmail" type="email" placeholder="you@example.com" /></div>
+      <div class="admin-field"><label>站长密码</label><input id="artAdminPwd" type="password" placeholder="••••••••" /></div>
+      <button class="btn btn-primary btn-sm" id="artAdminLoginBtn">登录</button>
+      <p class="form-tip" id="artAdminTip"></p>
+      <p class="admin-secure">🔒 密码由 Supabase 服务器校验,前端拿不到,也不会写进任何文件。</p>
+    </div>
+    <div class="hidden" id="artAdminPanel">
+      <div class="admin-bar">
+        <span class="admin-badge">已登录:站长</span>
+        <button class="btn btn-ghost btn-sm" id="artAdminLogout">退出登录</button>
+      </div>
+      <h3 class="art-sub">⏳ 待审核 <span id="pendingCount" class="art-count"></span></h3>
+      <div class="art-list" id="pendingList"></div>
+      <h3 class="art-sub">📚 已发布 <span id="publishedCount" class="art-count"></span></h3>
+      <div class="art-list" id="publishedList"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p><b>关于投稿板块:</b>文章内容由访客自行投稿并自负责任,不代表本站立场;站长只做形式审核(违法、广告、盗用、剧透标注),不对内容真实性做担保。<br />
+      本站为非官方影迷站点,与漫威/迪士尼/索尼等公司无隶属关系;影片信息以官方公布与正片为准。</p>
+    <p class="footer-links">
+      <a href="index.html">首页</a> · <a href="guide.html">观影指南</a> · <a href="comments.html">留言提问</a> · <a href="articles.html">影迷投稿</a>
+    </p>
+  </footer>
+
+  <script src="assets/js/site-config.js"></script>
+  <script src="assets/js/fx.js"></script>
+  <script src="assets/js/articles.js"></script>
+</body>
+</html>

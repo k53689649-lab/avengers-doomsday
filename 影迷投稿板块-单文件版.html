@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>留言提问板 | 毁灭之日 · 观影指南</title>
-  <meta name="description" content="关于《复仇者联盟5:毁灭之日》的提问、考据与观后感交流板。支持楼中楼互相回复、点赞、站长置顶公告与删评。" />
+  <title>影迷投稿板块 | 复仇者联盟5:毁灭之日 资讯与考据</title>
+  <meta name="description" content="影迷投稿板块:上传你发现的新资讯、考据与观后感,可附网址跳转,支持评论、点赞与收藏(站长审核后公开)。" />
   <style>
 /* =========================================================
    毁灭之日观影指南 — 全局样式
@@ -801,7 +801,7 @@ body.articles .btn-ghost:hover { border-color: var(--accent); color: #fff; }
 
 </style>
 </head>
-<body class="photo-bg">
+<body class="photo-bg articles">
 
   <!-- ======= 顶部导航 ======= -->
   <header class="topbar" id="topbar">
@@ -816,9 +816,8 @@ body.articles .btn-ghost:hover { border-color: var(--accent); color: #fff; }
         <a href="%E5%A4%8D%E4%BB%87%E8%80%85%E8%81%94%E7%9B%9F5%E8%A7%82%E5%BD%B1%E6%8C%87%E5%8D%97-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html">彩蛋速报</a>
         <a href="%E5%A4%8D%E4%BB%87%E8%80%85%E8%81%94%E7%9B%9F5%E8%A7%82%E5%BD%B1%E6%8C%87%E5%8D%97-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html">全作品库</a>
         <a href="%E5%A4%8D%E4%BB%87%E8%80%85%E8%81%94%E7%9B%9F5%E8%A7%82%E5%BD%B1%E6%8C%87%E5%8D%97-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html">角色图鉴</a>
-        <a href="%E5%A4%8D%E4%BB%87%E8%80%85%E8%81%94%E7%9B%9F5%E8%A7%82%E5%BD%B1%E6%8C%87%E5%8D%97-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html">Q&amp;A</a>
         <a href="%E7%95%99%E8%A8%80%E6%8F%90%E9%97%AE%E6%9D%BF-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html">留言提问</a>
-        <a href="articles.html">影迷投稿</a>
+        <a href="articles.html" class="active">影迷投稿</a>
       </nav>
       <button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button>
     </div>
@@ -826,163 +825,165 @@ body.articles .btn-ghost:hover { border-color: var(--accent); color: #fff; }
 
   <!-- ======= 页首 ======= -->
   <section class="cm-hero">
-    <p class="hero-kicker">GUESTBOOK · Q&amp;A</p>
-    <h1>留言提问板<br/><span>有问题,尽管问</span></h1>
-    <p>关于《复仇者联盟5:毁灭之日》的任何疑问——剧情考据、角色去向、观影顺序、彩蛋解读,或者只是想说两句观后感,都欢迎留在这里。站长会尽量逐条回复,<b>也欢迎网友之间楼中楼互相解答、互相点赞</b>。</p>
-    <div class="cm-stats" id="cmStats"></div>
-  </section>
-
-  <!-- ======= 数据库升级提示(未升级时自动出现,放在最前面以便一眼看到) ======= -->
-  <section class="cm-section" id="v2NoticeSection">
-    <div class="v2-banner" id="v2Banner"></div>
+    <p class="eyebrow">FAN ARTICLES</p>
+    <h1>影迷投稿板块 <span>把你发现的新资讯写下来</span></h1>
+    <p class="cm-hero-desc">
+      发现了一条新预告解析、考据、片场照或官方访谈?在这里写成文章分享出来。<br />
+      支持附加<strong>原始网址</strong>(点击可直接跳转),文章下面可以<strong>评论、点赞、收藏</strong>;
+      所有投稿经<strong>站长审核</strong>后对所有人公开。
+    </p>
+    <div class="cm-stats" id="artStats"></div>
   </section>
 
   <!-- ======= 两个板块切换 ======= -->
   <nav class="board-switch" aria-label="板块切换">
-    <a href="%E7%95%99%E8%A8%80%E6%8F%90%E9%97%AE%E6%9D%BF-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html" class="bs-item active">
+    <a href="%E7%95%99%E8%A8%80%E6%8F%90%E9%97%AE%E6%9D%BF-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html" class="bs-item">
       <b>提问 / 观后感</b>
-      <span>剧情疑问、考据讨论、观后感交流(支持楼中楼与点赞)</span>
+      <span>剧情疑问、考据讨论、观后感交流</span>
     </a>
-    <a href="articles.html" class="bs-item">
+    <a href="articles.html" class="bs-item active">
       <b>影迷投稿</b>
-      <span>写文章、附网址、可评论点赞收藏(站长审核)</span>
+      <span>写文章、附网址、可评论点赞收藏</span>
     </a>
   </nav>
 
-  <!-- ======= 声明 ======= -->
-  <section class="cm-section" id="rules">
-    <div class="notice-panel">
-      <h2>📢 留言须知与免责声明</h2>
-      <p class="notice-sub">请在发言前花一分钟读完。继续提交留言,即视为你已阅读并同意以下全部条款。</p>
-      <ol class="notice-list">
-        <li><b>本站性质:</b>本留言板是影迷自发搭建的非官方交流区,与漫威影业、迪士尼、索尼影业等公司无任何隶属或合作关系;站内所有影片信息、票房、剧情推测均整理自公开报道与上映内容,最终请以官方公布和电影正片为准。</li>
-        <li><b>友善交流:</b>禁止人身攻击、辱骂、嘲讽、恶意挑衅、地域/性别/民族/宗教歧视、网络暴力与恶意引战。意见可以尖锐,态度请保持体面。</li>
-        <li><b>剧透规范:</b>涉及<strong>未上映影片</strong>(如《复仇者联盟5:毁灭之日》)的重大剧情、结局、彩蛋与泄露内容时,请在开头标注「<strong>剧透</strong>」,给还没看的朋友留一点余地。</li>
-        <li><b>严禁违法内容:</b>不得发布任何违反法律法规的内容,包括但不限于色情低俗、暴力血腥、恐怖主义、赌博博彩、毒品、诈骗、传销、洗钱、涉枪涉爆、危害国家安全与公共利益的言论。</li>
-        <li><b>禁止刷屏灌水:</b>同一内容反复提交、无意义字符、纯表情霸屏、连续多楼占用版面、恶意顶帖等行为一律删除;本站设有防刷机制:两次留言间隔不少于 <strong>30 秒</strong>,单次访问最多 <strong>20 条</strong>,重复内容会被自动拦截。</li>
-        <li><b>禁止广告导流:</b>不得发布商业推广、拉群、代刷代练、账号买卖、外链引流、博彩与贷款类信息;个人作品推广请先联系站长。</li>
-        <li><b>尊重版权:</b>请勿发布、索取或询问盗版影视资源、破解工具的获取方式;引用他人观点、数据或截图时请注明来源。</li>
-        <li><b>保护隐私:</b>请勿在留言中透露自己或他人的真实姓名、住址、学校、单位、电话、身份证号、支付账号等敏感信息。未成年人尤其需要注意;建议所有人不要公开联系方式,谨防冒充站长的诈骗。</li>
-        <li><b>楼中楼互相回复:</b>不只是站长能回你——<b>任何人都可以点某条留言下面的「回复」</b>进行楼中楼交流,回复会缩进显示在原留言下面,并标注「回复 @对方昵称」。请尽量就事论事,别把讨论变成对线。</li>
-        <li><b>点赞:</b>每条留言和每条回复都可以点赞(爱心按钮),<b>一个访客对同一条只能点一次</b>,重复点击不会重复计数;点赞数据存在云端数据库里,所有人可见。请不要用脚本刷赞。</li>
-        <li><b>提问建议:</b>提问请尽量具体(写明电影名、时间点、你想确认的细节),这样站长与网友才能高效回答。发问前建议先看看站内 Q&amp;A 与已有留言,避免重复提问。</li>
-        <li><b>内容处置权:</b>留言仅代表发布者个人观点,不代表本站立场。站长作为内容管理者,有权在<strong>不事先通知</strong>的情况下删除、隐藏或置顶任何留言;对涉嫌违法或侵权的留言,本站保留保存证据并向有关部门举报、追究责任的权利。</li>
-        <li><b>技术说明:</b>本站是静态站点。在未配置云端留言板的情况下,留言只保存在<strong>你自己的浏览器</strong>里(其他设备与其他访客看不到),请勿将其当作正式投稿或求助渠道;配置云端留言板后,留言将对所有访客公开。</li>
-        <li><b>举报与纠错:</b>发现违规留言、事实错误或版权问题,欢迎在留言中@站长说明,我们会尽快核实处理。感谢你一起维护这里的氛围 🙏</li>
-      </ol>
-      <p class="notice-foot">⚠️ 继续发布留言即视为已阅读并同意以上全部条款;如不同意,请勿发言。</p>
-    </div>
-  </section>
-
-  <!-- ======= 公告 ======= -->
-  <section class="cm-section" id="announce">
-    <div class="announce-head">
-      <h2>📌 站长公告</h2>
-      <button class="btn btn-ghost btn-sm" id="adminToggle">站长管理</button>
-    </div>
-    <div class="announce-list" id="announceList"></div>
-  </section>
-
-  <!-- ======= 留言表单(本地/云端模式共用) ======= -->
-  <section class="cm-section" id="localFormSection">
-    <h2>我要提问 / 留言</h2>
-    <p class="cloud-status local" id="cloudStatus"></p>
-    <div class="cm-form-card">
-      <div class="login-row">
-        <span>登录方式:</span>
-        <button class="btn-wechat" data-provider="wechat">💬 微信登录</button>
-        <button class="btn-qq" data-provider="qq">🐧 QQ 登录</button>
-        <span class="login-hint">(点按可查看当前配置状态;未配置时可直接用昵称留言)</span>
+  <!-- ======= 数据库升级提示(v3 未跑时出现) ======= -->
+  <section class="cm-section" id="v3NoticeSection" style="display:none">
+    <div class="v2-banner show">
+      <div class="v2b-head">⚠️ 投稿板块还没启用:数据库差一次升级(30 秒)</div>
+      <div class="v2b-body">本次需要新增「文章表 / 文章评论 / 点赞 / 收藏」相关内容。跑完脚本后本提示会自动消失。</div>
+      <div class="v2b-steps">① 打开 supabase.com → 进入你的项目　② 左侧 <b>SQL Editor</b> → <b>New query</b>　③ 粘贴 <b>docs/supabase-migration-v3.sql</b> → 点 <b>Run</b>　④ 回到本页刷新</div>
+      <div class="v2b-actions">
+        <button type="button" id="v3Copy">📋 复制升级脚本</button>
+        <a href="docs/supabase-migration-v3.sql" target="_blank" rel="noopener">查看脚本原文</a>
       </div>
+    </div>
+  </section>
+
+  <!-- ======= 工具条 ======= -->
+  <section class="cm-section" id="artToolbar">
+    <div class="art-tools">
+      <input class="search-input" id="artSearch" type="search" placeholder="搜索标题 / 作者 / 摘要关键词…" />
+      <div class="art-tool-actions">
+        <button class="btn btn-primary btn-sm" id="btnSubmit">✍️ 我要投稿</button>
+        <button class="btn btn-ghost btn-sm" id="btnMine">📄 我的投稿</button>
+        <button class="btn btn-ghost btn-sm" id="btnFav">⭐ 我的收藏</button>
+        <button class="btn btn-ghost btn-sm" id="btnAdmin">🔐 站长管理</button>
+      </div>
+    </div>
+    <div class="art-filters">
+      <div class="filter-group" id="artCats"></div>
+      <div class="filter-group" id="artSorts"></div>
+    </div>
+  </section>
+
+  <!-- ======= 列表视图 ======= -->
+  <section class="cm-section" id="artListView">
+    <h2>全部投稿 <span id="artCount" class="art-count"></span></h2>
+    <div class="art-list" id="artList"></div>
+    <p class="cm-empty hidden" id="artEmpty"></p>
+  </section>
+
+  <!-- ======= 详情视图 ======= -->
+  <section class="cm-section hidden" id="artDetailView">
+    <button class="btn btn-ghost btn-sm" id="btnBack">← 返回列表</button>
+    <article class="art-detail" id="artDetail"></article>
+    <div class="art-comment-wrap">
+      <h3 class="art-sub">💬 评论 <span id="artCmCount" class="art-count"></span></h3>
+      <div class="reply-bar" id="artReplyBar"></div>
+      <div class="cm-form-card art-cm-form">
+        <div class="form-grid">
+          <input id="acName" type="text" maxlength="16" placeholder="你的昵称(2-16 字)" />
+        </div>
+        <textarea id="acContent" maxlength="500" placeholder="说说你的看法…(4-500 字)"></textarea>
+        <div class="form-foot">
+          <span id="acCounter">0/500</span>
+          <button class="btn btn-primary btn-sm" id="acSubmit">发表评论</button>
+        </div>
+        <p class="form-tip" id="acTip"></p>
+      </div>
+      <div class="cm-list" id="artCmList"></div>
+    </div>
+  </section>
+
+  <!-- ======= 投稿表单视图 ======= -->
+  <section class="cm-section hidden" id="artSubmitView">
+    <button class="btn btn-ghost btn-sm" id="btnSubmitBack">← 返回列表</button>
+    <h2>✍️ 投稿一篇文章</h2>
+    <div class="notice-card art-rules">
+      <p><b>投稿规范:</b>只发你<strong>真实看到</strong>的资讯(预告解析、官方访谈、片场照、考据等),请注明来源;禁止盗用他人文章、禁止标题党、禁止广告与盗版资源。所有投稿<strong>需站长审核</strong>后才公开,一般 1-2 天内处理。</p>
+    </div>
+    <div class="cm-form-card">
       <div class="form-grid">
-        <input id="cmName" type="text" maxlength="16" placeholder="你的昵称(2-16 字,请勿用真实姓名)" />
-        <select id="cmType">
-          <option value="提问">提问</option>
+        <input id="arName" type="text" maxlength="16" placeholder="你的昵称(2-16 字,请勿用真实姓名)" />
+        <select id="arCat">
+          <option value="资讯">资讯</option>
+          <option value="预告解析">预告解析</option>
           <option value="剧情考据">剧情考据</option>
+          <option value="演员动态">演员动态</option>
           <option value="观后感">观后感</option>
-          <option value="纠错建议">纠错建议</option>
         </select>
       </div>
-      <div class="reply-bar" id="cmReplyBar"></div>
-      <textarea id="cmContent" maxlength="500" placeholder="想说的话…例如:《复联5》预告里洛基那场戏到底在哪个时间点?需要先补哪几部?（4-500 字）"></textarea>
+      <input id="arTitle" type="text" maxlength="120" placeholder="文章标题(4-120 字,别用「震惊体」)" />
+      <input id="arSummary" type="text" maxlength="120" placeholder="一句话摘要(选填,列表里会显示)" />
+      <textarea id="arContent" maxlength="20000" class="art-textarea" placeholder="正文(20 字以上)。支持换行分段;如需插入原始网页,请填在下面的「附加网址」里。"></textarea>
+
+      <div class="art-links">
+        <div class="art-links-head">
+          <b>🔗 附加网址(选填,最多 3 条)</b>
+          <button class="btn btn-ghost btn-sm" id="arAddLink" type="button">+ 添加一条</button>
+        </div>
+        <div id="arLinkRows"></div>
+        <p class="art-hint">只会跳转 http/https 网址;为避免引流,请填写与文章直接相关的来源(如官方频道、知名媒体)。</p>
+      </div>
+
+      <label class="art-spoiler"><input type="checkbox" id="arSpoiler" /> 本文含<strong>剧透</strong>内容(会在标题旁标注)</label>
       <div class="form-foot">
-        <span id="cmCounter">0/500</span>
-        <button class="btn btn-primary btn-sm" id="cmSubmit">发布留言</button>
+        <span id="arCounter">0/20000</span>
+        <button class="btn btn-primary btn-sm" id="arSubmit">提交审核</button>
       </div>
-      <p class="form-tip" id="cmTip"></p>
+      <p class="form-tip" id="arTip"></p>
     </div>
   </section>
 
-  <!-- ======= 留言列表(本地模式) ======= -->
-  <section class="cm-section" id="localListSection">
-    <h2>全部留言 <span id="cmCount" style="color:var(--muted);font-size:15px"></span></h2>
-    <div class="cm-list" id="cmList"></div>
+  <!-- ======= 我的投稿 / 我的收藏 ======= -->
+  <section class="cm-section hidden" id="artMineView">
+    <button class="btn btn-ghost btn-sm" id="btnMineBack">← 返回列表</button>
+    <h2 id="mineTitle">📄 我的投稿</h2>
+    <p class="art-hint" id="mineHint"></p>
+    <div class="art-list" id="mineList"></div>
   </section>
 
-  <!-- ======= 云端留言板(配置 Waline 后显示) ======= -->
-  <section class="cm-section hidden" id="walineWrap">
-    <h2>云端留言板</h2>
-    <p class="waline-note" id="walineNote"></p>
-    <div id="waline" style="margin-top:16px"></div>
-  </section>
-
-  <!-- ======= 管理面板 ======= -->
-  <div class="admin-modal" id="adminModal">
-    <div class="admin-box">
-      <h3>站长管理面板 <span class="admin-badge" id="adminState"></span></h3>
-      <p class="admin-desc">
-        输入管理密码后可发布公告、置顶/回复/删除留言、导出备份。
-        <span id="adminModeHint"></span>
-      </p>
-
-      <div id="adminLogin">
-        <p class="form-tip" id="adminLoginHint" style="margin-bottom:12px"></p>
-        <label id="adminEmailLabel" style="display:none">站长邮箱(云端模式)</label>
-        <input id="adminEmail" type="email" placeholder="you@example.com" style="display:none" />
-        <label>管理密码</label>
-        <input id="adminPwd" type="password" placeholder="请输入管理密码" />
-        <div class="admin-actions">
-          <button class="btn btn-primary btn-sm" id="adminLoginBtn">解锁</button>
-          <button class="btn btn-ghost btn-sm" id="adminClose">关闭</button>
-        </div>
-        <p class="form-tip" id="adminTip"></p>
-      </div>
-
-      <div id="adminPanel" style="display:none">
-        <label>发布公告(会置顶显示在公告区)</label>
-        <textarea id="annText" maxlength="300" placeholder="例如:本站已更新《复联4加码臻享版》4 个彩蛋的解析,欢迎前往首页「彩蛋速报」查看。"></textarea>
-        <div class="admin-actions">
-          <button class="btn btn-primary btn-sm" id="annPost">发布公告</button>
-        </div>
-        <div class="admin-grid">
-          <button class="btn btn-ghost btn-sm" id="changePwdBtn">修改管理密码</button>
-          <button class="btn btn-ghost btn-sm" id="exportBtn">导出留言备份(JSON)</button>
-          <button class="btn btn-ghost btn-sm btn-danger" id="clearBtn">清空全部留言</button>
-          <button class="btn btn-ghost btn-sm" id="logoutBtn">退出管理模式</button>
-          <button class="btn btn-ghost btn-sm" id="adminClose2" onclick="document.getElementById('adminModal').classList.remove('open')">关闭面板</button>
-        </div>
-        <p class="admin-desc" style="margin-top:14px">提示:留言列表出现管理员的「置顶 / 回复 / 删除」按钮后,即可对每条留言单独操作。删除与清空不可恢复,建议先导出备份。</p>
-
-        <div class="admin-secure">
-          <h4>🔐 关于管理权限与密码</h4>
-          <ul>
-            <li><b>云端模式(推荐,已配置时):</b>站长用<b>邮箱 + 密码</b>登录自己的 Supabase 账号,密码由服务器校验,<b>前端完全看不到</b>,别人无法冒充;所有访客都能看到彼此的提问与站长的回复。</li>
-            <li><b>本地模式(未配置云端时):</b>首次输入即设置密码,密码以 SHA-256 摘要保存在<b>你这台设备的浏览器</b>里,不上传、不写进源码;但留言同样只存在本机,站长收不到别人的提问。</li>
-            <li><b>数据库层面的保护:</b>云端模式下,删除/置顶/回复等写操作受数据库 RLS 策略限制,只有站长账号的 UID 能执行 —— 即使有人知道接口地址也改不了任何留言。</li>
-            <li><b>账号保护建议:</b>给 Supabase / GitHub 都开启两步验证(2FA),使用密码管理器生成 16 位以上随机密码,不要把任何密钥写进公开仓库。</li>
-          </ul>
-        </div>
-      </div>
+  <!-- ======= 站长管理视图 ======= -->
+  <section class="cm-section hidden" id="artAdminView">
+    <button class="btn btn-ghost btn-sm" id="btnAdminBack">← 返回列表</button>
+    <h2>🔐 站长管理</h2>
+    <div class="admin-modal-inline" id="artAdminLogin">
+      <p class="admin-desc">用你的 Supabase 站长账号登录后,即可审核投稿、置顶与删除。</p>
+      <div class="admin-field"><label id="artAdminEmailLabel">站长邮箱</label><input id="artAdminEmail" type="email" placeholder="you@example.com" /></div>
+      <div class="admin-field"><label>站长密码</label><input id="artAdminPwd" type="password" placeholder="••••••••" /></div>
+      <button class="btn btn-primary btn-sm" id="artAdminLoginBtn">登录</button>
+      <p class="form-tip" id="artAdminTip"></p>
+      <p class="admin-secure">🔒 密码由 Supabase 服务器校验,前端拿不到,也不会写进任何文件。</p>
     </div>
-  </div>
+    <div class="hidden" id="artAdminPanel">
+      <div class="admin-bar">
+        <span class="admin-badge">已登录:站长</span>
+        <button class="btn btn-ghost btn-sm" id="artAdminLogout">退出登录</button>
+      </div>
+      <h3 class="art-sub">⏳ 待审核 <span id="pendingCount" class="art-count"></span></h3>
+      <div class="art-list" id="pendingList"></div>
+      <h3 class="art-sub">📚 已发布 <span id="publishedCount" class="art-count"></span></h3>
+      <div class="art-list" id="publishedList"></div>
+    </div>
+  </section>
 
-  <!-- ======= Footer ======= -->
   <footer class="footer">
-    <div class="footer-inner">
-      <p><strong>免责声明:</strong>本留言板内容由访客自行发布,不代表本站立场。本站为非官方粉丝站点,与漫威/迪士尼/索尼等公司无隶属关系;影片信息以官方公布与正片为准。</p>
-      <p>📖 返回主站:<a href="%E9%97%A8%E6%88%B7%E9%A1%B5-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html">《复仇者联盟5:毁灭之日》观影指南 →</a></p>
-      <p>© 2026 毁灭之日观影指南 · 请文明发言,理性讨论 · Marvel 及相关角色版权归漫威/迪士尼所有</p>
-    </div>
+    <p><b>关于投稿板块:</b>文章内容由访客自行投稿并自负责任,不代表本站立场;站长只做形式审核(违法、广告、盗用、剧透标注),不对内容真实性做担保。<br />
+      本站为非官方影迷站点,与漫威/迪士尼/索尼等公司无隶属关系;影片信息以官方公布与正片为准。</p>
+    <p class="footer-links">
+      <a href="%E9%97%A8%E6%88%B7%E9%A1%B5-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html">首页</a> · <a href="%E5%A4%8D%E4%BB%87%E8%80%85%E8%81%94%E7%9B%9F5%E8%A7%82%E5%BD%B1%E6%8C%87%E5%8D%97-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html">观影指南</a> · <a href="%E7%95%99%E8%A8%80%E6%8F%90%E9%97%AE%E6%9D%BF-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html">留言提问</a> · <a href="articles.html">影迷投稿</a>
+    </p>
   </footer>
 
   <script>
@@ -1272,900 +1273,742 @@ window.SITE_CONFIG = {
 </script>
   <script>
 /* =========================================================
-   留言提问板 · 逻辑
-   两种工作模式(自动判断):
-   ① 云端模式 —— 配置 SITE_CONFIG.cloud(provider:"supabase")后启用:
-      所有人共享同一份留言(谁都能看到所有提问与站长回复),
-      站长用邮箱+密码登录 Supabase 账号管理(密码在服务器端校验,前端看不到);
-   ② 本地模式 —— 未配置云端时的兜底:留言只存在访客自己的浏览器里(仅供演示)。
+   影迷投稿板块
+   —— 文章列表 / 详情 / 投稿 / 文章评论(楼中楼)/ 点赞 / 收藏 / 站长审核
+   —— 与留言板共用 Supabase 与访客标识(dd_visitor_v1)
    ========================================================= */
 (function () {
   "use strict";
 
-  var rawCfg = window.SITE_CONFIG || {};
-  var CFG = Object.assign({
-    siteName: "毁灭之日 · 观影指南",
-    adminPassword: "",
-    walineServerURL: "",
-    socialLogin: { wechat: false, qq: false },
-    presetAnnouncements: [],
-    limits: { maxLength: 500, minLength: 4, cooldownSeconds: 30, maxPerVisit: 20 },
-    blockedWords: []
-  }, rawCfg);
-  CFG.cloud = Object.assign({
-    provider: "",              // "" = 本地模式;"supabase" = 云端模式
-    supabaseUrl: "",
-    supabaseAnonKey: "",
-    commentsTable: "comments",
-    announceTable: "announcements"
-  }, rawCfg.cloud || {});
+  var CFG = window.SITE_CONFIG || {};
+  var CLOUD = CFG.cloud || {};
+  var KEY_VISITOR = "dd_visitor_v1";     // 与留言板共用,保证同一浏览器点赞/收藏一致
+  var KEY_LIKED = "dd_aliked_v1";
+  var KEY_FAV = "dd_afav_v1";
 
-  var KEY_CM = "dd_comments_v1";
-  var KEY_ANN = "dd_announcements_v1";
-  var KEY_LAST = "dd_last_post_v1";
-  var KEY_COUNT = "dd_visit_count_v1";
-  var KEY_ADMIN = "dd_admin_session_v1";
-  var KEY_PWD = "dd_admin_pwd_v1";        // 本地模式下的站长密码(SHA-256 摘要,仅存本浏览器)
-  var KEY_LIKED = "dd_liked_v1";          // 我点过赞的留言 id(本浏览器)
-  var KEY_VISITOR = "dd_visitor_v1";      // 访客唯一标识(点赞去重用)
-  var replyTarget = null;                 // 当前正在回复的目标 {id, name}
-  var likeUnsupported = false;            // 数据库还没升级时,点赞降级
-  var v2Ready = null;                     // 数据库是否已升级(楼中楼+点赞):null=未知
-
-  /* ---------------- 云端状态 ---------------- */
-  var sb = null;              // Supabase 客户端
-  var cloudUser = null;       // 已登录的站长账号
-  var cloudReady = false;
-  var cloudComments = [];
-  var cloudAnns = [];
-  var cloudError = "";
-
-  function cloudConfigured() {
-    return CFG.cloud.provider === "supabase" && !!CFG.cloud.supabaseUrl && !!CFG.cloud.supabaseAnonKey;
-  }
-  function cloudMode() { return cloudConfigured() && cloudReady; }
-  function modeName() {
-    if (cloudMode()) return "云端";
-    if (cloudConfigured() && !cloudReady) return "连接中";
-    return "本地";
-  }
-
-  /* ---------------- 存储层(本地模式 / 内存兜底) ---------------- */
-  var memory = {};
-  function store(key, value) {
-    try {
-      if (value === undefined) {
-        var raw = window.localStorage.getItem(key);
-        return raw === null ? (memory[key] === undefined ? null : memory[key]) : raw;
-      }
-      memory[key] = value;
-      window.localStorage.setItem(key, value);
-      return value;
-    } catch (e) {
-      return value === undefined ? (memory[key] === undefined ? null : memory[key]) : value;
-    }
-  }
-  function session(key, value) {
-    try {
-      if (value === undefined) return window.sessionStorage.getItem(key);
-      window.sessionStorage.setItem(key, value);
-      return value;
-    } catch (e) { return null; }
-  }
-  function readJSON(key, fallback) {
-    var raw = store(key);
-    if (!raw) return fallback;
-    try { var v = JSON.parse(raw); return v == null ? fallback : v; } catch (e) { return fallback; }
-  }
-  function writeJSON(key, val) { store(key, JSON.stringify(val)); }
-
-  /* ---------------- 数据读取(两种模式统一出口) ---------------- */
-  function getComments() {
-    return cloudMode() ? cloudComments : readJSON(KEY_CM, []);
-  }
-  function setComments(list) {
-    if (cloudMode()) { cloudComments = list; return; }
-    writeJSON(KEY_CM, list);
-  }
-  function getAnnouncements() {
-    if (cloudMode()) return cloudAnns;
-    var own = readJSON(KEY_ANN, null);
-    if (own && own.length) return own;
-    return (CFG.presetAnnouncements || []).map(function (a, i) {
-      return { id: "preset" + i, text: a.text, time: a.time || "" };
-    });
-  }
-  function setAnnouncements(list) {
-    if (cloudMode()) { cloudAnns = list; return; }
-    writeJSON(KEY_ANN, list);
-  }
+  var sb = null, ready = false, user = null, v3 = null;
+  var ARTICLES = [];
+  var CACHE = { comms: {} };             // 文章评论缓存
+  var state = {
+    cat: "all", sort: "new", q: "",
+    current: null, replyTo: null, mineMode: "mine"
+  };
+  var CATS = ["资讯", "预告解析", "剧情考据", "演员动态", "观后感"];
+  var SORTS = [{ id: "new", name: "最新" }, { id: "hot", name: "最热" }, { id: "fav", name: "收藏最多" }];
+  var MAX_LINKS = 3;
 
   /* ---------------- 工具 ---------------- */
-  function $(sel) { return document.querySelector(sel); }
+  var memory = {};
+  function store(k, v) {
+    try {
+      if (v === undefined) return window.localStorage.getItem(k);
+      window.localStorage.setItem(k, String(v));
+    } catch (e) { if (v === undefined) return memory[k] || null; memory[k] = String(v); }
+    return null;
+  }
+  function readJSON(k, d) { try { return JSON.parse(store(k)) || d; } catch (e) { return d; } }
+  function writeJSON(k, v) { store(k, JSON.stringify(v || [])); }
+  function $(s) { return document.querySelector(s); }
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
-  function now() { return new Date(); }
   function fmt(d) {
     var t = d instanceof Date ? d : new Date(d);
     if (isNaN(t.getTime())) return "";
     function p(n) { return n < 10 ? "0" + n : "" + n; }
     return t.getFullYear() + "-" + p(t.getMonth() + 1) + "-" + p(t.getDate()) + " " + p(t.getHours()) + ":" + p(t.getMinutes());
   }
-  function uid() { return "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
-  function setTip(el, cls, text) { if (el) { el.className = "form-tip " + cls; el.textContent = text; } }
-
-  /* ---------------- 访客标识 & 点赞记录(本浏览器) ---------------- */
   function visitorId() {
     var v = store(KEY_VISITOR);
     if (!v) { v = "v" + Date.now().toString(36) + Math.random().toString(36).slice(2, 9); store(KEY_VISITOR, v); }
     return v;
   }
-  function likedIds() { return readJSON(KEY_LIKED, []) || []; }
+  function likedIds() { return readJSON(KEY_LIKED, []); }
+  function favIds() { return readJSON(KEY_FAV, []); }
   function hasLiked(id) { return likedIds().indexOf(id) !== -1; }
-  function markLiked(id) {
-    var a = likedIds();
-    if (a.indexOf(id) === -1) { a.push(id); writeJSON(KEY_LIKED, a); }
+  function hasFav(id) { return favIds().indexOf(id) !== -1; }
+  function markLiked(id) { var a = likedIds(); if (a.indexOf(id) === -1) { a.push(id); writeJSON(KEY_LIKED, a); } }
+  function unmarkLiked(id) { writeJSON(KEY_LIKED, likedIds().filter(function (x) { return x !== id; })); }
+  function markFav(id, on) {
+    var a = favIds().filter(function (x) { return x !== id; });
+    if (on) a.push(id);
+    writeJSON(KEY_FAV, a);
   }
-  function unmarkLiked(id) {
-    writeJSON(KEY_LIKED, likedIds().filter(function (x) { return x !== id; }));
+  function tip(el, cls, text) { if (el) { el.className = "form-tip " + cls; el.textContent = text; } }
+  function flash(text) { tip($("#arTip") || $("#acTip"), "ok", "✓ " + text); }
+
+  /* 只允许 http/https,防止 javascript: 之类的注入 */
+  function safeUrl(u) {
+    var s = String(u || "").trim();
+    if (!s) return "";
+    if (!/^https?:\/\//i.test(s)) {
+      if (/^[\w.-]+\.[a-z]{2,}(\/|$)/i.test(s)) s = "https://" + s; else return "";
+    }
+    try { var x = new URL(s); if (x.protocol !== "http:" && x.protocol !== "https:") return ""; return x.href; } catch (e) { return ""; }
   }
-  function bumpLikes(id, delta) {
-    var list = getComments(), hit = false;
-    list.forEach(function (c) { if (c.id === id) { c.likes = Math.max(0, Number(c.likes || 0) + delta); hit = true; } });
-    if (hit) setComments(list);
+  function parseLinks(row) {
+    var arr = row && row.links;
+    if (typeof arr === "string") { try { arr = JSON.parse(arr); } catch (e) { arr = []; } }
+    if (!Array.isArray(arr)) return [];
+    return arr.map(function (l) {
+      var url = safeUrl(l && l.url);
+      return url ? { label: String((l && l.label) || "").slice(0, 40), url: url } : null;
+    }).filter(Boolean).slice(0, 6);
+  }
+  function normArt(row) {
+    return {
+      id: row.id, title: row.title, author: row.author, category: row.category || "资讯",
+      summary: row.summary || "", content: row.content || "", links: parseLinks(row),
+      spoiler: !!row.spoiler, status: row.status, pinned: !!row.pinned,
+      likes: Number(row.like_count || 0), favs: Number(row.favorite_count || 0),
+      views: Number(row.view_count || 0), note: row.review_note || "",
+      ts: Date.parse(row.created_at) || Date.now(),
+      created: row.created_at
+    };
+  }
+  function catClass(c) {
+    return { "资讯": "c-info", "预告解析": "c-trailer", "剧情考据": "c-lore", "演员动态": "c-cast", "观后感": "c-review" }[c] || "c-info";
   }
 
-  /* 数据库升级后,把「我点过哪些赞」以数据库为准同步一次
-     —— 避免升级前点赞失败留下的本地假记录,导致升级后点不动 */
-  function syncMyLikes() {
-    if (!cloudMode() || v2Ready !== true) return Promise.resolve();
-    return sb.from("comment_likes").select("comment_id").eq("visitor_id", visitorId()).then(function (r) {
-      if (!r.error && r.data) {
-        writeJSON(KEY_LIKED, r.data.map(function (x) { return x.comment_id; }));
+  /* ---------------- Supabase ---------------- */
+  function loadScript(src) {
+    return new Promise(function (res, rej) {
+      var s = document.createElement("script");
+      s.src = src; s.onload = res; s.onerror = function () { rej(new Error(src)); };
+      document.head.appendChild(s);
+    });
+  }
+  function loadLib() {
+    if (window.supabase) return Promise.resolve();
+    return loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2")
+      .catch(function () { return loadScript("https://unpkg.com/@supabase/supabase-js@2"); });
+  }
+  function configured() { return !!(CLOUD.supabaseUrl && CLOUD.supabaseAnonKey); }
+
+  function probeV3() {
+    if (!ready) { v3 = false; toggleNotice(); return Promise.resolve(false); }
+    return sb.from("articles").select("id").limit(1).then(function (r) {
+      v3 = !r.error;
+      toggleNotice();
+      return v3;
+    }).catch(function () { v3 = false; toggleNotice(); return false; });
+  }
+  function toggleNotice() {
+    var sec = $("#v3NoticeSection");
+    if (sec) sec.style.display = (ready && v3 === false) ? "" : "none";
+  }
+  function copyV3() {
+    var url = "docs/supabase-migration-v3.sql";
+    var fb = function (t) {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+        flash("升级脚本已复制 → 粘到 Supabase 的 SQL Editor 里点 Run");
+      } catch (e) { window.open(url, "_blank"); }
+    };
+    fetch(url).then(function (r) { return r.text(); }).then(function (t) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(t).then(function () { flash("升级脚本已复制 → 粘到 Supabase 的 SQL Editor 里点 Run"); }, function () { fb(t); });
+      } else fb(t);
+    }).catch(function () { window.open(url, "_blank"); });
+  }
+
+  /* ---------------- 加载数据 ---------------- */
+  function loadArticles() {
+    if (!ready || v3 === false) { ARTICLES = []; renderAll(); return Promise.resolve(); }
+    return sb.from("articles").select("*").eq("status", "approved").order("created_at", { ascending: false }).limit(300)
+      .then(function (r) {
+        ARTICLES = (r.error ? [] : (r.data || [])).map(normArt);
         renderAll();
-      }
+      });
+  }
+  function loadMyMarks() {
+    if (!ready || v3 === false) return Promise.resolve();
+    return Promise.all([
+      sb.from("article_likes").select("article_id").eq("visitor_id", visitorId()),
+      sb.from("article_favorites").select("article_id").eq("visitor_id", visitorId())
+    ]).then(function (res) {
+      if (!res[0].error && res[0].data) writeJSON(KEY_LIKED, res[0].data.map(function (x) { return x.article_id; }));
+      if (!res[1].error && res[1].data) writeJSON(KEY_FAV, res[1].data.map(function (x) { return x.article_id; }));
+      renderAll();
     }).catch(function () { });
   }
 
-  /* ---------------- 检测数据库是否已升级(楼中楼 + 点赞) ---------------- */
-  function probeV2() {
-    if (!cloudMode()) { v2Ready = false; renderV2Banner(); return Promise.resolve(false); }
-    return sb.from(CFG.cloud.commentsTable).select("parent_id,like_count").limit(1).then(function (r) {
-      v2Ready = !r.error;
-      renderV2Banner();
-      return v2Ready;
-    }).catch(function () { v2Ready = false; renderV2Banner(); return false; });
+  /* ---------------- 统计 / 筛选 ---------------- */
+  function renderStats() {
+    var box = $("#artStats");
+    if (!box) return;
+    var likes = ARTICLES.reduce(function (s, a) { return s + a.likes; }, 0);
+    var cm = ARTICLES.reduce(function (s, a) { return s + (a._cm || 0); }, 0);
+    box.innerHTML =
+      '<div class="stat"><b>' + ARTICLES.length + '</b><span>篇已发布投稿</span></div>' +
+      '<div class="stat"><b>' + likes + '</b><span>累计点赞</span></div>' +
+      '<div class="stat"><b>' + favIds().length + '</b><span>我收藏的</span></div>' +
+      '<div class="stat"><b>' + (ready ? (v3 === false ? "待升级" : "云端") : "连接中") + '</b><span>数据模式</span></div>';
   }
-  function renderV2Banner() {
-    var el = $("#v2Banner");
-    if (!el) return;
-    var sec = $("#v2NoticeSection");
-    /* 只在云端模式且确实探测到未升级时提示;本地模式不提示(否则会误导) */
-    if (v2Ready !== false || !cloudMode()) {
-      el.classList.remove("show"); el.innerHTML = "";
-      if (sec) sec.style.display = "none";
+  function renderFilters() {
+    var cats = [{ id: "all", name: "全部分类" }].concat(CATS.map(function (c) { return { id: c, name: c }; }));
+    var cb = $("#artCats");
+    if (cb) cb.innerHTML = '<span class="filter-label">分类</span>' + cats.map(function (c) {
+      return '<button class="chip' + (state.cat === c.id ? " active" : "") + '" data-cat="' + esc(c.id) + '">' + esc(c.name) + "</button>";
+    }).join("");
+    var sbx = $("#artSorts");
+    if (sbx) sbx.innerHTML = '<span class="filter-label">排序</span>' + SORTS.map(function (s) {
+      return '<button class="chip' + (state.sort === s.id ? " active" : "") + '" data-sort="' + esc(s.id) + '">' + esc(s.name) + "</button>";
+    }).join("");
+  }
+  function filtered() {
+    var q = state.q.trim().toLowerCase();
+    var list = ARTICLES.filter(function (a) {
+      if (state.cat !== "all" && a.category !== state.cat) return false;
+      if (state.mineMode === "fav" && state.view === "mine" && !hasFav(a.id)) return false;
+      if (!q) return true;
+      return (a.title + " " + a.author + " " + a.summary + " " + a.content).toLowerCase().indexOf(q) !== -1;
+    });
+    list.sort(function (a, b) {
+      if (!!b.pinned !== !!a.pinned) return b.pinned ? 1 : -1;
+      if (state.sort === "hot") return b.likes - a.likes || b.ts - a.ts;
+      if (state.sort === "fav") return b.favs - a.favs || b.ts - a.ts;
+      return b.ts - a.ts;
+    });
+    return list;
+  }
+
+  /* ---------------- 列表 ---------------- */
+  function cardHtml(a, opts) {
+    opts = opts || {};
+    var links = a.links.length ? '<span class="art-meta-item">🔗 ' + a.links.length + " 个链接</span>" : "";
+    return '<article class="art-card" data-art="' + esc(a.id) + '">' +
+      (a.pinned ? '<span class="art-pin">已置顶</span>' : "") +
+      '<div class="art-card-head">' +
+      '<span class="art-cat ' + catClass(a.category) + '">' + esc(a.category) + "</span>" +
+      (a.spoiler ? '<span class="art-spoiler-tag">剧透</span>' : "") +
+      (opts.statusTag || "") +
+      '<span class="art-date">' + esc(fmt(a.created)) + "</span></div>" +
+      '<h3 class="art-title">' + esc(a.title) + "</h3>" +
+      (a.summary ? '<p class="art-summary">' + esc(a.summary) + "</p>" : "") +
+      '<div class="art-meta">' +
+      '<span class="art-meta-item">✍️ ' + esc(a.author) + "</span>" +
+      '<span class="art-meta-item">👁 ' + a.views + "</span>" +
+      '<span class="art-meta-item">❤ ' + a.likes + "</span>" +
+      '<span class="art-meta-item">⭐ ' + a.favs + "</span>" +
+      links +
+      "</div>" +
+      (opts.adminBar || "") +
+      "</article>";
+  }
+  function renderList() {
+    var list = filtered();
+    var box = $("#artList");
+    var cnt = $("#artCount"), empty = $("#artEmpty");
+    if (cnt) cnt.textContent = "(" + list.length + " 篇)";
+    if (!list.length) {
+      box.innerHTML = "";
+      if (empty) {
+        empty.classList.remove("hidden");
+        empty.textContent = !configured() ? "留言板未配置云端存储,投稿板块暂不可用。"
+          : (ready && v3 === false) ? "投稿板块需要先完成一次数据库升级(见上方提示)。"
+            : "还没有已发布的投稿 —— 点上面的「✍️ 我要投稿」来发第一篇吧!";
+      }
       return;
     }
-    if (sec) sec.style.display = "";
-    el.classList.add("show");
-    el.innerHTML =
-      '<div class="v2b-head">⚠️ 楼中楼与点赞还没启用:数据库差一次升级(30 秒)</div>' +
-      '<div class="v2b-body">现在留言、站长回复、置顶都正常,但<b>网友之间互相回复</b>和<b>点赞计数</b>需要先给数据库加两个字段。</div>' +
-      '<div class="v2b-steps">① 打开 supabase.com → 进入你的项目　② 左侧 <b>SQL Editor</b> → <b>New query</b>　③ 粘贴下面的脚本 → 点 <b>Run</b>　④ 回到本页刷新</div>' +
-      '<div class="v2b-actions">' +
-      '<button type="button" id="v2Copy">📋 复制升级脚本</button>' +
-      '<a href="docs/supabase-migration-v2.sql" target="_blank" rel="noopener">查看脚本原文</a>' +
+    if (empty) empty.classList.add("hidden");
+    box.innerHTML = list.map(function (a) { return cardHtml(a); }).join("");
+  }
+
+  /* ---------------- 详情 ---------------- */
+  function renderDetail(id) {
+    var a = null;
+    for (var i = 0; i < ARTICLES.length; i++) if (ARTICLES[i].id === id) a = ARTICLES[i];
+    if (!a) { show("list"); return; }
+    state.current = a;
+    var links = a.links.length
+      ? '<div class="art-links-view"><b>🔗 相关网址</b>' + a.links.map(function (l) {
+        return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer nofollow">' +
+          (l.label ? esc(l.label) + " — " : "") + esc(l.url.replace(/^https?:\/\//, "").slice(0, 60)) + "</a>";
+      }).join("") + "</div>"
+      : "";
+    var paras = String(a.content).split(/\n{1,}/).map(function (p) { return p.trim(); }).filter(Boolean)
+      .map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("");
+
+    $("#artDetail").innerHTML =
+      '<div class="art-card-head">' +
+      '<span class="art-cat ' + catClass(a.category) + '">' + esc(a.category) + "</span>" +
+      (a.spoiler ? '<span class="art-spoiler-tag">含剧透</span>' : "") +
+      '<span class="art-date">' + esc(fmt(a.created)) + "</span></div>" +
+      '<h1 class="art-detail-title">' + esc(a.title) + "</h1>" +
+      '<div class="art-meta"><span class="art-meta-item">✍️ ' + esc(a.author) + "</span>" +
+      '<span class="art-meta-item">👁 ' + a.views + " 次阅读</span>" +
+      '<span class="art-meta-item">💬 <span id="artCmInline">…</span></span></div>' +
+      '<div class="art-body">' + paras + "</div>" +
+      links +
+      '<div class="art-actions">' +
+      '<button class="art-act' + (hasLiked(a.id) ? " on" : "") + '" id="artLikeBtn">' + (hasLiked(a.id) ? "❤" : "♡") + " 点赞 " + a.likes + "</button>" +
+      '<button class="art-act' + (hasFav(a.id) ? " on fav" : "") + '" id="artFavBtn">' + (hasFav(a.id) ? "★" : "☆") + " " + (hasFav(a.id) ? "已收藏" : "收藏") + " " + a.favs + "</button>" +
+      '<button class="art-act" id="artShareBtn">🔗 复制链接</button>' +
       "</div>";
+
+    $("#artLikeBtn").addEventListener("click", function () { likeArticle(a.id); });
+    $("#artFavBtn").addEventListener("click", function () { toggleFav(a.id); });
+    $("#artShareBtn").addEventListener("click", function () {
+      var u = location.origin + location.pathname + "#a=" + a.id;
+      if (navigator.clipboard) navigator.clipboard.writeText(u).then(function () { flash("文章链接已复制,可以发给朋友了"); });
+      else window.prompt("复制这个链接:", u);
+    });
+
+    /* 阅读数 +1(不阻塞渲染) */
+    if (ready && v3 !== false) {
+      sb.rpc("view_article", { p_article: a.id }).then(function (r) {
+        if (!r.error && r.data != null) a.views = Number(r.data);
+      }).catch(function () { });
+    }
+    loadComments(a.id);
   }
 
-  /* 一键复制升级脚本,省得手动找文件 */
-  function copyMigrationSql() {
-    var url = "docs/supabase-migration-v2.sql";
-    var fallback = function (txt) {
-      try {
-        var ta = document.createElement("textarea");
-        ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
-        document.body.appendChild(ta); ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-        flashTip("升级脚本已复制 → 粘到 Supabase 的 SQL Editor 里点 Run");
-      } catch (e) { window.open(url, "_blank"); }
-    };
-    if (window.fetch) {
-      fetch(url).then(function (r) { return r.text(); }).then(function (txt) {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(txt).then(function () {
-            flashTip("升级脚本已复制 → 粘到 Supabase 的 SQL Editor 里点 Run");
-          }, function () { fallback(txt); });
-        } else { fallback(txt); }
-      }).catch(function () { window.open(url, "_blank"); });
-    } else { window.open(url, "_blank"); }
+  /* ---------------- 文章评论(楼中楼 + 点赞) ---------------- */
+  function loadComments(articleId) {
+    var box = $("#artCmList");
+    if (!box) return;
+    if (!ready || v3 === false) { box.innerHTML = '<p class="cm-empty">评论需要云端数据库支持。</p>'; return; }
+    box.innerHTML = '<p class="cm-empty">正在加载评论…</p>';
+    return sb.from("comments").select("*").eq("article_id", articleId).order("created_at", { ascending: true }).limit(500)
+      .then(function (r) {
+        var list = (r.error ? [] : (r.data || [])).map(function (row) {
+          return {
+            id: row.id, name: row.name, content: row.content, ts: Date.parse(row.created_at) || Date.now(),
+            parentId: row.parent_id || null, likes: Number(row.like_count || 0)
+          };
+        });
+        CACHE.comms[articleId] = list;
+        renderComments(articleId);
+      });
   }
-
-  /* ---------------- 楼中楼:把平铺列表拼成树 ---------------- */
   function buildTree(list) {
     var tops = [], byParent = {};
     list.forEach(function (c) {
-      if (c.parentId) { (byParent[c.parentId] = byParent[c.parentId] || []).push(c); }
-      else { tops.push(c); }
+      if (c.parentId) (byParent[c.parentId] = byParent[c.parentId] || []).push(c); else tops.push(c);
     });
-    tops.sort(function (a, b) {
-      if (!!b.pinned !== !!a.pinned) return b.pinned ? 1 : -1;
-      return (b.ts || 0) - (a.ts || 0);
-    });
-    Object.keys(byParent).forEach(function (k) {
-      byParent[k].sort(function (a, b) { return (a.ts || 0) - (b.ts || 0); });
-    });
+    tops.sort(function (a, b) { return b.ts - a.ts; });
+    Object.keys(byParent).forEach(function (k) { byParent[k].sort(function (a, b) { return a.ts - b.ts; }); });
     return { tops: tops, children: byParent };
   }
-  function commentName(id) {
-    var f = getComments().filter(function (c) { return c.id === id; })[0];
-    return f ? f.name : "已删除的留言";
-  }
-
-  /* ---------------- 点赞 ---------------- */
-  function likeComment(id) {
-    if (!id) return;
-    if (hasLiked(id)) { flashTip("你已经点过赞啦 👍 换一个浏览器/无痕窗口可以再点一次"); return; }
-    if (cloudMode() && v2Ready === false) {
-      flashTip("点赞还没启用:数据库需要先升级(见页面顶部橙色提示里的升级步骤)");
-      return;
-    }
-    /* 先按 +1 立刻反馈,失败再回滚 */
-    markLiked(id);
-    bumpLikes(id, 1);
-    renderAll();
-
-    if (cloudMode()) {
-      sb.rpc("like_comment", { p_comment: id, p_visitor: visitorId() }).then(function (r) {
-        if (r.error) {
-          likeUnsupported = true;
-          unmarkLiked(id); bumpLikes(id, -1); renderAll();
-          flashTip("点赞失败:" + (r.error.message || "数据库未升级") + " —— 请先执行升级脚本");
-          return;
-        }
-        var list = getComments(), hit = false;
-        list.forEach(function (c) { if (c.id === id) { c.likes = Number(r.data || 0); hit = true; } });
-        if (hit) setComments(list);
-        renderAll();
-      });
-      return;
-    }
-  }
-  function flashTip(text) {
-    var el = $("#cmTip");
-    if (el) { setTip(el, "ok", "✓ " + text); setTimeout(function () { if (el.textContent.indexOf(text) !== -1) setTip(el, "", ""); }, 4000); }
-  }
-
-  /* ---------------- 校验(两种模式共用) ---------------- */
-  function validate(name, content) {
-    var L = CFG.limits;
-    name = (name || "").trim();
-    content = (content || "").trim();
-    if (name.length < 2) return { ok: false, msg: "昵称至少 2 个字(可用网名,请勿使用真实姓名)" };
-    if (name.length > 16) return { ok: false, msg: "昵称最多 16 个字" };
-    if (content.length < L.minLength) return { ok: false, msg: "留言至少 " + L.minLength + " 个字,请把问题说清楚一点~" };
-    if (content.length > L.maxLength) return { ok: false, msg: "留言最多 " + L.maxLength + " 个字" };
-    if (/^(.)\1{3,}$/.test(content)) return { ok: false, msg: "请勿发布重复字符刷屏内容" };
-    var low = (name + " " + content).toLowerCase();
-    for (var i = 0; i < (CFG.blockedWords || []).length; i++) {
-      if (low.indexOf(String(CFG.blockedWords[i]).toLowerCase()) !== -1) {
-        return { ok: false, msg: "留言包含被禁止的内容(" + CFG.blockedWords[i] + "),请修改后再发布" };
-      }
-    }
-    var dup = getComments().some(function (c) { return (c.content || "").trim() === content; });
-    if (dup) return { ok: false, msg: "这条内容已经发过了,请勿重复刷屏" };
-    var last = Number(store(KEY_LAST) || 0);
-    var wait = CFG.limits.cooldownSeconds * 1000 - (Date.now() - last);
-    if (last && wait > 0) return { ok: false, msg: "发布太频繁了,请 " + Math.ceil(wait / 1000) + " 秒后再试" };
-    var cnt = Number(session(KEY_COUNT) || 0);
-    if (cnt >= CFG.limits.maxPerVisit) return { ok: false, msg: "本次访问的留言数已达上限(" + CFG.limits.maxPerVisit + " 条),请稍后再来" };
-    return { ok: true, name: name, content: content };
-  }
-
-  /* ---------------- 渲染 ---------------- */
-  function renderStatus() {
-    var box = $("#cloudStatus");
-    if (!box) return;
-    if (cloudMode()) {
-      box.className = "cloud-status ok";
-      box.innerHTML = "☁️ <b>云端已连接</b> —— 所有人的提问与回复都在这里,其他访客也能看到。";
-    } else if (cloudConfigured() && !cloudReady) {
-      box.className = "cloud-status pending";
-      box.innerHTML = "⏳ 正在连接云端留言板…" + (cloudError ? "<br /><span class=\"cloud-err\">连接失败:" + esc(cloudError) + "</span>" : "");
-    } else {
-      box.className = "cloud-status local";
-      box.innerHTML = "💾 <b>当前为本地模式(未配置云端)</b> —— 留言只保存在你自己的浏览器里,站长发不出去、也收不到别人的提问。" +
-        "<br />站长若要让所有人共享留言,请按 README 的「Supabase 云端留言板」配置 <code>site-config.js</code>。";
-    }
-  }
-
-  function renderAnnouncements() {
-    var box = $("#announceList");
-    if (!box) return;
-    var list = getAnnouncements();
-    if (!list.length) {
-      box.innerHTML = '<p class="announce-empty">暂无公告。站长登录后可在管理面板发布公告(会置顶显示在这里)。</p>';
-      return;
-    }
-    box.innerHTML = list.map(function (a) {
-      return '<div class="announce-item">' +
-        '<div class="a-meta">📌 站长公告' + (a.time ? " · " + esc(a.time) : "") + "</div>" +
-        '<div class="a-text">' + esc(a.text) + "</div></div>";
-    }).join("");
-  }
-
-  function renderComments() {
-    var box = $("#cmList");
-    if (!box) return;
-    var list = getComments();
+  function renderComments(articleId) {
+    var list = CACHE.comms[articleId] || [];
     var tree = buildTree(list);
-    var replyCount = list.filter(function (c) { return !!c.parentId; }).length;
-    var countEl = $("#cmCount");
-    if (countEl) countEl.textContent = list.length ? "(" + list.length + " 条 · 含 " + replyCount + " 条回复)" : "";
-    if (!list.length) {
-      box.innerHTML = '<p class="cm-empty">' +
-        (cloudConfigured() && !cloudReady ? "正在加载云端留言…" : "还没有留言,来做第一个提问的人吧 👋") +
-        "</p>";
-      renderReplyBar();
-      return;
-    }
-    var admin = isAdmin();
-
-    function itemHtml(c, isChild) {
-      var liked = hasLiked(c.id);
-      var parentName = isChild ? commentName(c.parentId) : "";
-      return '<article class="cm-item' + (c.pinned ? " pinned" : "") + (isChild ? " cm-child" : "") +
-        '" data-id="' + esc(c.id) + '">' +
-        '<div class="cm-head">' +
-        '<span class="cm-name">' + esc(c.name) + "</span>" +
-        (isChild ? '<span class="cm-at">回复 @' + esc(parentName) + "</span>" : "") +
-        (c.pinned ? '<span class="cm-badge pin">已置顶</span>' : "") +
-        '<span class="cm-badge type">' + esc(c.type || "提问") + "</span>" +
-        '<span class="cm-time">' + esc(fmt(c.ts)) + "</span>" +
-        "</div>" +
+    var cnt = $("#artCmCount");
+    if (cnt) cnt.textContent = list.length ? "(" + list.length + " 条)" : "";
+    var inline = $("#artCmInline");
+    if (inline) inline.textContent = list.length;
+    var box = $("#artCmList");
+    if (!box) return;
+    if (!list.length) { box.innerHTML = '<p class="cm-empty">还没有评论,来说第一句吧 👋</p>'; renderReplyBar(); return; }
+    function nameOf(id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i].name; return "已删除"; }
+    function item(c, isChild) {
+      return '<article class="cm-item' + (isChild ? " cm-child" : "") + '" data-id="' + esc(c.id) + '">' +
+        '<div class="cm-head"><span class="cm-name">' + esc(c.name) + "</span>" +
+        (isChild ? '<span class="cm-at">回复 @' + esc(nameOf(c.parentId)) + "</span>" : "") +
+        '<span class="cm-time">' + esc(fmt(c.ts)) + "</span></div>" +
         '<div class="cm-text">' + esc(c.content) + "</div>" +
-        (c.reply ? '<div class="cm-reply"><b>站长回复:</b>' + esc(c.reply) + "</div>" : "") +
         '<div class="cm-actions">' +
-        '<button class="cm-like' + (liked ? " liked" : "") + '" data-act="like" data-id="' + esc(c.id) + '" ' +
-        'title="' + (liked ? "你已经赞过这条了" : "给这条留言点个赞") + '">' +
-        (liked ? "❤" : "♡") + " " + Number(c.likes || 0) + "</button>" +
-        '<button data-act="replyto" data-id="' + esc(c.id) + '">回复</button>' +
-        (admin
-          ? '<button data-act="pin" data-id="' + esc(c.id) + '">' + (c.pinned ? "取消置顶" : "置顶") + "</button>" +
-          '<button data-act="reply" data-id="' + esc(c.id) + '">' + (c.reply ? "修改站长回复" : "站长回复") + "</button>" +
-          '<button class="danger" data-act="del" data-id="' + esc(c.id) + '">删除</button>'
-          : "") +
-        "</div>" +
-        "</article>";
+        '<button class="cm-like' + (hasLiked(c.id) ? " liked" : "") + '" data-act="clike" data-id="' + esc(c.id) + '">' +
+        (hasLiked(c.id) ? "❤" : "♡") + " " + c.likes + "</button>" +
+        '<button data-act="creply" data-id="' + esc(c.id) + '">回复</button>' +
+        (user ? '<button class="danger" data-act="cdel" data-id="' + esc(c.id) + '">删除</button>' : "") +
+        "</div></article>";
     }
-
     box.innerHTML = tree.tops.map(function (c) {
       var kids = tree.children[c.id] || [];
-      return itemHtml(c, false) +
-        (kids.length ? '<div class="cm-children">' + kids.map(function (k) { return itemHtml(k, true); }).join("") + "</div>" : "");
+      return item(c, false) + (kids.length ? '<div class="cm-children">' + kids.map(function (k) { return item(k, true); }).join("") + "</div>" : "");
     }).join("");
     renderReplyBar();
   }
-
-  /* 正在回复谁:表单上方的一条提示 */
   function renderReplyBar() {
-    var bar = $("#cmReplyBar");
+    var bar = $("#artReplyBar");
     if (!bar) return;
-    if (!replyTarget) { bar.classList.remove("show"); bar.innerHTML = ""; return; }
+    if (!state.replyTo) { bar.classList.remove("show"); bar.innerHTML = ""; return; }
     bar.classList.add("show");
-    bar.innerHTML = "正在回复 <b>@" + esc(replyTarget.name) + "</b> 的留言" +
-      ' <button type="button" data-act="cancelreply">取消</button>';
+    bar.innerHTML = "正在回复 <b>@" + esc(state.replyTo.name) + "</b>" + ' <button type="button" data-act="ccancel">取消</button>';
   }
-
-  function renderStats() {
-    var box = $("#cmStats");
-    if (!box) return;
-    var list = getComments();
-    var anns = getAnnouncements();
-    box.innerHTML =
-      '<div class="stat"><b>' + list.length + '</b><span>条留言</span></div>' +
-      '<div class="stat"><b>' + list.filter(function (c) { return !c.reply; }).length + '</b><span>待回复</span></div>' +
-      '<div class="stat"><b>' + anns.length + '</b><span>条公告</span></div>' +
-      '<div class="stat"><b>' + modeName() + '</b><span>存储模式</span></div>';
-  }
-
-  function renderAll() { renderStatus(); renderAnnouncements(); renderComments(); renderStats(); }
-
-  /* ---------------- 管理员状态 ---------------- */
-  function isAdmin() {
-    if (cloudConfigured()) return !!cloudUser;
-    return session(KEY_ADMIN) === "1";
-  }
-  function setAdmin(v) { session(KEY_ADMIN, v ? "1" : "0"); }
-
-  /* ---------------- 发布留言 ---------------- */
-  function submit() {
-    var nameEl = $("#cmName"), contentEl = $("#cmContent"), typeEl = $("#cmType"), tip = $("#cmTip");
-    var v = validate(nameEl ? nameEl.value : "", contentEl ? contentEl.value : "");
-    if (!v.ok) { setTip(tip, "err", "✕ " + v.msg); return false; }
-    var type = (typeEl && typeEl.value) || "提问";
-
-    if (cloudMode()) {
-      setTip(tip, "", "正在发布…");
-      var payload = { name: v.name, content: v.content, type: type };
-      if (replyTarget) payload.parent_id = replyTarget.id;
-      var afterOk = function () {
-        store(KEY_LAST, String(Date.now()));
-        session(KEY_COUNT, String(Number(session(KEY_COUNT) || 0) + 1));
-        if (contentEl) contentEl.value = "";
-        replyTarget = null;
-        setTip(tip, "ok", "✓ 留言已发布,所有访客都能看到");
-        return refreshCloud();
-      };
-      sb.from(CFG.cloud.commentsTable).insert([payload]).then(function (r) {
-        if (r.error) {
-          /* 数据库还没升级(没有 parent_id 列):明确报错,不悄悄降级成普通留言 */
-          if (replyTarget && /parent_id|column|schema/i.test(r.error.message || "")) {
-            setTip(tip, "err", "✕ 楼中楼还没启用:数据库需要先执行升级脚本(见页面顶部橙色提示),升级后再发一次即可");
-            return;
-          }
-          setTip(tip, "err", "✕ 发布失败:" + r.error.message);
-          return;
-        }
-        afterOk();
-      });
-      return true;
-    }
-
-    var list = getComments();
-    list.push({
-      id: uid(), name: v.name, content: v.content, type: type,
-      ts: Date.now(), pinned: false, reply: "",
-      parentId: replyTarget ? replyTarget.id : null, likes: 0
-    });
-    setComments(list);
-    store(KEY_LAST, String(Date.now()));
-    session(KEY_COUNT, String(Number(session(KEY_COUNT) || 0) + 1));
-    if (contentEl) contentEl.value = "";
-    replyTarget = null;
-    setTip(tip, "ok", "✓ 留言已发布(当前为本地模式:仅你自己能看到)");
-    renderAll();
-    return true;
-  }
-
-  /* ---------------- 管理操作 ---------------- */
-  function findComment(id) {
-    var list = getComments();
-    for (var i = 0; i < list.length; i++) if (list[i].id === id) return { list: list, index: i };
-    return null;
-  }
-  function togglePin(id) {
-    if (cloudMode()) {
-      var cur = getComments().filter(function (c) { return c.id === id; })[0];
-      sb.from(CFG.cloud.commentsTable).update({ pinned: !(cur && cur.pinned) }).eq("id", id)
-        .then(function (r) { if (r.error) window.alert("操作失败:" + r.error.message); else refreshCloud(); });
-      return;
-    }
-    var f = findComment(id); if (!f) return;
-    f.list[f.index].pinned = !f.list[f.index].pinned;
-    setComments(f.list); renderAll();
-  }
-  function removeComment(id) {
-    var kids = getComments().filter(function (c) { return c.parentId === id; }).length;
-    var msg = kids ? "确定删除这条留言?它下面的 " + kids + " 条回复会一起删除,且不可恢复。" : "确定删除这条留言?删除后不可恢复。";
-    if (!window.confirm(msg)) return;
-    if (cloudMode()) {
-      sb.from(CFG.cloud.commentsTable).delete().eq("id", id)
-        .then(function (r) { if (r.error) window.alert("删除失败:" + r.error.message); else refreshCloud(); });
-      return;
-    }
-    var f = findComment(id); if (!f) return;
-    f.list = f.list.filter(function (c) { return c.id !== id && c.parentId !== id; });
-    setComments(f.list); renderAll();
-  }
-  function replyComment(id) {
-    var f = findComment(id);
-    var cur = f ? (f.list[f.index].reply || "") : "";
-    var txt = window.prompt("输入站长回复内容(留空则清除回复):", cur);
-    if (txt === null) return;
-    if (cloudMode()) {
-      sb.from(CFG.cloud.commentsTable).update({ reply: txt.trim() }).eq("id", id)
-        .then(function (r) { if (r.error) window.alert("回复失败:" + r.error.message); else refreshCloud(); });
-      return;
-    }
-    if (!f) return;
-    f.list[f.index].reply = txt.trim();
-    setComments(f.list); renderAll();
-  }
-  function postAnnouncement() {
-    var el = $("#annText"); if (!el) return;
-    var text = (el.value || "").trim();
-    if (text.length < 4) { window.alert("公告内容至少 4 个字"); return; }
-    if (cloudMode()) {
-      sb.from(CFG.cloud.announceTable).insert([{ text: text }]).then(function (r) {
-        if (r.error) { window.alert("发布失败:" + r.error.message); return; }
-        el.value = "";
-        window.alert("公告已发布(所有访客可见)");
-        refreshCloud();
-      });
-      return;
-    }
-    var list = getAnnouncements();
-    list.unshift({ id: uid(), text: text, time: fmt(now()) });
-    setAnnouncements(list);
-    el.value = "";
-    renderAll();
-    window.alert("公告已发布(当前为本地模式:仅你自己可见)");
-  }
-  function exportData() {
-    var data = { exportAt: fmt(now()), mode: modeName(), comments: getComments(), announcements: getAnnouncements() };
-    try {
-      var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "留言板备份-" + new Date().toISOString().slice(0, 10) + ".json";
-      document.body.appendChild(a); a.click(); a.remove();
-    } catch (e) { window.alert("导出失败:" + e.message); }
-  }
-  function clearAll() {
-    if (!window.confirm("确定清空全部留言(公告保留)?此操作不可恢复!")) return;
-    if (cloudMode()) {
-      sb.from(CFG.cloud.commentsTable).delete().neq("id", "00000000-0000-0000-0000-000000000000")
-        .then(function (r) { if (r.error) window.alert("清空失败:" + r.error.message); else refreshCloud(); });
-      return;
-    }
-    setComments([]); renderAll();
-  }
-
-  /* ---------------- 本地模式的站长密码(不写进代码) ---------------- */
-  function weakHash(s) {
-    var h = 5381, i;
-    for (i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
-    return "weak:" + h.toString(16);
-  }
-  function hashPwd(pwd, cb) {
-    var s = "doomsday-guide::" + String(pwd);
-    var c = window.crypto;
-    if (c && c.subtle && typeof window.TextEncoder !== "undefined") {
-      c.subtle.digest("SHA-256", new window.TextEncoder().encode(s)).then(function (buf) {
-        var bytes = new Uint8Array(buf), hex = "", i;
-        for (i = 0; i < bytes.length; i++) hex += ("0" + bytes[i].toString(16)).slice(-2);
-        cb(hex);
-      }).catch(function () { cb(weakHash(s)); });
-    } else {
-      cb(weakHash(s));
-    }
-  }
-  function hasLocalPassword() { return !!store(KEY_PWD); }
-
-  /* 登录核心逻辑(可测试):empty / short / set(首次设置) / ok / wrong */
-  function attemptLogin(pwd, cb) {
-    pwd = (pwd || "").trim();
-    if (!pwd) return cb("empty");
-    if (CFG.adminPassword) {
-      var ok1 = pwd === CFG.adminPassword;
-      setAdmin(ok1);
-      return cb(ok1 ? "ok" : "wrong");
-    }
-    var saved = store(KEY_PWD);
-    if (!saved) {
-      if (pwd.length < 6) return cb("short");
-      hashPwd(pwd, function (h) { store(KEY_PWD, h); setAdmin(true); cb("set"); });
-      return;
-    }
-    hashPwd(pwd, function (h) {
-      var ok2 = h === saved;
-      setAdmin(ok2);
-      cb(ok2 ? "ok" : "wrong");
+  function submitComment() {
+    var nameEl = $("#acName"), contentEl = $("#acContent"), t = $("#acTip");
+    var name = (nameEl ? nameEl.value : "").trim();
+    var content = (contentEl ? contentEl.value : "").trim();
+    if (name.length < 2 || name.length > 16) { tip(t, "err", "✕ 昵称需要 2-16 个字"); return; }
+    if (content.length < 4) { tip(t, "err", "✕ 评论至少 4 个字"); return; }
+    if (content.length > 500) { tip(t, "err", "✕ 评论最多 500 字"); return; }
+    if (!ready || v3 === false) { tip(t, "err", "✕ 评论需要云端数据库支持"); return; }
+    var a = state.current;
+    if (!a) return;
+    var row = { name: name, content: content, type: "评论", article_id: a.id };
+    if (state.replyTo) row.parent_id = state.replyTo.id;
+    tip(t, "", "正在发布…");
+    sb.from("comments").insert([row]).then(function (r) {
+      if (r.error) { tip(t, "err", "✕ 发布失败:" + r.error.message); return; }
+      contentEl.value = ""; $("#acCounter").textContent = "0/500";
+      state.replyTo = null; renderReplyBar();
+      tip(t, "ok", "✓ 评论已发布");
+      loadComments(a.id);
     });
   }
-  function changeAdminPwd() {
-    var np = window.prompt("设置新的管理密码(至少 6 位,留空取消):", "");
-    if (np === null) return;
-    np = np.trim();
-    if (np.length < 6) { window.alert("密码至少 6 位,未修改"); return; }
-    hashPwd(np, function (h) {
-      store(KEY_PWD, h);
-      window.alert("✓ 管理密码已更新(仅保存在本浏览器)");
-    });
-  }
-
-  /* ---------------- 管理弹窗 ---------------- */
-  function openAdmin() {
-    var m = $("#adminModal"); if (!m) return;
-    m.classList.add("open");
-    syncAdminUI();
-  }
-  function closeAdmin() { var m = $("#adminModal"); if (m) m.classList.remove("open"); }
-  function syncAdminUI() {
-    var login = $("#adminLogin"), panel = $("#adminPanel");
-    if (!login || !panel) return;
-    var on = isAdmin();
-    login.style.display = on ? "none" : "block";
-    panel.style.display = on ? "block" : "none";
-    // 云端模式:用邮箱+密码登录 Supabase 账号;本地模式:用本机设置的密码
-    var emailEl = $("#adminEmail"), emailLbl = $("#adminEmailLabel"), hint = $("#adminLoginHint");
-    var cloud = cloudConfigured();
-    if (emailEl) emailEl.style.display = cloud ? "block" : "none";
-    if (emailLbl) emailLbl.style.display = cloud ? "block" : "none";
-    if (hint) {
-      hint.textContent = cloud
-        ? "云端模式:请用站长 Supabase 账号(邮箱 + 密码)登录 —— 密码在服务器端校验,前端看不到,别人也无法冒充。"
-        : "本地模式:首次使用即设置密码,密码只保存在你自己的浏览器里,不会上传。";
-    }
-    var cp = $("#changePwdBtn");
-    if (cp) cp.style.display = cloud ? "none" : "inline-block";
-  }
-  function tryLogin() {
-    var tip = $("#adminTip");
-    var el = $("#adminPwd");
-    var pwd = el ? el.value : "";
-
-    if (cloudConfigured()) {
-      var emailEl = $("#adminEmail");
-      var email = emailEl ? emailEl.value.trim() : "";
-      if (!email) { setTip(tip, "err", "✕ 请输入站长邮箱"); return; }
-      if (!pwd) { setTip(tip, "err", "✕ 请输入密码"); return; }
-      if (!sb) { setTip(tip, "err", "✕ 云端尚未连接完成,请稍候重试"); return; }
-      setTip(tip, "", "正在登录…");
-      sb.auth.signInWithPassword({ email: email, password: pwd }).then(function (r) {
-        if (r.error) { setTip(tip, "err", "✕ 登录失败:" + r.error.message); return; }
-        cloudUser = r.data && r.data.user ? r.data.user : null;
-        if (el) el.value = "";
-        syncAdminUI(); renderAll();
-        setTip(tip, "ok", "✓ 已登录(管理员),现在可以回复/置顶/删除留言");
-      });
-      return;
-    }
-
-    var firstTime = !CFG.adminPassword && !hasLocalPassword();
-    attemptLogin(pwd, function (res) {
-      if (res === "empty") { setTip(tip, "err", "✕ 请输入密码"); return; }
-      if (res === "short") { setTip(tip, "err", "✕ 密码至少 6 位"); return; }
-      if (res === "wrong") { setTip(tip, "err", "✕ 密码错误"); return; }
-      if (el) el.value = "";
-      syncAdminUI(); renderAll();
-      setTip(tip, "ok", res === "set"
-        ? "✓ 已设置管理密码并进入管理模式(密码只保存在本浏览器,不会上传)"
-        : "✓ 已进入管理模式");
-      if (firstTime && res === "set") {
-        window.alert("管理密码设置成功!\n\n请记住它 —— 密码以摘要形式保存在你自己的浏览器里,换浏览器或清除数据后需要重新设置。");
+  function likeComment(id) {
+    if (hasLiked(id)) { flash("你已经点过赞啦 👍"); return; }
+    if (!ready) return;
+    markLiked(id);
+    var list = CACHE.comms[state.current.id] || [];
+    list.forEach(function (c) { if (c.id === id) c.likes++; });
+    renderComments(state.current.id);
+    sb.rpc("like_comment", { p_comment: id, p_visitor: visitorId() }).then(function (r) {
+      if (r.error) {
+        unmarkLiked(id);
+        var l2 = CACHE.comms[state.current.id] || [];
+        l2.forEach(function (c) { if (c.id === id) c.likes = Math.max(0, c.likes - 1); });
+        renderComments(state.current.id);
+        flash("点赞失败:" + (r.error.message || ""));
+        return;
       }
+      var l3 = CACHE.comms[state.current.id] || [];
+      l3.forEach(function (c) { if (c.id === id) c.likes = Number(r.data || c.likes); });
+      renderComments(state.current.id);
     });
   }
-  function logout() {
-    if (cloudConfigured() && sb) {
-      sb.auth.signOut().then(function () { cloudUser = null; syncAdminUI(); renderAll(); });
+  function delComment(id) {
+    if (!window.confirm("确定删除这条评论?下面的回复会一起删除。")) return;
+    sb.from("comments").delete().eq("id", id).then(function (r) {
+      if (r.error) { window.alert("删除失败:" + r.error.message); return; }
+      loadComments(state.current.id);
+    });
+  }
+
+  /* ---------------- 文章点赞 / 收藏 ---------------- */
+  function likeArticle(id) {
+    if (hasLiked(id)) { flash("你已经赞过这篇了 👍"); return; }
+    if (!ready || v3 === false) { flash("点赞需要先完成数据库升级"); return; }
+    markLiked(id);
+    var a = byId(id); if (a) a.likes++;
+    refreshDetailActions(); renderList(); renderStats();
+    sb.rpc("like_article", { p_article: id, p_visitor: visitorId() }).then(function (r) {
+      if (r.error) {
+        unmarkLiked(id);
+        var a2 = byId(id); if (a2) a2.likes = Math.max(0, a2.likes - 1);
+        refreshDetailActions(); renderList(); renderStats();
+        flash("点赞失败:" + (r.error.message || ""));
+        return;
+      }
+      var a3 = byId(id); if (a3) a3.likes = Number(r.data || 0);
+      refreshDetailActions(); renderList(); renderStats();
+    });
+  }
+  function toggleFav(id) {
+    if (!ready || v3 === false) { flash("收藏需要先完成数据库升级"); return; }
+    var on = !hasFav(id);
+    markFav(id, on);
+    var a = byId(id); if (a) a.favs = Math.max(0, a.favs + (on ? 1 : -1));
+    refreshDetailActions(); renderList(); renderStats();
+    var fn = on ? "favorite_article" : "unfavorite_article";
+    sb.rpc(fn, { p_article: id, p_visitor: visitorId() }).then(function (r) {
+      if (r.error) { markFav(id, !on); flash("操作失败:" + (r.error.message || "")); return; }
+      var a2 = byId(id); if (a2) a2.favs = Number(r.data || 0);
+      refreshDetailActions(); renderList(); renderStats();
+      flash(on ? "已加入收藏,可在「我的收藏」里找到" : "已取消收藏");
+    });
+  }
+  function byId(id) { for (var i = 0; i < ARTICLES.length; i++) if (ARTICLES[i].id === id) return ARTICLES[i]; return null; }
+  function refreshDetailActions() {
+    var a = state.current;
+    if (!a || state.view !== "detail") return;
+    var lb = $("#artLikeBtn"), fb = $("#artFavBtn");
+    if (lb) { lb.classList.toggle("on", hasLiked(a.id)); lb.innerHTML = (hasLiked(a.id) ? "❤" : "♡") + " 点赞 " + a.likes; }
+    if (fb) {
+      fb.classList.toggle("on", hasFav(a.id)); fb.classList.toggle("fav", hasFav(a.id));
+      fb.innerHTML = (hasFav(a.id) ? "★" : "☆") + " " + (hasFav(a.id) ? "已收藏" : "收藏") + " " + a.favs;
+    }
+  }
+
+  /* ---------------- 投稿 ---------------- */
+  function addLinkRow(label, url) {
+    var box = $("#arLinkRows");
+    if (!box) return;
+    if (box.children.length >= MAX_LINKS) { tip($("#arTip"), "err", "✕ 最多 3 条链接"); return; }
+    var row = document.createElement("div");
+    row.className = "art-link-row";
+    row.innerHTML = '<input class="al-label" type="text" maxlength="40" placeholder="链接名称(如:官方预告)" value="' + esc(label || "") + '" />' +
+      '<input class="al-url" type="url" maxlength="500" placeholder="https://…" value="' + esc(url || "") + '" />' +
+      '<button type="button" class="al-del" title="删除这条">✕</button>';
+    box.appendChild(row);
+  }
+  function submitArticle() {
+    var t = $("#arTip");
+    var name = ($("#arName").value || "").trim();
+    var title = ($("#arTitle").value || "").trim();
+    var cat = $("#arCat").value || "资讯";
+    var summary = ($("#arSummary").value || "").trim();
+    var content = ($("#arContent").value || "").trim();
+    var spoiler = !!($("#arSpoiler") && $("#arSpoiler").checked);
+
+    if (name.length < 2 || name.length > 16) { tip(t, "err", "✕ 昵称需要 2-16 个字"); return; }
+    if (title.length < 4 || title.length > 120) { tip(t, "err", "✕ 标题需要 4-120 个字"); return; }
+    if (content.length < 20) { tip(t, "err", "✕ 正文至少 20 个字,请把资讯内容写清楚"); return; }
+
+    var links = [];
+    Array.prototype.forEach.call(document.querySelectorAll("#arLinkRows .art-link-row"), function (row) {
+      var label = row.querySelector(".al-label").value.trim();
+      var raw = row.querySelector(".al-url").value.trim();
+      if (!raw) return;
+      var url = safeUrl(raw);
+      if (!url) { links.push({ bad: raw }); return; }
+      links.push({ label: label || "", url: url });
+    });
+    var bad = links.filter(function (l) { return l.bad; });
+    if (bad.length) { tip(t, "err", "✕ 网址只能是 http/https,请检查:" + bad[0].bad); return; }
+    if (!ready || v3 === false) { tip(t, "err", "✕ 投稿需要先完成数据库升级(见页面顶部提示)"); return; }
+
+    var row = {
+      title: title, author: name, author_visitor: visitorId(), category: cat,
+      summary: summary.slice(0, 120), content: content, links: links, spoiler: spoiler
+    };
+    tip(t, "", "正在提交…");
+    sb.from("articles").insert([row]).then(function (r) {
+      if (r.error) { tip(t, "err", "✕ 提交失败:" + r.error.message); return; }
+      ["#arTitle", "#arSummary", "#arContent"].forEach(function (s) { var el = $(s); if (el) el.value = ""; });
+      $("#arLinkRows").innerHTML = ""; addLinkRow();
+      tip(t, "ok", "✓ 已提交,等待站长审核(通常 1-2 天);可在「📄 我的投稿」里查看状态");
+    });
+  }
+
+  /* ---------------- 我的投稿 / 收藏 ---------------- */
+  function renderMine() {
+    var box = $("#mineList"), hint = $("#mineHint");
+    if (!box) return;
+    if (state.mineMode === "fav") {
+      $("#mineTitle").textContent = "⭐ 我的收藏";
+      var favs = ARTICLES.filter(function (a) { return hasFav(a.id); });
+      if (hint) hint.textContent = favs.length ? "收藏只保存在你这台设备上,换设备看不到。" : "";
+      box.innerHTML = favs.length ? favs.map(function (a) { return cardHtml(a); }).join("")
+        : '<p class="cm-empty">还没有收藏 —— 打开一篇文章,点「☆ 收藏」就会出现在这里。</p>';
       return;
     }
-    setAdmin(false); syncAdminUI(); renderAll();
-  }
-
-  /* ---------------- 登录入口说明 ---------------- */
-  function handleLogin(provider) {
-    var label = provider === "wechat" ? "微信" : "QQ";
-    var plat = provider === "wechat" ? "微信开放平台「网站应用」" : "QQ 互联「网站应用」";
-    var enabled = CFG.socialLogin && CFG.socialLogin[provider];
-    var lines;
-    if (enabled && CFG.walineServerURL) {
-      lines = ["【" + label + "登录】已开启。", "", "请使用页面下方的留言框,点击登录按钮选择" + label + "授权即可。"];
-    } else {
-      lines = [
-        "【" + label + "登录】当前未开启 —— 说明如下",
-        "",
-        "为什么不能一键开通:" + plat + "要求【企业/组织主体】实名认证(微信需 300 元/年认证费)且网站需已完成 ICP 备案,个人开发者无法申请。",
-        "",
-        "个人站长可走的四条路(按推荐度):",
-        "① 邮箱验证码登录 —— 最省事:部署 Waline 云留言板并开启邮箱注册,访客用邮箱收验证码即可发言,零资质要求;",
-        "② 社交登录 —— Waline 服务端可开启 GitHub / 微博 等第三方一键授权登录;",
-        "③ 微信小程序版留言板 —— 个人可免费注册小程序,在小程序内调用微信登录 + 云开发数据库,这是个人开发者唯一能真正使用「微信登录」的正规途径;",
-        "④ 若日后有营业执照 —— 申请" + plat + ",把 AppID/密钥配置到 Waline 社交登录,即可实现网页扫码登录。",
-        "",
-        "本站当前使用『昵称留言』模式:无需登录,任何人都可以直接提问。"
-      ];
-    }
-    window.alert(lines.join("\n"));
-  }
-
-  /* ---------------- Waline 云端模式(可选,另一种云端方案) ---------------- */
-  function bootWaline() {
-    if (!CFG.walineServerURL) return false;
-    var wrap = $("#walineWrap"), localForm = $("#localFormSection"), localList = $("#localListSection");
-    if (wrap) wrap.classList.remove("hidden");
-    if (localForm) localForm.classList.add("hidden");
-    if (localList) localList.classList.add("hidden");
-    var note = $("#walineNote");
-    if (note) note.textContent = "已连接云端留言板(Waline):" + CFG.walineServerURL + " —— 留言保存到云端数据库,所有访客可见;社交登录与后台管理请在 Waline 服务端配置。";
-    try {
-      var s = document.createElement("script");
-      s.src = "https://unpkg.com/@waline/client@v3/dist/waline.js";
-      s.onload = function () {
-        if (window.Waline && window.Waline.init) {
-          window.Waline.init({
-            el: "#waline", serverURL: CFG.walineServerURL, lang: "zh-CN",
-            meta: ["nick", "mail", "link"], requiredMeta: ["nick"], login: "enable", pageview: false
-          });
-        }
-      };
-      document.body.appendChild(s);
-      var link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = "https://unpkg.com/@waline/client@v3/dist/waline.css";
-      document.head.appendChild(link);
-    } catch (e) { /* 离线环境忽略 */ }
-    return true;
-  }
-
-  /* ---------------- Supabase 云端:连接与同步 ---------------- */
-  function loadScript(src) {
-    return new Promise(function (resolve, reject) {
-      var s = document.createElement("script");
-      s.src = src;
-      s.onload = resolve;
-      s.onerror = function () { reject(new Error("无法加载 " + src)); };
-      document.head.appendChild(s);
-      setTimeout(function () { reject(new Error("加载超时")); }, 12000);
+    $("#mineTitle").textContent = "📄 我的投稿";
+    if (hint) hint.textContent = "这里能看到你投过的文章和审核状态;投稿只按浏览器记录,换设备/清缓存后看不到。";
+    if (!ready || v3 === false) { box.innerHTML = '<p class="cm-empty">需要云端数据库支持。</p>'; return; }
+    box.innerHTML = '<p class="cm-empty">正在加载…</p>';
+    sb.rpc("my_articles", { p_visitor: visitorId() }).then(function (r) {
+      if (r.error) { box.innerHTML = '<p class="cm-empty">加载失败:' + esc(r.error.message) + "</p>"; return; }
+      var list = (r.data || []).map(normArt);
+      if (!list.length) { box.innerHTML = '<p class="cm-empty">还没有投过稿 —— 点「✍️ 我要投稿」写第一篇吧!</p>'; return; }
+      box.innerHTML = list.map(function (a) {
+        var tag = a.status === "approved" ? '<span class="art-status ok">已通过</span>'
+          : a.status === "rejected" ? '<span class="art-status no">未通过</span>'
+            : '<span class="art-status wait">待审核</span>';
+        var note = a.note ? '<p class="art-note">站长备注:' + esc(a.note) + "</p>" : "";
+        return cardHtml(a, { statusTag: tag }) + note;
+      }).join("");
     });
   }
-  function loadSupabaseLib() {
-    if (window.supabase) return Promise.resolve();
-    var cdns = [
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
-      "https://unpkg.com/@supabase/supabase-js@2"
-    ];
-    return cdns.reduce(function (chain, url) {
-      return chain.catch(function () { return loadScript(url); });
-    }, Promise.reject(new Error("start")));
+
+  /* ---------------- 站长管理 ---------------- */
+  function syncAdmin() {
+    var login = $("#artAdminLogin"), panel = $("#artAdminPanel");
+    if (!login || !panel) return;
+    var on = !!user;
+    login.classList.toggle("hidden", on);
+    panel.classList.toggle("hidden", !on);
+    if (on) renderAdmin();
   }
-  function normalizeComment(row) {
-    return {
-      id: row.id, name: row.name, content: row.content,
-      type: row.type || "提问", reply: row.reply || "",
-      pinned: !!row.pinned, ts: Date.parse(row.created_at) || Date.now(),
-      parentId: row.parent_id || null,                 /* 楼中楼:回复的父留言 */
-      likes: Number(row.like_count || 0)               /* 点赞数 */
-    };
+  function renderAdmin() {
+    if (!ready) return;
+    sb.from("articles").select("*").order("created_at", { ascending: false }).limit(300).then(function (r) {
+      if (r.error) { window.alert("读取失败:" + r.error.message); return; }
+      var all = (r.data || []).map(normArt);
+      var pend = all.filter(function (a) { return a.status === "pending"; });
+      var pub = all.filter(function (a) { return a.status === "approved"; });
+      var rej = all.filter(function (a) { return a.status === "rejected"; });
+      $("#pendingCount").textContent = "(" + pend.length + " 篇)";
+      $("#publishedCount").textContent = "(" + pub.length + " 篇已发布 · " + rej.length + " 篇未通过)";
+      $("#pendingList").innerHTML = pend.length ? pend.map(function (a) {
+        return cardHtml(a, {
+          statusTag: '<span class="art-status wait">待审核</span>',
+          adminBar: '<div class="art-admin-bar">' +
+            '<button class="btn btn-primary btn-sm" data-admin="approve" data-id="' + esc(a.id) + '">✓ 通过</button>' +
+            '<button class="btn btn-ghost btn-sm" data-admin="reject" data-id="' + esc(a.id) + '">✕ 驳回</button>' +
+            '<button class="btn btn-ghost btn-sm" data-admin="del" data-id="' + esc(a.id) + '">删除</button>' +
+            "</div>"
+        });
+      }).join("") : '<p class="cm-empty">没有待审核的投稿 🎉</p>';
+      $("#publishedList").innerHTML = pub.concat(rej).map(function (a) {
+        return cardHtml(a, {
+          statusTag: a.status === "approved" ? '<span class="art-status ok">已发布</span>' : '<span class="art-status no">已驳回</span>',
+          adminBar: '<div class="art-admin-bar">' +
+            '<button class="btn btn-ghost btn-sm" data-admin="pin" data-id="' + esc(a.id) + '">' + (a.pinned ? "取消置顶" : "置顶") + "</button>" +
+            (a.status === "rejected" ? '<button class="btn btn-ghost btn-sm" data-admin="approve" data-id="' + esc(a.id) + '">改为通过</button>' : "") +
+            '<button class="btn btn-ghost btn-sm" data-admin="del" data-id="' + esc(a.id) + '">删除</button>' +
+            "</div>"
+        });
+      }).join("") || '<p class="cm-empty">暂无已发布文章。</p>';
+    });
   }
-  function normalizeAnnouncement(row) {
-    return { id: row.id, text: row.text, time: fmt(row.created_at) };
+  function adminAct(act, id) {
+    if (act === "approve") {
+      sb.from("articles").update({ status: "approved", reviewed_at: new Date().toISOString(), review_note: "" }).eq("id", id)
+        .then(function (r) { if (r.error) window.alert("操作失败:" + r.error.message); else { renderAdmin(); loadArticles(); } });
+    } else if (act === "reject") {
+      var note = window.prompt("驳回理由(会显示给投稿人,可留空):", "内容需要补充来源或修改标题");
+      if (note === null) return;
+      sb.from("articles").update({ status: "rejected", reviewed_at: new Date().toISOString(), review_note: note }).eq("id", id)
+        .then(function (r) { if (r.error) window.alert("操作失败:" + r.error.message); else { renderAdmin(); loadArticles(); } });
+    } else if (act === "pin") {
+      sb.from("articles").select("pinned").eq("id", id).limit(1).then(function (r) {
+        var cur = !r.error && r.data && r.data[0] ? !!r.data[0].pinned : false;
+        return sb.from("articles").update({ pinned: !cur }).eq("id", id);
+      }).then(function (r2) { if (r2 && r2.error) window.alert("操作失败:" + r2.error.message); else { renderAdmin(); loadArticles(); } });
+    } else if (act === "del") {
+      if (!window.confirm("确定删除这篇文章?它下面的评论会一起删除,不可恢复。")) return;
+      sb.from("articles").delete().eq("id", id)
+        .then(function (r) { if (r.error) window.alert("删除失败:" + r.error.message); else { renderAdmin(); loadArticles(); } });
+    }
   }
-  function refreshCloud() {
-    if (!cloudMode()) return Promise.resolve();
-    return Promise.all([
-      sb.from(CFG.cloud.commentsTable).select("*").order("created_at", { ascending: false }).limit(500),
-      sb.from(CFG.cloud.announceTable).select("*").order("created_at", { ascending: false }).limit(50)
-    ]).then(function (res) {
-      var c = res[0], a = res[1];
-      if (c.error) { cloudError = c.error.message; }
-      else { cloudComments = (c.data || []).map(normalizeComment); }
-      if (!a.error) { cloudAnns = (a.data || []).map(normalizeAnnouncement); }
-      renderAll();
-    }).catch(function (e) { cloudError = e.message; renderAll(); });
+  function adminLogin() {
+    var email = ($("#artAdminEmail").value || "").trim();
+    var pwd = $("#artAdminPwd").value || "";
+    var t = $("#artAdminTip");
+    if (!email || !pwd) { tip(t, "err", "✕ 请填写邮箱与密码"); return; }
+    tip(t, "", "正在登录…");
+    sb.auth.signInWithPassword({ email: email, password: pwd }).then(function (r) {
+      if (r.error) { tip(t, "err", "✕ 登录失败:" + r.error.message); return; }
+      user = r.data.user;
+      tip(t, "ok", "✓ 登录成功");
+      syncAdmin();
+    });
   }
-  function initCloud() {
-    return loadSupabaseLib().then(function () {
-      if (!window.supabase) throw new Error("supabase-js 未就绪");
-      sb = window.supabase.createClient(CFG.cloud.supabaseUrl, CFG.cloud.supabaseAnonKey, {
+  function adminLogout() { sb.auth.signOut().then(function () { user = null; syncAdmin(); }); }
+
+  /* ---------------- 视图切换 ---------------- */
+  var VIEWS = ["list", "detail", "submit", "mine", "admin"];
+  function show(v) {
+    state.view = v;
+    VIEWS.forEach(function (k) {
+      var el = $("#art" + k.charAt(0).toUpperCase() + k.slice(1) + "View");
+      if (el) el.classList.toggle("hidden", k !== v);
+    });
+    var tb = $("#artToolbar");
+    if (tb) tb.classList.toggle("hidden", v === "detail");
+    if (v === "mine") renderMine();
+    if (v === "admin") syncAdmin();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  function route() {
+    var h = location.hash || "";
+    var m = /^#a=([\w-]+)/.exec(h);
+    if (m) { show("detail"); renderDetail(m[1]); return; }
+    if (h === "#submit") { show("submit"); return; }
+    if (h === "#mine") { state.mineMode = "mine"; show("mine"); return; }
+    if (h === "#fav") { state.mineMode = "fav"; show("mine"); return; }
+    if (h === "#admin") { show("admin"); return; }
+    show("list");
+  }
+  function renderAll() { renderStats(); renderFilters(); renderList(); }
+
+  /* ---------------- 事件 ---------------- */
+  function bind() {
+    document.addEventListener("click", function (e) {
+      var t = e.target; if (!t || !t.closest) return;
+
+      var card = t.closest("[data-art]");
+      if (card && !t.closest("[data-admin]")) { location.hash = "a=" + card.dataset.art; return; }
+
+      var cat = t.closest("[data-cat]");
+      if (cat) { state.cat = cat.dataset.cat; renderFilters(); renderList(); return; }
+      var srt = t.closest("[data-sort]");
+      if (srt) { state.sort = srt.dataset.sort; renderFilters(); renderList(); return; }
+
+      var ad = t.closest("[data-admin]");
+      if (ad) { adminAct(ad.dataset.admin, ad.dataset.id); return; }
+
+      var act = t.closest("[data-act]");
+      if (act) {
+        var id = act.dataset.id, what = act.dataset.act;
+        if (what === "clike") likeComment(id);
+        else if (what === "creply") {
+          var list = CACHE.comms[state.current.id] || [];
+          for (var i = 0; i < list.length; i++) if (list[i].id === id) state.replyTo = { id: id, name: list[i].name };
+          renderReplyBar();
+          var ta = $("#acContent"); if (ta) { ta.focus(); ta.scrollIntoView({ block: "center", behavior: "smooth" }); }
+        } else if (what === "ccancel") { state.replyTo = null; renderReplyBar(); }
+        else if (what === "cdel") delComment(id);
+        return;
+      }
+
+      if (t.closest("#btnSubmit")) { location.hash = "submit"; return; }
+      if (t.closest("#btnMine")) { location.hash = "mine"; return; }
+      if (t.closest("#btnFav")) { location.hash = "fav"; return; }
+      if (t.closest("#btnAdmin")) { location.hash = "admin"; return; }
+      if (t.closest("#btnBack") || t.closest("#btnSubmitBack") || t.closest("#btnMineBack") || t.closest("#btnAdminBack")) {
+        location.hash = ""; return;
+      }
+      if (t.closest("#arAddLink")) { addLinkRow(); return; }
+      if (t.closest(".al-del")) { var r = t.closest(".art-link-row"); if (r) r.remove(); return; }
+      if (t.closest("#v3Copy")) { copyV3(); return; }
+      if (t.closest("#artAdminLoginBtn")) { adminLogin(); return; }
+      if (t.closest("#artAdminLogout")) { adminLogout(); return; }
+      var navL = t.closest(".nav a"); if (navL) $("#nav").classList.remove("open");
+    });
+
+    var si = $("#artSearch");
+    if (si) si.addEventListener("input", function () { state.q = si.value; renderList(); });
+    var ac = $("#acContent"), acc = $("#acCounter");
+    if (ac && acc) ac.addEventListener("input", function () { acc.textContent = ac.value.length + "/500"; });
+    var arc = $("#arContent"), arcC = $("#arCounter");
+    if (arc && arcC) arc.addEventListener("input", function () { arcC.textContent = arc.value.length + "/20000"; });
+    var asub = $("#acSubmit"); if (asub) asub.addEventListener("click", submitComment);
+    var arsub = $("#arSubmit"); if (arsub) arsub.addEventListener("click", submitArticle);
+    var nt = $("#navToggle"); if (nt) nt.addEventListener("click", function () { $("#nav").classList.toggle("open"); });
+    window.addEventListener("hashchange", route);
+  }
+
+  /* ---------------- 启动 ---------------- */
+  document.addEventListener("DOMContentLoaded", function () {
+    bind();
+    renderAll();
+    addLinkRow();
+    if (!configured()) { show("list"); renderList(); return; }
+    loadLib().then(function () {
+      sb = window.supabase.createClient(CLOUD.supabaseUrl, CLOUD.supabaseAnonKey, {
         auth: { persistSession: true, autoRefreshToken: true }
       });
       return sb.auth.getSession();
     }).then(function (s) {
-      cloudUser = s && s.data && s.data.session ? s.data.session.user : null;
-      cloudReady = true;
-      if (sb && sb.auth && sb.auth.onAuthStateChange) {
-        sb.auth.onAuthStateChange(function (_evt, sess) {
-          cloudUser = sess ? sess.user : null;
-          syncAdminUI(); renderAll();
-        });
+      user = s && s.data && s.data.session ? s.data.session.user : null;
+      ready = true;
+      if (sb.auth.onAuthStateChange) {
+        sb.auth.onAuthStateChange(function (_e, sess) { user = sess ? sess.user : null; syncAdmin(); });
       }
-      renderAll();
-      return refreshCloud().then(function () { return probeV2(); }).then(function () { return syncMyLikes(); });
+      return probeV3();
+    }).then(function () {
+      return loadArticles();
+    }).then(function () {
+      return loadMyMarks();
+    }).then(function () {
+      route();
     }).catch(function (e) {
-      cloudError = (e && e.message) || String(e);
-      cloudReady = false;
-      renderAll();
+      ready = false;
+      var empty = $("#artEmpty");
+      if (empty) { empty.classList.remove("hidden"); empty.textContent = "云端连接失败:" + ((e && e.message) || e); }
     });
-  }
+  });
 
-  /* ---------------- 事件绑定 ---------------- */
-  function bind() {
-    var btnSubmit = $("#cmSubmit");
-    if (btnSubmit) btnSubmit.addEventListener("click", submit);
-
-    var ta = $("#cmContent"), counter = $("#cmCounter");
-    if (ta && counter) {
-      counter.textContent = "0/" + CFG.limits.maxLength;
-      ta.addEventListener("input", function () {
-        counter.textContent = ta.value.length + "/" + CFG.limits.maxLength;
-      });
-    }
-
-    document.addEventListener("click", function (e) {
-      var t = e.target;
-      if (!t || !t.closest) return;
-      var loginBtn = t.closest("[data-provider]");
-      if (loginBtn) { handleLogin(loginBtn.dataset.provider); return; }
-      var act = t.closest("[data-act]");
-      if (act) {
-        var id = act.dataset.id;
-        var what = act.dataset.act;
-        if (what === "pin") togglePin(id);
-        else if (what === "del") removeComment(id);
-        else if (what === "reply") replyComment(id);
-        else if (what === "like") likeComment(id);
-        else if (what === "replyto") {
-          if (cloudMode() && v2Ready === false) {
-            flashTip("楼中楼还没启用:数据库需要先升级(见页面顶部橙色提示),升级后任何人都能在这里互相回复");
-            return;
-          }
-          var f = findComment(id);
-          if (f) {
-            replyTarget = { id: id, name: f.list[f.index].name };
-            renderReplyBar();
-            var ta = $("#cmContent");
-            if (ta) { ta.focus(); ta.scrollIntoView({ block: "center", behavior: "smooth" }); }
-          }
-        } else if (what === "cancelreply") {
-          replyTarget = null; renderReplyBar();
-        }
-        return;
-      }
-      if (t.closest("#adminToggle")) { openAdmin(); return; }
-      if (t.closest("#v2Copy")) { copyMigrationSql(); return; }
-      if (t.closest("#adminClose")) { closeAdmin(); return; }
-      if (t.closest("#adminModal") && !t.closest(".admin-box")) { closeAdmin(); return; }
-    });
-
-    var lb = $("#adminLoginBtn"); if (lb) lb.addEventListener("click", tryLogin);
-    var cp = $("#changePwdBtn"); if (cp) cp.addEventListener("click", changeAdminPwd);
-    var pwd = $("#adminPwd");
-    if (pwd) pwd.addEventListener("keydown", function (e) { if (e.key === "Enter") tryLogin(); });
-    var ab = $("#annPost"); if (ab) ab.addEventListener("click", postAnnouncement);
-    var ex = $("#exportBtn"); if (ex) ex.addEventListener("click", exportData);
-    var cl = $("#clearBtn"); if (cl) cl.addEventListener("click", clearAll);
-    var lo = $("#logoutBtn"); if (lo) lo.addEventListener("click", logout);
-    var back = document.createElement("button");
-    back.id = "backTop"; back.textContent = "↑"; back.title = "回到顶部";
-    document.body.appendChild(back);
-    back.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
-  }
-
-  /* ---------------- 启动 ---------------- */
-  function init() {
-    if (bootWaline()) { renderStatus(); renderAnnouncements(); renderStats(); bind(); return; }
-    renderAll();
-    bind();
-    syncAdminUI();
-    if (cloudConfigured()) initCloud();
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-
-  /* 供测试与站长调试使用 */
-  window.CommentsBoard = {
-    validate: validate, getComments: getComments, setComments: setComments,
-    getAnnouncements: getAnnouncements, setAnnouncements: setAnnouncements,
-    render: renderAll, isAdmin: isAdmin, setAdmin: setAdmin, config: CFG,
-    attemptLogin: attemptLogin, hashPwd: hashPwd, hasLocalPassword: hasLocalPassword,
-    changeAdminPwd: changeAdminPwd,
-    cloudConfigured: cloudConfigured, cloudMode: cloudMode, modeName: modeName,
-    normalizeComment: normalizeComment,
-    buildTree: buildTree, likeComment: likeComment, hasLiked: hasLiked,
-    setV2State: function (v) { v2Ready = v; renderV2Banner(); },
-    getV2State: function () { return v2Ready; },
-    setReplyTarget: function (t) { replyTarget = t; renderReplyBar(); },
-    getReplyTarget: function () { return replyTarget; }
+  /* 供测试使用 */
+  window.ArticlesBoard = {
+    state: state, safeUrl: safeUrl, normArt: normArt, parseLinks: parseLinks,
+    cardHtml: cardHtml, buildTree: buildTree, CATS: CATS,
+    setArticles: function (l) { ARTICLES = (l || []).map(function (x) { return x && x.links !== undefined && x.status ? normArt(x) : x; }); renderAll(); },
+    setComments: function (articleId, list) { CACHE.comms[articleId] = list; renderComments(articleId); },
+    setView: function (v) { show(v); }, openDetail: renderDetail,
+    hasLiked: hasLiked, hasFav: hasFav, visitorId: visitorId
   };
 })();
 
 </script>
-  <script>
-    document.getElementById("navToggle").addEventListener("click", function () {
-      document.getElementById("nav").classList.toggle("open");
-    });
-  </script>
 </body>
 </html>

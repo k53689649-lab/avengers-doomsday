@@ -113,10 +113,10 @@ body.portal {
 .cd-item span { font-size: 11.5px; color: var(--p-muted); }
 .cd-label { font-size: 12.5px; color: #b9cec7; padding-bottom: 8px; letter-spacing: 1px; text-shadow: 0 2px 12px rgba(0, 10, 7, 0.9); }
 
-/* ---------- 两个入口 ---------- */
+/* ---------- 三个入口 ---------- */
 .portal-choices {
-  display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr));
-  gap: 18px; width: 100%; margin-top: 24px;
+  display: grid; grid-template-columns: repeat(3, minmax(240px, 1fr));
+  gap: 16px; width: 100%; margin-top: 24px;
 }
 
 .choice {
@@ -280,9 +280,20 @@ body.portal {
           <span class="choice-title">留言提问板</span>
           <span class="choice-desc">
             剧情考据 · 观影顺序 · 彩蛋解读 · 观后感<br />
-            站长公告与逐条回复,发言前请先阅读留言须知
+            支持楼中楼互相回复与点赞,发言前请先阅读留言须知
           </span>
           <span class="choice-go">去发言 →</span>
+        </a>
+
+        <a class="choice choice-article" href="articles.html">
+          <span class="choice-rank">03</span>
+          <span class="choice-icon" aria-hidden="true">📝</span>
+          <span class="choice-title">影迷投稿</span>
+          <span class="choice-desc">
+            把你发现的新资讯、预告解析、考据写成文章,可附原始网址<br />
+            文章下可评论、点赞、收藏,投稿经站长审核后公开
+          </span>
+          <span class="choice-go">去投稿 →</span>
         </a>
       </div>
 

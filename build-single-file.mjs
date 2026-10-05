@@ -93,12 +93,14 @@ const files = {
   portal: "门户页-单文件版.html",
   guide: "复仇者联盟5观影指南-单文件版.html",
   comments: "留言提问板-单文件版.html",
+  articles: "影迷投稿板块-单文件版.html",
 };
 
 const jobs = [
   { src: "index.html", out: files.portal, rewrite: true },
   { src: "guide.html", out: files.guide, rewrite: true },
   { src: "comments.html", out: files.comments, rewrite: true },
+  { src: "articles.html", out: files.articles, rewrite: true },
 ];
 
 for (const job of jobs) {

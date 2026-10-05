@@ -219,6 +219,55 @@ check("回复目标:提示条正确显示", (() => {
   return ok;
 })());
 
+/* ---------- 2e. 影迷投稿板块 ---------- */
+const articlesSrc = read("assets/js/articles.js");
+const docC = makeDoc();
+const winC = {
+  localStorage: storage, addEventListener() {}, confirm: () => true, prompt: () => "备注", alert: () => {},
+  scrollTo() {}, location: { hash: "", origin: "https://x", pathname: "/articles.html" }, URL: globalThis.URL,
+  fetch: () => Promise.reject(new Error("offline")), navigator: {},
+};
+new Function("window", "document", configSrc + "\n" + articlesSrc)(winC, docC);
+const art = winC.ArticlesBoard;
+check("投稿板块初始化", !!art && Array.isArray(art.CATS) && art.CATS.length >= 4);
+check("投稿:URL 白名单(只允许 http/https)", (() => {
+  return art.safeUrl("https://www.bilibili.com/video/BV1x") === "https://www.bilibili.com/video/BV1x" &&
+    art.safeUrl("www.marvel.com/news") === "https://www.marvel.com/news" &&
+    art.safeUrl("javascript:alert(1)") === "" &&
+    art.safeUrl("data:text/html,<script>alert(1)</script>") === "" &&
+    art.safeUrl("") === "";
+})());
+check("投稿:links 解析(过滤非法链接)", (() => {
+  const l = art.parseLinks({ links: [{ label: "官方", url: "https://marvel.com" }, { label: "坏", url: "javascript:x" }, { url: "http://ok.com/a" }] });
+  return l.length === 2 && l[0].label === "官方" && l[1].url === "http://ok.com/a";
+})());
+check("投稿:字段归一化", (() => {
+  const a = art.normArt({
+    id: "a1", title: "测试文章", author: "影迷", category: "预告解析", summary: "摘要",
+    content: "正文内容", links: [{ url: "https://a.com" }], spoiler: true, status: "approved",
+    pinned: true, like_count: 5, favorite_count: 2, view_count: 9, created_at: "2026-10-05T10:00:00Z",
+  });
+  return a.id === "a1" && a.likes === 5 && a.favs === 2 && a.views === 9 && a.spoiler === true && a.links.length === 1;
+})());
+check("投稿:卡片渲染含分类/作者/数据", (() => {
+  const html = art.cardHtml(art.normArt({
+    id: "a2", title: "毁灭博士最新片场照", author: "路人甲", category: "资讯", summary: "有图有真相",
+    content: "正文", links: [{ url: "https://a.com" }], status: "approved", like_count: 3, favorite_count: 1, view_count: 7,
+    created_at: "2026-10-05T10:00:00Z",
+  }));
+  return html.includes("毁灭博士最新片场照") && html.includes("路人甲") && html.includes("资讯") &&
+    html.includes("❤ 3") && html.includes("⭐ 1") && html.includes('data-art="a2"');
+})());
+check("投稿:文章评论树(楼中楼)", (() => {
+  const tree = art.buildTree([
+    { id: "p", name: "甲", content: "主楼", ts: 3, parentId: null },
+    { id: "c1", name: "乙", content: "回复1", ts: 1, parentId: "p" },
+    { id: "c2", name: "丙", content: "回复2", ts: 2, parentId: "p" },
+  ]);
+  return tree.tops.length === 1 && (tree.children["p"] || []).length === 2 && tree.children["p"][0].id === "c1";
+})());
+check("投稿:访客标识与留言板共用", typeof art.visitorId() === "string" && art.visitorId().length > 5);
+
 /* 当前随站发布的配置:应当已是云端模式 */
 if (board.cloudConfigured()) {
   check("云端模式:配置已被识别", true);
@@ -245,7 +294,7 @@ if (localCfgSrc !== configSrc) {
 }
 
 /* ---------- 3. 页面文件与单文件版检查 ---------- */
-const pages = ["index.html", "guide.html", "comments.html"];
+const pages = ["index.html", "guide.html", "comments.html", "articles.html"];
 for (const p of pages) {
   check("页面存在: " + p, fs.existsSync(dir + p));
 }
