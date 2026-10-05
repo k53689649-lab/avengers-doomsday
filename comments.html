@@ -144,6 +144,17 @@
           <button class="btn btn-ghost btn-sm" id="adminClose2" onclick="document.getElementById('adminModal').classList.remove('open')">关闭面板</button>
         </div>
         <p class="admin-desc" style="margin-top:14px">提示:留言列表出现管理员的「置顶 / 回复 / 删除」按钮后,即可对每条留言单独操作。删除与清空不可恢复,建议先导出备份。</p>
+
+        <div class="admin-secure">
+          <h4>🔐 关于这个密码的安全性</h4>
+          <ul>
+            <li><b>存在哪里:</b>密码以 SHA-256 摘要形式保存在<b>你这台设备的浏览器</b>里,<b>不会上传</b>到任何服务器,也<b>不写进网页源码</b> —— 别人查看代码或抓包都拿不到。</li>
+            <li><b>为什么安全:</b>校验完全在你的浏览器里完成,密码从不离开设备;别的设备没有这份摘要,也就无法登录。</li>
+            <li><b>使用边界:</b>换浏览器 / 清除浏览数据后需要重新设置;用完建议点「退出管理模式」。</li>
+            <li><b>更进一步:</b>若想多人共享留言、并把管理权限放到服务器端(前端完全看不到任何凭据),请部署 Waline 云端留言板 —— 详见项目 README 的「留言板部署指南」。</li>
+            <li><b>账号保护建议:</b>给 GitHub 开启两步验证(2FA)、使用密码管理器生成 16 位以上随机密码、不要把密码写进仓库里的任何文件。</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
