@@ -1,0 +1,144 @@
+/* =========================================================
+   门户封面页 · 样式
+   ========================================================= */
+:root {
+  --p-bg: #05070c;
+  --p-green: #1f7a5a;
+  --p-red: #e23636;
+  --p-gold: #f7c948;
+  --p-line: rgba(255, 255, 255, 0.10);
+  --p-text: #eef2f8;
+  --p-muted: #9aa5b8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body.portal {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", sans-serif;
+  background: var(--p-bg);
+  color: var(--p-text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- 封面背景 ---------- */
+.portal-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: radial-gradient(120% 90% at 50% 0%, #132033 0%, #070a11 55%, #04060a 100%); }
+.portal-cover {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center 30%;
+  opacity: 0.85; filter: saturate(1.05) contrast(1.05);
+}
+.portal-vignette {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(80% 60% at 50% 45%, rgba(5, 7, 12, 0.15) 0%, rgba(5, 7, 12, 0.78) 62%, rgba(5, 7, 12, 0.96) 100%),
+    linear-gradient(180deg, rgba(5, 7, 12, 0.72) 0%, rgba(5, 7, 12, 0.35) 35%, rgba(5, 7, 12, 0.92) 100%);
+}
+.portal-noise {
+  position: absolute; inset: 0; opacity: 0.35;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 2px 3px;
+}
+
+/* ---------- 主体 ---------- */
+.portal-main {
+  position: relative; z-index: 1;
+  min-height: 100%;
+  max-width: 1100px; margin: 0 auto;
+  padding: clamp(40px, 7vh, 90px) 22px 56px;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+
+.portal-kicker {
+  font-size: 12.5px; letter-spacing: 5px; font-weight: 700;
+  color: var(--p-gold); opacity: 0.9; margin-bottom: 18px;
+}
+
+.portal-title {
+  font-size: clamp(34px, 7.2vw, 74px); line-height: 1.08; font-weight: 900;
+  letter-spacing: 2px; text-shadow: 0 8px 40px rgba(0, 0, 0, 0.75);
+}
+.portal-title-sub {
+  display: block; margin-top: 6px;
+  background: linear-gradient(120deg, #ff4d4d 10%, var(--p-gold) 85%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+.portal-sub {
+  margin-top: 20px; max-width: 780px;
+  font-size: clamp(13.5px, 1.6vw, 16px); color: #cbd5e4;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+}
+
+/* ---------- 倒计时 ---------- */
+.countdown {
+  display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; justify-content: center;
+  margin: 30px 0 8px;
+}
+.cd-item {
+  min-width: 78px; padding: 10px 14px; border-radius: 12px;
+  background: rgba(10, 14, 22, 0.62); border: 1px solid var(--p-line);
+  backdrop-filter: blur(6px);
+}
+.cd-item b { display: block; font-size: clamp(20px, 3vw, 28px); font-weight: 900; color: #fff; line-height: 1.1; }
+.cd-item span { font-size: 11.5px; color: var(--p-muted); }
+.cd-label { font-size: 12.5px; color: var(--p-muted); padding-bottom: 8px; letter-spacing: 1px; }
+
+/* ---------- 两个入口 ---------- */
+.portal-choices {
+  display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 20px; width: 100%; margin-top: 38px;
+}
+
+.choice {
+  position: relative; overflow: hidden; text-decoration: none; color: var(--p-text);
+  display: flex; flex-direction: column; align-items: flex-start; text-align: left;
+  padding: 30px 28px 26px; border-radius: 18px;
+  background: linear-gradient(160deg, rgba(20, 26, 38, 0.92), rgba(11, 15, 22, 0.92));
+  border: 1px solid var(--p-line);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  backdrop-filter: blur(8px);
+}
+.choice::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, var(--p-red), var(--p-gold)); opacity: 0.9;
+}
+.choice-board::after { background: linear-gradient(90deg, #4da3ff, #43d17c); }
+.choice:hover { transform: translateY(-6px); border-color: rgba(226, 54, 54, 0.55); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55); }
+.choice-board:hover { border-color: rgba(77, 163, 255, 0.55); }
+
+.choice-rank {
+  position: absolute; right: 22px; top: 18px;
+  font-family: "Segoe UI", sans-serif; font-size: 40px; font-weight: 900;
+  color: rgba(255, 255, 255, 0.07); line-height: 1;
+}
+.choice-icon { font-size: 30px; margin-bottom: 10px; }
+.choice-title { font-size: clamp(21px, 2.6vw, 27px); font-weight: 900; letter-spacing: 1px; }
+.choice-desc { margin-top: 10px; font-size: 13.5px; color: var(--p-muted); line-height: 1.85; }
+.choice-go {
+  margin-top: 18px; font-size: 14px; font-weight: 800; color: var(--p-gold);
+  border-bottom: 1px solid rgba(247, 201, 72, 0.4); padding-bottom: 3px;
+}
+.choice-board .choice-go { color: #8ec4ff; border-bottom-color: rgba(142, 196, 255, 0.4); }
+
+.portal-foot {
+  margin-top: 46px; font-size: 11.5px; color: #7f8aa0; line-height: 1.9;
+  max-width: 760px;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 780px) {
+  .only-desktop { display: none; }
+  .portal-choices { grid-template-columns: 1fr; gap: 14px; margin-top: 30px; }
+  .choice { padding: 24px 22px 22px; }
+  .portal-main { padding: 34px 16px 40px; }
+  .countdown { gap: 8px; margin: 24px 0 4px; }
+  .cd-item { min-width: 66px; padding: 8px 10px; }
+  .cd-label { width: 100%; text-align: center; padding-bottom: 0; }
+}

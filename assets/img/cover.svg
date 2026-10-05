@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="毁灭之日原创概念封面">
+  <defs>
+    <radialGradient id="sky" cx="50%" cy="18%" r="85%">
+      <stop offset="0%" stop-color="#1b2c44"/>
+      <stop offset="45%" stop-color="#0b1220"/>
+      <stop offset="100%" stop-color="#04060b"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4fe0b0" stop-opacity="0.55"/>
+      <stop offset="55%" stop-color="#1f7a5a" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#1f7a5a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cloak" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1c6b51"/>
+      <stop offset="55%" stop-color="#0f4636"/>
+      <stop offset="100%" stop-color="#071c17"/>
+    </linearGradient>
+    <linearGradient id="hoodIn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d3a2d"/>
+      <stop offset="100%" stop-color="#05130f"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0%" stop-color="#e8edf2"/>
+      <stop offset="28%" stop-color="#aab4c0"/>
+      <stop offset="52%" stop-color="#78838f"/>
+      <stop offset="74%" stop-color="#b9c3ce"/>
+      <stop offset="100%" stop-color="#5d6672"/>
+    </linearGradient>
+    <linearGradient id="metalDark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a525c"/>
+      <stop offset="100%" stop-color="#23282e"/>
+    </linearGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+    <filter id="soft2" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1600" height="900" fill="url(#sky)"/>
+
+  <!-- 背后巨大字母 D -->
+  <text x="800" y="700" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
+        font-size="880" font-weight="700" fill="#ffffff" opacity="0.028">D</text>
+
+  <!-- 光柱 -->
+  <g opacity="0.30" filter="url(#soft)">
+    <rect x="700" y="-120" width="90" height="900" fill="#6ff0c8" opacity="0.10"/>
+    <rect x="880" y="-120" width="46" height="900" fill="#6ff0c8" opacity="0.14"/>
+    <rect x="1010" y="-120" width="120" height="900" fill="#6ff0c8" opacity="0.08"/>
+  </g>
+
+  <!-- 面具后光晕 -->
+  <ellipse cx="1000" cy="440" rx="430" ry="360" fill="url(#halo)"/>
+
+  <!-- 披风 / 肩部 -->
+  <path d="M540 900 C560 690 700 596 1000 590 C1300 596 1440 690 1460 900 Z" fill="url(#cloak)"/>
+  <path d="M540 900 C556 706 690 618 1000 612 C1310 618 1444 706 1460 900"
+        fill="none" stroke="#2fa27a" stroke-opacity="0.35" stroke-width="3"/>
+
+  <!-- 兜帽 -->
+  <ellipse cx="1000" cy="400" rx="255" ry="305" fill="url(#hoodIn)"/>
+  <path d="M745 400 C745 215 860 110 1000 110 C1140 110 1255 215 1255 400 C1255 585 1140 700 1000 700 C860 700 745 585 745 400 Z"
+        fill="none" stroke="#2b8f6c" stroke-opacity="0.45" stroke-width="4"/>
+
+  <!-- 面具主体 -->
+  <path d="M1000 258 C1128 258 1180 336 1174 434 C1168 552 1104 656 1000 682 C896 656 832 552 826 434 C820 336 872 258 1000 258 Z"
+        fill="url(#metal)" stroke="#eef3f7" stroke-opacity="0.35" stroke-width="2"/>
+  <path d="M1000 258 C1128 258 1180 336 1174 434 C1168 552 1104 656 1000 682"
+        fill="none" stroke="#2a3038" stroke-opacity="0.55" stroke-width="3"/>
+
+  <!-- 面具中央棱线 -->
+  <path d="M1000 262 L1000 676" stroke="#5f6a76" stroke-opacity="0.55" stroke-width="2"/>
+  <path d="M960 268 C948 400 946 540 968 672" fill="none" stroke="#ffffff" stroke-opacity="0.10" stroke-width="8" filter="url(#soft2)"/>
+
+  <!-- 眼窝 -->
+  <path d="M872 402 C922 380 968 392 982 420 C962 442 912 450 872 434 Z" fill="url(#metalDark)"/>
+  <path d="M1128 402 C1078 380 1032 392 1018 420 C1038 442 1088 450 1128 434 Z" fill="url(#metalDark)"/>
+  <g filter="url(#soft2)">
+    <path d="M886 410 C918 398 950 404 962 420 C948 432 914 436 886 426 Z" fill="#7ff0ff" opacity="0.85"/>
+    <path d="M1114 410 C1082 398 1050 404 1038 420 C1052 432 1086 436 1114 426 Z" fill="#7ff0ff" opacity="0.85"/>
+  </g>
+
+  <!-- 呼吸格栅 -->
+  <g fill="#39414a" opacity="0.9">
+    <rect x="944" y="546" width="12" height="54" rx="4"/>
+    <rect x="966" y="546" width="12" height="60" rx="4"/>
+    <rect x="988" y="546" width="12" height="62" rx="4"/>
+    <rect x="1010" y="546" width="12" height="60" rx="4"/>
+    <rect x="1032" y="546" width="12" height="54" rx="4"/>
+  </g>
+
+  <!-- 铆钉 -->
+  <g fill="#dfe6ee" opacity="0.75">
+    <circle cx="1000" cy="286" r="6"/>
+    <circle cx="936" cy="300" r="5"/><circle cx="1064" cy="300" r="5"/>
+    <circle cx="880" cy="352" r="5"/><circle cx="1120" cy="352" r="5"/>
+    <circle cx="852" cy="440" r="5"/><circle cx="1148" cy="440" r="5"/>
+    <circle cx="884" cy="540" r="5"/><circle cx="1116" cy="540" r="5"/>
+    <circle cx="940" cy="628" r="5"/><circle cx="1060" cy="628" r="5"/>
+  </g>
+
+  <!-- 裂纹与损伤 -->
+  <g stroke="#3a4149" stroke-opacity="0.55" stroke-width="2" fill="none">
+    <path d="M916 320 L938 356 L924 380"/>
+    <path d="M1084 316 L1062 350 L1078 382"/>
+    <path d="M1000 600 L980 640 L1000 668"/>
+  </g>
+
+  <!-- 冷色轮廓光 -->
+  <path d="M1000 258 C1128 258 1180 336 1174 434" fill="none" stroke="#8ff2d0" stroke-opacity="0.35" stroke-width="5" filter="url(#soft2)"/>
+  <path d="M826 434 C820 336 872 258 1000 258" fill="none" stroke="#ff6b6b" stroke-opacity="0.28" stroke-width="5" filter="url(#soft2)"/>
+
+  <!-- 火星粒子 -->
+  <g fill="#ffb545" opacity="0.75">
+    <circle cx="420" cy="700" r="3"/><circle cx="512" cy="612" r="2"/><circle cx="332" cy="520" r="2.5"/>
+    <circle cx="1190" cy="640" r="3"/><circle cx="1290" cy="540" r="2"/><circle cx="1360" cy="700" r="2.5"/>
+    <circle cx="640" cy="380" r="2"/><circle cx="1420" cy="360" r="2"/>
+  </g>
+  <g fill="#7ff0ff" opacity="0.55">
+    <circle cx="700" cy="250" r="2"/><circle cx="1240" cy="230" r="2.5"/><circle cx="1150" cy="160" r="2"/>
+    <circle cx="820" cy="170" r="1.8"/>
+  </g>
+
+  <!-- 底部渐隐 -->
+  <rect x="0" y="620" width="1600" height="280" fill="url(#sky)" opacity="0.42"/>
+  <rect x="0" y="760" width="1600" height="140" fill="#04060b" opacity="0.75"/>
+</svg>

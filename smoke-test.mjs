@@ -83,11 +83,22 @@ board.setAnnouncements([{ id: "a1", text: "测试公告:欢迎提问", time: "20
 board.render();
 check("公告发布并渲染", docB.querySelector("#announceList").innerHTML.includes("测试公告"));
 
-/* ---------- 3. 单文件版检查 ---------- */
-for (const f of ["复仇者联盟5观影指南-单文件版.html", "留言提问板-单文件版.html"]) {
+/* ---------- 3. 页面文件与单文件版检查 ---------- */
+const pages = ["index.html", "guide.html", "comments.html"];
+for (const p of pages) {
+  check("页面存在: " + p, fs.existsSync(dir + p));
+}
+const portal = read("index.html");
+check("门户页含两个入口", portal.includes('href="guide.html"') && portal.includes('href="comments.html"'));
+check("门户页含封面与倒计时", portal.includes("coverImg") && portal.includes("countdown"));
+check("前瞻页已与首页解耦", read("guide.html").includes('href="index.html"') && read("guide.html").includes('class="brand"'));
+check("留言板可返回首页", read("comments.html").includes('href="index.html"'));
+check("原创封面插画存在", fs.existsSync(dir + "assets/img/cover.svg"));
+
+for (const f of ["门户页-单文件版.html", "复仇者联盟5观影指南-单文件版.html", "留言提问板-单文件版.html"]) {
   if (!fs.existsSync(dir + f)) { console.log("SKIP 单文件版未构建: " + f); continue; }
   const html = read(f);
-  check("单文件版无外部依赖: " + f, !/src="assets\//.test(html) && !/href="assets\//.test(html));
+  check("单文件版无内部资源依赖: " + f, !/src="assets\//.test(html) && !/href="assets\//.test(html));
 }
 
 console.log(ok ? "\n✅ ALL TESTS PASSED" : "\n❌ SOME TESTS FAILED");

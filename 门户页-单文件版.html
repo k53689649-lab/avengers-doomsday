@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>复仇者联盟5:毁灭之日 · 观影指南与影迷留言板</title>
+  <meta name="description" content="《复仇者联盟5:毁灭之日》观影门户:进入前瞻补课(103 部漫威影视作品 + 角色图鉴 + 彩蛋速报),或在留言提问板与其他影迷交流。" />
+  <meta property="og:title" content="复仇者联盟5:毁灭之日 · 观影指南与影迷留言板" />
+  <meta property="og:description" content="看复联五之前你需要了解什么 —— 进入前瞻,或去留言板提问。" />
+  <meta property="og:type" content="website" />
+  <style>
+/* =========================================================
+   门户封面页 · 样式
+   ========================================================= */
+:root {
+  --p-bg: #05070c;
+  --p-green: #1f7a5a;
+  --p-red: #e23636;
+  --p-gold: #f7c948;
+  --p-line: rgba(255, 255, 255, 0.10);
+  --p-text: #eef2f8;
+  --p-muted: #9aa5b8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body.portal {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", sans-serif;
+  background: var(--p-bg);
+  color: var(--p-text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- 封面背景 ---------- */
+.portal-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: radial-gradient(120% 90% at 50% 0%, #132033 0%, #070a11 55%, #04060a 100%); }
+.portal-cover {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center 30%;
+  opacity: 0.85; filter: saturate(1.05) contrast(1.05);
+}
+.portal-vignette {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(80% 60% at 50% 45%, rgba(5, 7, 12, 0.15) 0%, rgba(5, 7, 12, 0.78) 62%, rgba(5, 7, 12, 0.96) 100%),
+    linear-gradient(180deg, rgba(5, 7, 12, 0.72) 0%, rgba(5, 7, 12, 0.35) 35%, rgba(5, 7, 12, 0.92) 100%);
+}
+.portal-noise {
+  position: absolute; inset: 0; opacity: 0.35;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 2px 3px;
+}
+
+/* ---------- 主体 ---------- */
+.portal-main {
+  position: relative; z-index: 1;
+  min-height: 100%;
+  max-width: 1100px; margin: 0 auto;
+  padding: clamp(40px, 7vh, 90px) 22px 56px;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+
+.portal-kicker {
+  font-size: 12.5px; letter-spacing: 5px; font-weight: 700;
+  color: var(--p-gold); opacity: 0.9; margin-bottom: 18px;
+}
+
+.portal-title {
+  font-size: clamp(34px, 7.2vw, 74px); line-height: 1.08; font-weight: 900;
+  letter-spacing: 2px; text-shadow: 0 8px 40px rgba(0, 0, 0, 0.75);
+}
+.portal-title-sub {
+  display: block; margin-top: 6px;
+  background: linear-gradient(120deg, #ff4d4d 10%, var(--p-gold) 85%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+.portal-sub {
+  margin-top: 20px; max-width: 780px;
+  font-size: clamp(13.5px, 1.6vw, 16px); color: #cbd5e4;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+}
+
+/* ---------- 倒计时 ---------- */
+.countdown {
+  display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; justify-content: center;
+  margin: 30px 0 8px;
+}
+.cd-item {
+  min-width: 78px; padding: 10px 14px; border-radius: 12px;
+  background: rgba(10, 14, 22, 0.62); border: 1px solid var(--p-line);
+  backdrop-filter: blur(6px);
+}
+.cd-item b { display: block; font-size: clamp(20px, 3vw, 28px); font-weight: 900; color: #fff; line-height: 1.1; }
+.cd-item span { font-size: 11.5px; color: var(--p-muted); }
+.cd-label { font-size: 12.5px; color: var(--p-muted); padding-bottom: 8px; letter-spacing: 1px; }
+
+/* ---------- 两个入口 ---------- */
+.portal-choices {
+  display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 20px; width: 100%; margin-top: 38px;
+}
+
+.choice {
+  position: relative; overflow: hidden; text-decoration: none; color: var(--p-text);
+  display: flex; flex-direction: column; align-items: flex-start; text-align: left;
+  padding: 30px 28px 26px; border-radius: 18px;
+  background: linear-gradient(160deg, rgba(20, 26, 38, 0.92), rgba(11, 15, 22, 0.92));
+  border: 1px solid var(--p-line);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  backdrop-filter: blur(8px);
+}
+.choice::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, var(--p-red), var(--p-gold)); opacity: 0.9;
+}
+.choice-board::after { background: linear-gradient(90deg, #4da3ff, #43d17c); }
+.choice:hover { transform: translateY(-6px); border-color: rgba(226, 54, 54, 0.55); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55); }
+.choice-board:hover { border-color: rgba(77, 163, 255, 0.55); }
+
+.choice-rank {
+  position: absolute; right: 22px; top: 18px;
+  font-family: "Segoe UI", sans-serif; font-size: 40px; font-weight: 900;
+  color: rgba(255, 255, 255, 0.07); line-height: 1;
+}
+.choice-icon { font-size: 30px; margin-bottom: 10px; }
+.choice-title { font-size: clamp(21px, 2.6vw, 27px); font-weight: 900; letter-spacing: 1px; }
+.choice-desc { margin-top: 10px; font-size: 13.5px; color: var(--p-muted); line-height: 1.85; }
+.choice-go {
+  margin-top: 18px; font-size: 14px; font-weight: 800; color: var(--p-gold);
+  border-bottom: 1px solid rgba(247, 201, 72, 0.4); padding-bottom: 3px;
+}
+.choice-board .choice-go { color: #8ec4ff; border-bottom-color: rgba(142, 196, 255, 0.4); }
+
+.portal-foot {
+  margin-top: 46px; font-size: 11.5px; color: #7f8aa0; line-height: 1.9;
+  max-width: 760px;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 780px) {
+  .only-desktop { display: none; }
+  .portal-choices { grid-template-columns: 1fr; gap: 14px; margin-top: 30px; }
+  .choice { padding: 24px 22px 22px; }
+  .portal-main { padding: 34px 16px 40px; }
+  .countdown { gap: 8px; margin: 24px 0 4px; }
+  .cd-item { min-width: 66px; padding: 8px 10px; }
+  .cd-label { width: 100%; text-align: center; padding-bottom: 0; }
+}
+
+</style>
+</head>
+<body class="portal">
+
+  <!-- 封面背景层:优先加载 assets/img/cover.jpg(可自行替换为官方海报),缺失时自动回退到 cover.svg -->
+  <div class="portal-bg" aria-hidden="true">
+    <img id="coverImg" class="portal-cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAwIDkwMCIgd2lkdGg9IjE2MDAiIGhlaWdodD0iOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IuavgeeBreS5i+aXpeWOn+WIm+amguW/teWwgemdoiI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9InNreSIgY3g9IjUwJSIgY3k9IjE4JSIgcj0iODUlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzFiMmM0NCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjQ1JSIgc3RvcC1jb2xvcj0iIzBiMTIyMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNDA2MGIiLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImhhbG8iIGN4PSI1MCUiIGN5PSI1MCUiIHI9IjUwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM0ZmUwYjAiIHN0b3Atb3BhY2l0eT0iMC41NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjU1JSIgc3RvcC1jb2xvcj0iIzFmN2E1YSIgc3RvcC1vcGFjaXR5PSIwLjIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzFmN2E1YSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJjbG9hayIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMWM2YjUxIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iNTUlIiBzdG9wLWNvbG9yPSIjMGY0NjM2Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzA3MWMxNyIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iaG9vZEluIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwZDNhMmQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMDUxMzBmIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJtZXRhbCIgeDE9IjAuMTUiIHkxPSIwIiB4Mj0iMC44NSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZThlZGYyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMjglIiBzdG9wLWNvbG9yPSIjYWFiNGMwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iNTIlIiBzdG9wLWNvbG9yPSIjNzg4MzhmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iNzQlIiBzdG9wLWNvbG9yPSIjYjljM2NlIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzVkNjY3MiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibWV0YWxEYXJrIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM0YTUyNWMiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMjMyODJlIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0ic29mdCIgeD0iLTQwJSIgeT0iLTQwJSIgd2lkdGg9IjE4MCUiIGhlaWdodD0iMTgwJSI+CiAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjI2Ii8+CiAgICA8L2ZpbHRlcj4KICAgIDxmaWx0ZXIgaWQ9InNvZnQyIiB4PSItNDAlIiB5PSItNDAlIiB3aWR0aD0iMTgwJSIgaGVpZ2h0PSIxODAlIj4KICAgICAgPGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iNiIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgoKICA8IS0tIOiDjOaZryAtLT4KICA8cmVjdCB3aWR0aD0iMTYwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjc2t5KSIvPgoKICA8IS0tIOiDjOWQjuW3qOWkp+Wtl+avjSBEIC0tPgogIDx0ZXh0IHg9IjgwMCIgeT0iNzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIgogICAgICAgIGZvbnQtc2l6ZT0iODgwIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjAyOCI+RDwvdGV4dD4KCiAgPCEtLSDlhYnmn7EgLS0+CiAgPGcgb3BhY2l0eT0iMC4zMCIgZmlsdGVyPSJ1cmwoI3NvZnQpIj4KICAgIDxyZWN0IHg9IjcwMCIgeT0iLTEyMCIgd2lkdGg9IjkwIiBoZWlnaHQ9IjkwMCIgZmlsbD0iIzZmZjBjOCIgb3BhY2l0eT0iMC4xMCIvPgogICAgPHJlY3QgeD0iODgwIiB5PSItMTIwIiB3aWR0aD0iNDYiIGhlaWdodD0iOTAwIiBmaWxsPSIjNmZmMGM4IiBvcGFjaXR5PSIwLjE0Ii8+CiAgICA8cmVjdCB4PSIxMDEwIiB5PSItMTIwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjkwMCIgZmlsbD0iIzZmZjBjOCIgb3BhY2l0eT0iMC4wOCIvPgogIDwvZz4KCiAgPCEtLSDpnaLlhbflkI7lhYnmmZUgLS0+CiAgPGVsbGlwc2UgY3g9IjEwMDAiIGN5PSI0NDAiIHJ4PSI0MzAiIHJ5PSIzNjAiIGZpbGw9InVybCgjaGFsbykiLz4KCiAgPCEtLSDmiqvpo44gLyDogqnpg6ggLS0+CiAgPHBhdGggZD0iTTU0MCA5MDAgQzU2MCA2OTAgNzAwIDU5NiAxMDAwIDU5MCBDMTMwMCA1OTYgMTQ0MCA2OTAgMTQ2MCA5MDAgWiIgZmlsbD0idXJsKCNjbG9haykiLz4KICA8cGF0aCBkPSJNNTQwIDkwMCBDNTU2IDcwNiA2OTAgNjE4IDEwMDAgNjEyIEMxMzEwIDYxOCAxNDQ0IDcwNiAxNDYwIDkwMCIKICAgICAgICBmaWxsPSJub25lIiBzdHJva2U9IiMyZmEyN2EiIHN0cm9rZS1vcGFjaXR5PSIwLjM1IiBzdHJva2Utd2lkdGg9IjMiLz4KCiAgPCEtLSDlhZzluL0gLS0+CiAgPGVsbGlwc2UgY3g9IjEwMDAiIGN5PSI0MDAiIHJ4PSIyNTUiIHJ5PSIzMDUiIGZpbGw9InVybCgjaG9vZEluKSIvPgogIDxwYXRoIGQ9Ik03NDUgNDAwIEM3NDUgMjE1IDg2MCAxMTAgMTAwMCAxMTAgQzExNDAgMTEwIDEyNTUgMjE1IDEyNTUgNDAwIEMxMjU1IDU4NSAxMTQwIDcwMCAxMDAwIDcwMCBDODYwIDcwMCA3NDUgNTg1IDc0NSA0MDAgWiIKICAgICAgICBmaWxsPSJub25lIiBzdHJva2U9IiMyYjhmNmMiIHN0cm9rZS1vcGFjaXR5PSIwLjQ1IiBzdHJva2Utd2lkdGg9IjQiLz4KCiAgPCEtLSDpnaLlhbfkuLvkvZMgLS0+CiAgPHBhdGggZD0iTTEwMDAgMjU4IEMxMTI4IDI1OCAxMTgwIDMzNiAxMTc0IDQzNCBDMTE2OCA1NTIgMTEwNCA2NTYgMTAwMCA2ODIgQzg5NiA2NTYgODMyIDU1MiA4MjYgNDM0IEM4MjAgMzM2IDg3MiAyNTggMTAwMCAyNTggWiIKICAgICAgICBmaWxsPSJ1cmwoI21ldGFsKSIgc3Ryb2tlPSIjZWVmM2Y3IiBzdHJva2Utb3BhY2l0eT0iMC4zNSIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHBhdGggZD0iTTEwMDAgMjU4IEMxMTI4IDI1OCAxMTgwIDMzNiAxMTc0IDQzNCBDMTE2OCA1NTIgMTEwNCA2NTYgMTAwMCA2ODIiCiAgICAgICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utb3BhY2l0eT0iMC41NSIgc3Ryb2tlLXdpZHRoPSIzIi8+CgogIDwhLS0g6Z2i5YW35Lit5aSu5qOx57q/IC0tPgogIDxwYXRoIGQ9Ik0xMDAwIDI2MiBMMTAwMCA2NzYiIHN0cm9rZT0iIzVmNmE3NiIgc3Ryb2tlLW9wYWNpdHk9IjAuNTUiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwYXRoIGQ9Ik05NjAgMjY4IEM5NDggNDAwIDk0NiA1NDAgOTY4IDY3MiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utb3BhY2l0eT0iMC4xMCIgc3Ryb2tlLXdpZHRoPSI4IiBmaWx0ZXI9InVybCgjc29mdDIpIi8+CgogIDwhLS0g55y856qdIC0tPgogIDxwYXRoIGQ9Ik04NzIgNDAyIEM5MjIgMzgwIDk2OCAzOTIgOTgyIDQyMCBDOTYyIDQ0MiA5MTIgNDUwIDg3MiA0MzQgWiIgZmlsbD0idXJsKCNtZXRhbERhcmspIi8+CiAgPHBhdGggZD0iTTExMjggNDAyIEMxMDc4IDM4MCAxMDMyIDM5MiAxMDE4IDQyMCBDMTAzOCA0NDIgMTA4OCA0NTAgMTEyOCA0MzQgWiIgZmlsbD0idXJsKCNtZXRhbERhcmspIi8+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnQyKSI+CiAgICA8cGF0aCBkPSJNODg2IDQxMCBDOTE4IDM5OCA5NTAgNDA0IDk2MiA0MjAgQzk0OCA0MzIgOTE0IDQzNiA4ODYgNDI2IFoiIGZpbGw9IiM3ZmYwZmYiIG9wYWNpdHk9IjAuODUiLz4KICAgIDxwYXRoIGQ9Ik0xMTE0IDQxMCBDMTA4MiAzOTggMTA1MCA0MDQgMTAzOCA0MjAgQzEwNTIgNDMyIDEwODYgNDM2IDExMTQgNDI2IFoiIGZpbGw9IiM3ZmYwZmYiIG9wYWNpdHk9IjAuODUiLz4KICA8L2c+CgogIDwhLS0g5ZG85ZC45qC85qCFIC0tPgogIDxnIGZpbGw9IiMzOTQxNGEiIG9wYWNpdHk9IjAuOSI+CiAgICA8cmVjdCB4PSI5NDQiIHk9IjU0NiIgd2lkdGg9IjEyIiBoZWlnaHQ9IjU0IiByeD0iNCIvPgogICAgPHJlY3QgeD0iOTY2IiB5PSI1NDYiIHdpZHRoPSIxMiIgaGVpZ2h0PSI2MCIgcng9IjQiLz4KICAgIDxyZWN0IHg9Ijk4OCIgeT0iNTQ2IiB3aWR0aD0iMTIiIGhlaWdodD0iNjIiIHJ4PSI0Ii8+CiAgICA8cmVjdCB4PSIxMDEwIiB5PSI1NDYiIHdpZHRoPSIxMiIgaGVpZ2h0PSI2MCIgcng9IjQiLz4KICAgIDxyZWN0IHg9IjEwMzIiIHk9IjU0NiIgd2lkdGg9IjEyIiBoZWlnaHQ9IjU0IiByeD0iNCIvPgogIDwvZz4KCiAgPCEtLSDpk4bpkokgLS0+CiAgPGcgZmlsbD0iI2RmZTZlZSIgb3BhY2l0eT0iMC43NSI+CiAgICA8Y2lyY2xlIGN4PSIxMDAwIiBjeT0iMjg2IiByPSI2Ii8+CiAgICA8Y2lyY2xlIGN4PSI5MzYiIGN5PSIzMDAiIHI9IjUiLz48Y2lyY2xlIGN4PSIxMDY0IiBjeT0iMzAwIiByPSI1Ii8+CiAgICA8Y2lyY2xlIGN4PSI4ODAiIGN5PSIzNTIiIHI9IjUiLz48Y2lyY2xlIGN4PSIxMTIwIiBjeT0iMzUyIiByPSI1Ii8+CiAgICA8Y2lyY2xlIGN4PSI4NTIiIGN5PSI0NDAiIHI9IjUiLz48Y2lyY2xlIGN4PSIxMTQ4IiBjeT0iNDQwIiByPSI1Ii8+CiAgICA8Y2lyY2xlIGN4PSI4ODQiIGN5PSI1NDAiIHI9IjUiLz48Y2lyY2xlIGN4PSIxMTE2IiBjeT0iNTQwIiByPSI1Ii8+CiAgICA8Y2lyY2xlIGN4PSI5NDAiIGN5PSI2MjgiIHI9IjUiLz48Y2lyY2xlIGN4PSIxMDYwIiBjeT0iNjI4IiByPSI1Ii8+CiAgPC9nPgoKICA8IS0tIOijgue6ueS4juaNn+S8pCAtLT4KICA8ZyBzdHJva2U9IiMzYTQxNDkiIHN0cm9rZS1vcGFjaXR5PSIwLjU1IiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiPgogICAgPHBhdGggZD0iTTkxNiAzMjAgTDkzOCAzNTYgTDkyNCAzODAiLz4KICAgIDxwYXRoIGQ9Ik0xMDg0IDMxNiBMMTA2MiAzNTAgTDEwNzggMzgyIi8+CiAgICA8cGF0aCBkPSJNMTAwMCA2MDAgTDk4MCA2NDAgTDEwMDAgNjY4Ii8+CiAgPC9nPgoKICA8IS0tIOWGt+iJsui9ruW7k+WFiSAtLT4KICA8cGF0aCBkPSJNMTAwMCAyNTggQzExMjggMjU4IDExODAgMzM2IDExNzQgNDM0IiBmaWxsPSJub25lIiBzdHJva2U9IiM4ZmYyZDAiIHN0cm9rZS1vcGFjaXR5PSIwLjM1IiBzdHJva2Utd2lkdGg9IjUiIGZpbHRlcj0idXJsKCNzb2Z0MikiLz4KICA8cGF0aCBkPSJNODI2IDQzNCBDODIwIDMzNiA4NzIgMjU4IDEwMDAgMjU4IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZjZiNmIiIHN0cm9rZS1vcGFjaXR5PSIwLjI4IiBzdHJva2Utd2lkdGg9IjUiIGZpbHRlcj0idXJsKCNzb2Z0MikiLz4KCiAgPCEtLSDngavmmJ/nspLlrZAgLS0+CiAgPGcgZmlsbD0iI2ZmYjU0NSIgb3BhY2l0eT0iMC43NSI+CiAgICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI3MDAiIHI9IjMiLz48Y2lyY2xlIGN4PSI1MTIiIGN5PSI2MTIiIHI9IjIiLz48Y2lyY2xlIGN4PSIzMzIiIGN5PSI1MjAiIHI9IjIuNSIvPgogICAgPGNpcmNsZSBjeD0iMTE5MCIgY3k9IjY0MCIgcj0iMyIvPjxjaXJjbGUgY3g9IjEyOTAiIGN5PSI1NDAiIHI9IjIiLz48Y2lyY2xlIGN4PSIxMzYwIiBjeT0iNzAwIiByPSIyLjUiLz4KICAgIDxjaXJjbGUgY3g9IjY0MCIgY3k9IjM4MCIgcj0iMiIvPjxjaXJjbGUgY3g9IjE0MjAiIGN5PSIzNjAiIHI9IjIiLz4KICA8L2c+CiAgPGcgZmlsbD0iIzdmZjBmZiIgb3BhY2l0eT0iMC41NSI+CiAgICA8Y2lyY2xlIGN4PSI3MDAiIGN5PSIyNTAiIHI9IjIiLz48Y2lyY2xlIGN4PSIxMjQwIiBjeT0iMjMwIiByPSIyLjUiLz48Y2lyY2xlIGN4PSIxMTUwIiBjeT0iMTYwIiByPSIyIi8+CiAgICA8Y2lyY2xlIGN4PSI4MjAiIGN5PSIxNzAiIHI9IjEuOCIvPgogIDwvZz4KCiAgPCEtLSDlupXpg6jmuJDpmpAgLS0+CiAgPHJlY3QgeD0iMCIgeT0iNjIwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIyODAiIGZpbGw9InVybCgjc2t5KSIgb3BhY2l0eT0iMC40MiIvPgogIDxyZWN0IHg9IjAiIHk9Ijc2MCIgd2lkdGg9IjE2MDAiIGhlaWdodD0iMTQwIiBmaWxsPSIjMDQwNjBiIiBvcGFjaXR5PSIwLjc1Ii8+Cjwvc3ZnPgo=" alt="" />
+    <div class="portal-vignette"></div>
+    <div class="portal-noise"></div>
+  </div>
+
+  <main class="portal-main">
+    <p class="portal-kicker">AVENGERS: DOOMSDAY · 2026.12.18</p>
+
+    <h1 class="portal-title">
+      复仇者联盟5
+      <span class="portal-title-sub">毁灭之日</span>
+    </h1>
+
+    <p class="portal-sub">
+      看之前,你需要了解的一切 —— 全部漫威影视作品的剧情与关联、预告确认与预测登场角色图鉴,<br class="only-desktop" />
+      以及一个属于影迷自己的提问交流区。
+    </p>
+
+    <div class="countdown" id="countdown" aria-live="polite"></div>
+
+    <div class="portal-choices">
+      <a class="choice choice-guide" href="%E5%A4%8D%E4%BB%87%E8%80%85%E8%81%94%E7%9B%9F5%E8%A7%82%E5%BD%B1%E6%8C%87%E5%8D%97-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html">
+        <span class="choice-rank">01</span>
+        <span class="choice-icon" aria-hidden="true">🎬</span>
+        <span class="choice-title">进入前瞻</span>
+        <span class="choice-desc">
+          103 部漫威影视作品逐部解析「讲了什么」与「与复联5的关系」<br />
+          23 位预告确认角色 + 7 位预测角色 · 最新彩蛋速报 · 三条补课路线
+        </span>
+        <span class="choice-go">开始补课 →</span>
+      </a>
+
+      <a class="choice choice-board" href="%E7%95%99%E8%A8%80%E6%8F%90%E9%97%AE%E6%9D%BF-%E5%8D%95%E6%96%87%E4%BB%B6%E7%89%88.html">
+        <span class="choice-rank">02</span>
+        <span class="choice-icon" aria-hidden="true">💬</span>
+        <span class="choice-title">留言提问板</span>
+        <span class="choice-desc">
+          剧情考据 · 观影顺序 · 彩蛋解读 · 观后感<br />
+          站长公告与逐条回复,发言前请先阅读留言须知
+        </span>
+        <span class="choice-go">去发言 →</span>
+      </a>
+    </div>
+
+    <p class="portal-foot">
+      本站为非官方影迷整理内容,与漫威影业 / 迪士尼 / 索尼影业等无隶属关系;影片信息以官方公布与正片为准。<br />
+      Marvel 及相关角色版权归漫威 / 迪士尼所有 · 仅用于学习交流,不作商业用途
+    </p>
+  </main>
+
+  <script>
+    /* 封面图回退:cover.jpg → cover.svg → 纯 CSS 渐变 */
+    (function () {
+      var img = document.getElementById("coverImg");
+      if (!img) return;
+      img.addEventListener("error", function () {
+        if (img.dataset.fallback === "svg") { img.style.display = "none"; return; }
+        img.dataset.fallback = "svg";
+        img.src = "assets/img/cover.svg";
+      });
+    })();
+
+    /* 上映倒计时(北美 2026-12-18;若已过则显示为「已上映」) */
+    (function () {
+      var target = new Date("2026-12-18T00:00:00");
+      var box = document.getElementById("countdown");
+      if (!box) return;
+      function tick() {
+        var diff = target - new Date();
+        if (diff <= 0) {
+          box.innerHTML = '<span class="cd-item"><b>已上映</b><span>去影院看吧</span></span>';
+          return;
+        }
+        var s = Math.floor(diff / 1000);
+        var d = Math.floor(s / 86400);
+        var h = Math.floor((s % 86400) / 3600);
+        var m = Math.floor((s % 3600) / 60);
+        var sec = s % 60;
+        function pad(n) { return n < 10 ? "0" + n : "" + n; }
+        box.innerHTML =
+          '<span class="cd-item"><b>' + d + '</b><span>天</span></span>' +
+          '<span class="cd-item"><b>' + pad(h) + '</b><span>时</span></span>' +
+          '<span class="cd-item"><b>' + pad(m) + '</b><span>分</span></span>' +
+          '<span class="cd-item"><b>' + pad(sec) + '</b><span>秒</span></span>' +
+          '<span class="cd-label">距北美上映</span>';
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+</body>
+</html>

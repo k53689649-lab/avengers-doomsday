@@ -1,8 +1,9 @@
 /* =========================================================
    构建单文件版:把 CSS / JS 全部内联进 HTML
-   产出两个可独立分享的文件:
-     1) 复仇者联盟5观影指南-单文件版.html   (主站)
-     2) 留言提问板-单文件版.html            (留言板)
+   产出可直接分享的单文件:
+     1) 门户页-单文件版.html                 (封面 + 两个入口)
+     2) 复仇者联盟5观影指南-单文件版.html      (前瞻主站)
+     3) 留言提问板-单文件版.html              (留言板)
    用法: node build-single-file.mjs
    ========================================================= */
 import fs from "node:fs";
@@ -10,6 +11,8 @@ import path from "node:path";
 
 const dir = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1"));
 const read = p => fs.readFileSync(path.join(dir, p), "utf8");
+
+const MIME = { ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".gif": "image/gif" };
 
 function inline(pageFile) {
   let html = read(pageFile);
@@ -21,21 +24,45 @@ function inline(pageFile) {
     if (/^https?:/.test(src)) return m;
     return "<script>\n" + read(src) + "\n</script>";
   });
+  // 图片资源内联为 data URI(单文件版才能脱离文件夹独立运行)
+  html = html.replace(/src="(assets\/img\/[^"]+)"/g, (m, src) => {
+    let full = path.join(dir, src);
+    if (!fs.existsSync(full)) {
+      // 可选封面(cover.jpg)缺失时,回退到同名的原创插画 cover.svg
+      const alt = full.replace(/\.[a-z0-9]+$/i, ".svg");
+      if (fs.existsSync(alt)) full = alt; else return m;
+    }
+    const mime = MIME[path.extname(full).toLowerCase()] || "application/octet-stream";
+    return 'src="data:' + mime + ";base64," + fs.readFileSync(full).toString("base64") + '"';
+  });
   return html;
 }
 
+const files = {
+  portal: "门户页-单文件版.html",
+  guide: "复仇者联盟5观影指南-单文件版.html",
+  comments: "留言提问板-单文件版.html",
+};
+
 const jobs = [
-  ["index.html", "复仇者联盟5观影指南-单文件版.html"],
-  ["comments.html", "留言提问板-单文件版.html"],
+  { src: "index.html", out: files.portal, rewrite: true },
+  { src: "guide.html", out: files.guide, rewrite: true },
+  { src: "comments.html", out: files.comments, rewrite: true },
 ];
 
-for (const [src, out] of jobs) {
-  const html = inline(src);
-  fs.writeFileSync(path.join(dir, out), html, "utf8");
+for (const job of jobs) {
+  let html = inline(job.src);
+  if (job.rewrite) {
+    // 把页面间链接改到对应的单文件版,保证单文件之间可以互相跳转
+    html = html.replace(/href="index\.html(#[^"]*)?"/g, 'href="' + encodeURI(files.portal) + '"');
+    html = html.replace(/href="guide\.html(#[^"]*)?"/g, 'href="' + encodeURI(files.guide) + '"');
+    html = html.replace(/href="comments\.html"/g, 'href="' + encodeURI(files.comments) + '"');
+  }
+  fs.writeFileSync(path.join(dir, job.out), html, "utf8");
   const leftOver = (html.match(/(src|href)="assets\//g) || []).length;
   console.log(
-    "written: " + out + "  " + (html.length / 1024).toFixed(1) + "KB" +
-    " | 残留外部引用: " + leftOver +
+    "written: " + job.out + "  " + (html.length / 1024).toFixed(1) + "KB" +
+    " | 残留内部资源引用: " + leftOver +
     " | 内联检查: " + (html.includes("<style>") && html.includes("<script>"))
   );
 }
