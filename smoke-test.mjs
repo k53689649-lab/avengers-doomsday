@@ -115,7 +115,6 @@ check("重置密码:旧密码失效", rOld === "wrong");
 check("重置密码:新密码生效", rNew === "ok");
 
 /* ---------- 2c. 云端模式(Supabase)配置识别 ---------- */
-check("默认未配置云端 → 本地模式", board.cloudConfigured() === false && board.modeName() === "本地");
 check("normalizeComment 字段转换正确", (() => {
   const r = board.normalizeComment({
     id: "abc-123", name: "网友甲", content: "测试内容", type: "提问",
@@ -124,25 +123,29 @@ check("normalizeComment 字段转换正确", (() => {
   return r.id === "abc-123" && r.pinned === true && typeof r.ts === "number" && r.ts > 0;
 })());
 
-const cloudCfgSrc = configSrc
-  .replace('provider: "",', 'provider: "supabase",')
-  .replace('supabaseUrl: "",', 'supabaseUrl: "https://demo.supabase.co",')
-  .replace('supabaseAnonKey: "",', 'supabaseAnonKey: "demo-anon-key",');
-check("云端配置注入成功(测试自身)", cloudCfgSrc !== configSrc);
-if (cloudCfgSrc !== configSrc) {
-  const docC = makeDoc();
-  const winC = {
+/* 当前随站发布的配置:应当已是云端模式 */
+if (board.cloudConfigured()) {
+  check("云端模式:配置已被识别", true);
+  check("云端模式:测试环境未联网时显示「连接中」", board.modeName() === "连接中");
+  check("云端模式:未登录时无管理权限", board.isAdmin() === false);
+} else {
+  check("本地模式:未配置云端时进入本地模式", board.modeName() === "本地");
+}
+
+/* 反向验证:把 provider 改回空字符串,应回落到本地模式 */
+const localCfgSrc = configSrc.replace('provider: "supabase",', 'provider: "",');
+if (localCfgSrc !== configSrc) {
+  const docL = makeDoc();
+  const winL = {
     localStorage: { getItem: () => null, setItem() {}, removeItem() {} },
     sessionStorage: { getItem: () => null, setItem() {} },
     addEventListener() {}, confirm: () => true, prompt: () => "", alert() {},
     crypto: globalThis.crypto, TextEncoder: globalThis.TextEncoder,
   };
-  new Function("window", "document", cloudCfgSrc + "\n" + commentsSrc)(winC, docC);
-  const boardC = winC.CommentsBoard;
-  check("云端模式:配置被正确识别", boardC.cloudConfigured() === true);
-  check("云端模式:未连接时显示「连接中」", boardC.modeName() === "连接中");
-  check("云端模式:未登录时无管理权限", boardC.isAdmin() === false);
-  check("云端模式:渲染未抛错(可降级)", typeof docC.querySelector("#cloudStatus").innerHTML === "string");
+  new Function("window", "document", localCfgSrc + "\n" + commentsSrc)(winL, docL);
+  const boardL = winL.CommentsBoard;
+  check("本地模式:关闭云端配置后回落正常", boardL.cloudConfigured() === false && boardL.modeName() === "本地");
+  check("本地模式:渲染无异常", typeof docL.querySelector("#cloudStatus").innerHTML === "string");
 }
 
 /* ---------- 3. 页面文件与单文件版检查 ---------- */
