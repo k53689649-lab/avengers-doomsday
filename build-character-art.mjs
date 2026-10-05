@@ -183,4 +183,33 @@ for (const c of CHARS) {
   count++;
 }
 console.log("OK - 生成 " + count + " 张透明底人物立绘 → assets/img/chars/");
+
+/* ------------------ 同时生成「图片替换清单」 ------------------ */
+const rows = [];
+const push = (list, group) => list.forEach((c, i) => {
+  const cfg = ctx.CHAR_ART[c.name];
+  if (!cfg || !cfg.id) return;
+  rows.push("| " + (i + 1) + " | " + group + " | " + c.name + " | `" + cfg.id + ".png` |");
+});
+push(ctx.TRAILER_CHARS, "预告确认");
+push(ctx.PREDICTED_CHARS, "预测登场");
+
+const md = `# 角色立绘替换清单
+
+想用**官方设定图 / 人物图**替换现在自动生成的立绘:把图片存进本目录,文件名照下表即可 —— 前端会自动优先使用你的图,**不用改任何代码**。
+
+- 推荐格式:透明底 **PNG**(抠好的半身像最合适),也支持 \`.webp\` 和 \`.jpg\`
+- 优先级:\`<id>.png\` → \`<id>.webp\` → \`<id>.jpg\` → 自动生成的 \`<id>.svg\`
+- 建议尺寸:竖版,宽 800–1200px 即可(文件尽量 < 300KB,手机加载更快)
+- 没有对应图片时,会自动回退到本目录里同名的 SVG 立绘
+
+> ⚠️ 版权提醒:漫威/迪士尼的官方人物素材受版权保护,本站是非官方影迷站;
+> 是否放入官方图由站主自行决定并承担相应风险(公开仓库可能收到版权方通知)。
+
+| # | 分组 | 角色 | 放入本目录的文件名 |
+|---|---|---|---|
+${rows.join("\n")}
+`;
+fs.writeFileSync(path.join(OUT_DIR, "图片清单.md"), md, "utf8");
+console.log("OK - 已更新 assets/img/chars/图片清单.md(" + rows.length + " 位角色)");
 console.log("   角色:" + CHARS.map(c => ctx.CHAR_ART[c.name].id).join(", "));

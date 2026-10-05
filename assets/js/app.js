@@ -365,19 +365,17 @@
       (c.evidence ? '<p class="cast-evidence">' + c.evidence + "</p>" : "") +
       "</article>";
 
-    /* 想换成自己的透明底抠图:把 <id>.png(或 .jpg)放进 assets/img/chars/ 即可自动优先使用 */
+    /* 换成自己的图:把透明底抠图存成 assets/img/chars/<id>.png(或 .webp / .jpg)即可自动优先使用 */
     var img = $("#castStage .cast-img");
     if (img && id && typeof window.Image === "function") {
-      var png = "assets/img/chars/" + id + ".png";
-      var jpg = "assets/img/chars/" + id + ".jpg";
-      var t1 = new window.Image();
-      t1.onload = function () { img.src = png; };
-      t1.onerror = function () {
-        var t2 = new window.Image();
-        t2.onload = function () { img.src = jpg; };
-        t2.src = jpg;
-      };
-      t1.src = png;
+      var cands = [".png", ".webp", ".jpg"].map(function (ext) { return "assets/img/chars/" + id + ext; });
+      (function tryNext(k) {
+        if (k >= cands.length) return;
+        var probe = new window.Image();
+        probe.onload = function () { img.src = cands[k]; };
+        probe.onerror = function () { tryNext(k + 1); };
+        probe.src = cands[k];
+      })(0);
     }
 
     $("#castPos").textContent = (state.castIndex + 1) + " / " + list.length;

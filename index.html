@@ -51,16 +51,17 @@
         </a>
       </div>
 
-      <!-- 官方预告:点击后在原地播放 -->
+      <!-- 预告片:点击后在原地播放(支持多支切换) -->
       <section class="trailer-box" id="trailerBox">
         <div class="trailer-head">
           <h2 class="trailer-title" id="trailerTitle">预告片</h2>
           <span class="trailer-tag" id="trailerTag"></span>
         </div>
+        <div class="trailer-picker" id="trailerPicker"></div>
         <div class="trailer-frame" id="trailerFrame">
           <button class="trailer-poster" id="trailerPlay" type="button">
             <span class="trailer-icon">▶</span>
-            <span class="trailer-label">点击播放《复仇者联盟5:毁灭之日》预告</span>
+            <span class="trailer-label" id="trailerLabel">点击播放预告</span>
             <span class="trailer-src" id="trailerSrc"></span>
           </button>
         </div>
@@ -87,7 +88,8 @@
       });
     })();
 
-    /* 预告片:点击后在原地加载播放器(默认不加载第三方 iframe,打开更快) */
+    /* 预告片:支持多支切换,点击后在原地加载 B 站播放器
+       说明:本站只做搬运(嵌入官方播放器),不做翻译、字幕或压制 */
     (function () {
       var cfg = (window.SITE_CONFIG && window.SITE_CONFIG.trailer) || {};
       var box = document.getElementById("trailerBox");
@@ -96,30 +98,67 @@
       var note = document.getElementById("trailerNote");
       var srcEl = document.getElementById("trailerSrc");
       var tagEl = document.getElementById("trailerTag");
+      var picker = document.getElementById("trailerPicker");
+      var label = document.getElementById("trailerLabel");
       if (!box || !btn) return;
-      if (!cfg.bilibiliBvid && !cfg.youtubeId) { box.style.display = "none"; return; }
 
-      var title = cfg.title || "《复仇者联盟5:毁灭之日》预告";
+      var videos = (cfg.videos && cfg.videos.length) ? cfg.videos
+        : (cfg.bilibiliBvid ? [{ bvid: cfg.bilibiliBvid, title: cfg.title || "预告" }] : []);
+      if (!videos.length && !cfg.youtubeId) { box.style.display = "none"; return; }
+
+      var current = 0;
+      var title = cfg.title || "《复仇者联盟5:毁灭之日》预告片";
       document.getElementById("trailerTitle").textContent = title;
-      if (tagEl) tagEl.textContent = cfg.bilibiliBvid ? "B 站" : "YouTube";
+      if (tagEl) tagEl.textContent = videos.length ? "B 站" : "YouTube";
       if (note) note.textContent = cfg.note || "";
-      if (srcEl) {
-        srcEl.textContent = cfg.bilibiliBvid
-          ? "www.bilibili.com/video/" + cfg.bilibiliBvid
-          : "youtube.com/watch?v=" + cfg.youtubeId;
-      }
 
-      btn.addEventListener("click", function () {
+      function esc(s) {
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+      }
+      function poster() {
+        btn.querySelector(".trailer-label").textContent = "点击播放:" + (videos[current] ? videos[current].title : title);
+        if (srcEl) {
+          srcEl.textContent = videos.length
+            ? "www.bilibili.com/video/" + videos[current].bvid + " · 搬运(非本站汉化)"
+            : "youtube.com/watch?v=" + cfg.youtubeId;
+        }
+      }
+      function renderPicker() {
+        if (!picker) return;
+        if (videos.length < 2) { picker.innerHTML = ""; return; }
+        picker.innerHTML = videos.map(function (v, i) {
+          return '<button class="trailer-pick' + (i === current ? " active" : "") + '" type="button" data-i="' + i + '">' +
+            '<span class="tp-num">第 ' + (i + 1) + ' 支</span>' +
+            '<span class="tp-title">' + esc(v.title || "预告") + "</span>" +
+            (v.from ? '<span class="tp-from">' + esc(v.from) + "</span>" : "") +
+            "</button>";
+        }).join("");
+      }
+      function load(i) {
+        current = i;
+        renderPicker();
         var url;
-        if (cfg.bilibiliBvid) {
-          url = "https://player.bilibili.com/player.html?bvid=" + encodeURIComponent(cfg.bilibiliBvid) +
+        if (videos.length) {
+          url = "https://player.bilibili.com/player.html?bvid=" + encodeURIComponent(videos[i].bvid) +
             "&page=1&high_quality=1&danmaku=0&autoplay=1";
         } else {
           url = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(cfg.youtubeId) + "?autoplay=1&rel=0";
         }
         frame.innerHTML = '<iframe class="trailer-iframe" src="' + url + '" scrolling="no" frameborder="0" ' +
           'framespacing="0" allowfullscreen="true" allow="autoplay; fullscreen; encrypted-media"></iframe>';
-      });
+      }
+
+      renderPicker();
+      poster();
+      btn.addEventListener("click", function () { load(current); });
+      if (picker) {
+        picker.addEventListener("click", function (e) {
+          var b = e.target.closest ? e.target.closest("[data-i]") : null;
+          if (b) load(Number(b.dataset.i));
+        });
+      }
     })();
 
     /* 上映倒计时(北美 2026-12-18) */

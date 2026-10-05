@@ -571,14 +571,20 @@ window.SITE_CONFIG = {
   },
 
   /* ============ 预告片(首页嵌入) ============
-     bilibiliBvid: B 站视频号(BV 开头),填了就会在首页出现「点击播放」的预告片
-     youtubeId:    油管视频 ID(可选,国内一般打不开,作为备用)
-     想换成官方频道的预告:把对应视频的 BV 号填进来即可 */
+     videos:      可放多支预告,首页会显示成「第 1 支 / 第 2 支…」的切换按钮
+                  bvid = B 站视频号(BV 开头);title = 按钮上显示的名字
+                  from = 来源说明(可选,会显示在按钮上)
+     youtubeId:   油管视频 ID(可选,国内一般打不开,作为备用)
+     换预告:把对应视频的 BV 号填进来即可 */
   trailer: {
-    bilibiliBvid: "BV1i6qPBwEFV",     // IGN 上传的《复联5》全新预告
+    title: "《复仇者联盟5:毁灭之日》预告片",
+    videos: [
+      { bvid: "BV1gRgg6kE2R", title: "全新预告:毁灭博士秒雷神,哨兵机器人亮相", from: "搬运 · UP 汉化" },
+      { bvid: "BV1Z8Kp6kEEn", title: "正式预告:美队雷神合体,洛基归来,牌皇 VS 尚气", from: "搬运 · UP 汉化" }
+    ],
     youtubeId: "",
-    title: "《复仇者联盟5:毁灭之日》官方预告",
-    note: "视频来自 B 站(IGN 上传的官方预告),版权归漫威/迪士尼所有"
+    /* ⚠️ 声明:本站只做搬运(直接嵌入 B 站播放器),不做任何翻译、字幕或压制 */
+    note: "声明:本站不制作、不翻译、不压制任何字幕 —— 以上预告均为搬运自哔哩哔哩(汉化与字幕由原 UP 主制作),视频与字幕版权归原作者、漫威及迪士尼所有;若权利人提出要求,本站会立即移除。点击播放后会直接调用 B 站官方播放器。"
   },
 
   /* ============ 哪里能看(作品库播放按钮) ============
@@ -1859,19 +1865,17 @@ var CHAR_ART = {
       (c.evidence ? '<p class="cast-evidence">' + c.evidence + "</p>" : "") +
       "</article>";
 
-    /* 想换成自己的透明底抠图:把 <id>.png(或 .jpg)放进 assets/img/chars/ 即可自动优先使用 */
+    /* 换成自己的图:把透明底抠图存成 assets/img/chars/<id>.png(或 .webp / .jpg)即可自动优先使用 */
     var img = $("#castStage .cast-img");
     if (img && id && typeof window.Image === "function") {
-      var png = "assets/img/chars/" + id + ".png";
-      var jpg = "assets/img/chars/" + id + ".jpg";
-      var t1 = new window.Image();
-      t1.onload = function () { img.src = png; };
-      t1.onerror = function () {
-        var t2 = new window.Image();
-        t2.onload = function () { img.src = jpg; };
-        t2.src = jpg;
-      };
-      t1.src = png;
+      var cands = [".png", ".webp", ".jpg"].map(function (ext) { return "assets/img/chars/" + id + ext; });
+      (function tryNext(k) {
+        if (k >= cands.length) return;
+        var probe = new window.Image();
+        probe.onload = function () { img.src = cands[k]; };
+        probe.onerror = function () { tryNext(k + 1); };
+        probe.src = cands[k];
+      })(0);
     }
 
     $("#castPos").textContent = (state.castIndex + 1) + " / " + list.length;
