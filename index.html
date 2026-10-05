@@ -13,67 +13,61 @@
 </head>
 <body class="portal">
 
-  <!-- 环境光层:封面模糊放大的同款背景,营造氛围 -->
+  <!-- 嵌入背景:封面图铺满整个页面,底部渐隐让文字压在图上 -->
   <div class="portal-bg" aria-hidden="true">
-    <img id="ambientImg" class="portal-ambient" src="assets/img/cover.jpg" alt="" />
-    <div class="portal-vignette"></div>
+    <img id="coverImg" class="portal-cover" src="assets/img/cover.jpg" alt="" />
+    <div class="portal-shade"></div>
   </div>
 
   <main class="portal-main">
-
-    <!-- 海报主体(图片自带标题,因此 HTML 标题仅保留给屏幕阅读器与搜索引擎) -->
+    <!-- 图片自带标题,这里保留一份给屏幕阅读器与搜索引擎 -->
     <h1 class="sr-only">复仇者联盟5:毁灭之日 —— 观影指南与影迷留言板</h1>
 
-    <figure class="portal-hero">
-      <img id="coverImg" class="hero-art" src="assets/img/cover.jpg"
-           alt="《复仇者联盟5:毁灭之日》——看复联五之前,你要了解什么" />
-    </figure>
+    <div class="portal-content">
+      <p class="portal-sub">看之前,你需要了解的一切 —— 全部漫威影视作品的剧情与关联、角色图鉴,以及影迷交流区。</p>
 
-    <p class="portal-sub">看之前,你需要了解的一切 —— 全部漫威影视作品的剧情与关联、角色图鉴,以及影迷交流区。</p>
+      <div class="countdown" id="countdown" aria-live="polite"></div>
 
-    <div class="countdown" id="countdown" aria-live="polite"></div>
+      <div class="portal-choices">
+        <a class="choice choice-guide" href="guide.html">
+          <span class="choice-rank">01</span>
+          <span class="choice-icon" aria-hidden="true">🎬</span>
+          <span class="choice-title">进入前瞻</span>
+          <span class="choice-desc">
+            103 部漫威影视作品逐部解析「讲了什么」与「与复联5的关系」<br />
+            23 位预告确认角色 + 7 位预测角色 · 最新彩蛋速报 · 三条补课路线
+          </span>
+          <span class="choice-go">开始补课 →</span>
+        </a>
 
-    <div class="portal-choices">
-      <a class="choice choice-guide" href="guide.html">
-        <span class="choice-rank">01</span>
-        <span class="choice-icon" aria-hidden="true">🎬</span>
-        <span class="choice-title">进入前瞻</span>
-        <span class="choice-desc">
-          103 部漫威影视作品逐部解析「讲了什么」与「与复联5的关系」<br />
-          23 位预告确认角色 + 7 位预测角色 · 最新彩蛋速报 · 三条补课路线
-        </span>
-        <span class="choice-go">开始补课 →</span>
-      </a>
+        <a class="choice choice-board" href="comments.html">
+          <span class="choice-rank">02</span>
+          <span class="choice-icon" aria-hidden="true">💬</span>
+          <span class="choice-title">留言提问板</span>
+          <span class="choice-desc">
+            剧情考据 · 观影顺序 · 彩蛋解读 · 观后感<br />
+            站长公告与逐条回复,发言前请先阅读留言须知
+          </span>
+          <span class="choice-go">去发言 →</span>
+        </a>
+      </div>
 
-      <a class="choice choice-board" href="comments.html">
-        <span class="choice-rank">02</span>
-        <span class="choice-icon" aria-hidden="true">💬</span>
-        <span class="choice-title">留言提问板</span>
-        <span class="choice-desc">
-          剧情考据 · 观影顺序 · 彩蛋解读 · 观后感<br />
-          站长公告与逐条回复,发言前请先阅读留言须知
-        </span>
-        <span class="choice-go">去发言 →</span>
-      </a>
+      <p class="portal-foot">
+        本站为非官方影迷整理内容,与漫威影业 / 迪士尼 / 索尼影业等无隶属关系;影片信息以官方公布与正片为准。<br />
+        Marvel 及相关角色版权归漫威 / 迪士尼所有 · 仅用于学习交流,不作商业用途
+      </p>
     </div>
-
-    <p class="portal-foot">
-      本站为非官方影迷整理内容,与漫威影业 / 迪士尼 / 索尼影业等无隶属关系;影片信息以官方公布与正片为准。<br />
-      Marvel 及相关角色版权归漫威 / 迪士尼所有 · 仅用于学习交流,不作商业用途
-    </p>
   </main>
 
   <script>
     /* 封面回退:cover.jpg → cover.svg */
     (function () {
       var img = document.getElementById("coverImg");
-      var amb = document.getElementById("ambientImg");
       if (!img) return;
       img.addEventListener("error", function () {
         if (img.dataset.fallback === "svg") { img.style.display = "none"; return; }
         img.dataset.fallback = "svg";
         img.src = "assets/img/cover.svg";
-        if (amb) amb.src = "assets/img/cover.svg";
       });
     })();
 
