@@ -104,6 +104,16 @@ check("密码:已写入本浏览器摘要且非明文", (() => {
   return raw.length === 64 && raw !== "mypass123";
 })());
 
+/* 重置密码流程(用户在面板点「修改管理密码」) */
+winB.prompt = () => "reset-pass-2026";
+winB.alert = () => {};
+board.changeAdminPwd();
+await new Promise(r => setTimeout(r, 120));   // 哈希写入是异步的
+const rOld = await login("mypass123");
+const rNew = await login("reset-pass-2026");
+check("重置密码:旧密码失效", rOld === "wrong");
+check("重置密码:新密码生效", rNew === "ok");
+
 /* ---------- 3. 页面文件与单文件版检查 ---------- */
 const pages = ["index.html", "guide.html", "comments.html"];
 for (const p of pages) {
