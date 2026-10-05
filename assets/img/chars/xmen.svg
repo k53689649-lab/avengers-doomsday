@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="X战警阵营(野兽/夜行者等) 立绘背景">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#3f3006"/><stop offset="55%" stop-color="#050d0a"/><stop offset="100%" stop-color="#020706"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#e0b341" stop-opacity=".30"/><stop offset="60%" stop-color="#e0b341" stop-opacity=".08"/>
+      <stop offset="100%" stop-color="#e0b341" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fig" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#e0b341" stop-opacity=".95"/>
+      <stop offset="45%" stop-color="#e0b341" stop-opacity=".62"/>
+      <stop offset="100%" stop-color="#3f3006" stop-opacity=".95"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#020706" stop-opacity="0"/><stop offset="70%" stop-color="#020706" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="#020706" stop-opacity=".92"/>
+    </linearGradient>
+    <filter id="soft2" x="-45%" y="-45%" width="190%" height="190%"><feGaussianBlur stdDeviation="12"/></filter>
+    <pattern id="hex" width="52" height="45" patternUnits="userSpaceOnUse">
+      <path d="M26 0 L52 13 L52 32 L26 45 L0 32 L0 13 Z" fill="none" stroke="#e0b341" stroke-opacity=".085" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="1200" fill="url(#g1)"/>
+  <rect width="900" height="1200" fill="url(#hex)"/>
+  <rect width="900" height="1200" fill="url(#glow)"/>
+  <text x="450" y="880" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="700"
+        font-weight="700" fill="#ffffff" opacity="0.045">XM</text>
+  
+  <g><ellipse cx="450" cy="500" rx="134" ry="160" fill="url(#fig)"/>
+  <rect x="396" y="640" width="108" height="90" fill="url(#fig)"/>
+  <path d="M130 1200 C158 900 300 828 450 828 C600 828 742 900 770 1200 Z" fill="url(#fig)"/></g>
+  <path d="M316 500 C316 412 374 340 450 340" fill="none" stroke="#ffffff" stroke-opacity=".38" stroke-width="8" filter="url(#soft2)"/>
+  <path d="M584 500 C584 412 526 340 450 340" fill="none" stroke="#e0b341" stroke-opacity=".85" stroke-width="9" filter="url(#soft2)"/>
+  <path d="M130 1200 C158 900 300 828 450 828" fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width="9" filter="url(#soft2)"/>
+  <g stroke="#e0b341" stroke-width="18" fill="none" stroke-linecap="round" opacity=".7">
+      <path d="M180 700 C280 760 300 880 250 1000"/><path d="M240 700 C340 770 360 890 310 1010"/>
+      <path d="M300 700 C400 780 420 900 370 1020"/></g>
+  <rect width="900" height="1200" fill="url(#fade)"/>
+</svg>

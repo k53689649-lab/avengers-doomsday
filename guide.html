@@ -22,8 +22,7 @@
         <a href="#eggs">彩蛋速报</a>
         <a href="#timeline">观影顺序</a>
         <a href="#films">全作品库</a>
-        <a href="#trailer-cast">预告角色</a>
-        <a href="#predicted">预测角色</a>
+        <a href="#trailer-cast">角色图鉴</a>
         <a href="#faq">Q&amp;A</a>
         <a href="comments.html">留言提问</a>
       </nav>
@@ -78,37 +77,40 @@
     <div class="route-list" id="routeList"></div>
   </section>
 
+  <!-- ======= 角色图鉴(PPT 式:一次介绍一位) ======= -->
+  <section class="section alt" id="trailer-cast">
+    <div class="section-head">
+      <p class="eyebrow">CHARACTERS</p>
+      <h2>角色图鉴</h2>
+      <p class="section-desc" id="castDesc"></p>
+    </div>
+
+    <div class="cast-tabs" id="castTabs"></div>
+
+    <div class="cast-stage" id="castStage"></div>
+
+    <div class="cast-nav">
+      <button class="cast-btn" id="castPrev" type="button">◀ 上一位</button>
+      <span class="cast-pos" id="castPos"></span>
+      <button class="cast-btn" id="castNext" type="button">下一位 ▶</button>
+    </div>
+
+    <div class="cast-strip" id="castStrip"></div>
+    <p class="cast-tip">💡 也可以用键盘 ← → 切换,或点下面的头像直接跳转</p>
+    <span id="predicted"></span>
+  </section>
+
   <!-- ======= 全部作品库 ======= -->
   <section class="section" id="films">
     <div class="section-head">
       <p class="eyebrow">THE WHOLE SAGA</p>
       <h2>全部漫威影视作品</h2>
-      <p class="section-desc">覆盖 漫威影业 / 20世纪福克斯 / 索尼影业 / 环球 / 新线 / 狮门 等所有出品过漫威改编作品的片方。支持搜索与筛选。</p>
+      <p class="section-desc">覆盖 漫威影业 / 20世纪福克斯 / 索尼影业 / 环球 / 新线 / 狮门 等所有出品过漫威改编作品的片方。点封面上的 ▶ 可去正版平台查这部剧能不能看(本站不提供任何盗版资源)。</p>
     </div>
     <div class="controls" id="controls"></div>
     <div class="films-list" id="filmsList"></div>
     <p class="empty-tip hidden" id="emptyTip">没有匹配的作品,换个关键词试试?</p>
     <div class="films-more" id="filmsMore"></div>
-  </section>
-
-  <!-- ======= 预告角色 ======= -->
-  <section class="section alt" id="trailer-cast">
-    <div class="section-head">
-      <p class="eyebrow">THE TRAILER</p>
-      <h2>预告中确认登场的角色</h2>
-      <p class="section-desc" id="trailerCastDesc"></p>
-    </div>
-    <div class="char-grid" id="trailerCharGrid"></div>
-  </section>
-
-  <!-- ======= 预测角色 ======= -->
-  <section class="section" id="predicted">
-    <div class="section-head">
-      <p class="eyebrow">PREDICTED</p>
-      <h2>预告未公布,但大概率出现的角色</h2>
-      <p class="section-desc">基于官方卡司、泄露设定、片场照与媒体报道的预测 —— 标注了每条推断的依据与可信度。传闻仅供参考,以正片为准。</p>
-    </div>
-    <div class="char-grid" id="predictedCharGrid"></div>
   </section>
 
   <!-- ======= Q&A ======= -->
@@ -129,8 +131,10 @@
     </div>
   </footer>
 
+  <script src="assets/js/site-config.js"></script>
   <script src="assets/js/data-films.js"></script>
   <script src="assets/js/data-characters.js"></script>
+  <script src="assets/js/data-char-art.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
 </html>

@@ -31,6 +31,35 @@ window.SITE_CONFIG = {
     announceTable: "announcements"
   },
 
+  /* ============ 预告片(首页嵌入) ============
+     bilibiliBvid: B 站视频号(BV 开头),填了就会在首页出现「点击播放」的预告片
+     youtubeId:    油管视频 ID(可选,国内一般打不开,作为备用)
+     想换成官方频道的预告:把对应视频的 BV 号填进来即可 */
+  trailer: {
+    bilibiliBvid: "BV1i6qPBwEFV",     // IGN 上传的《复联5》全新预告
+    youtubeId: "",
+    title: "《复仇者联盟5:毁灭之日》官方预告",
+    note: "视频来自 B 站(IGN 上传的官方预告),版权归漫威/迪士尼所有"
+  },
+
+  /* ============ 哪里能看(作品库播放按钮) ============
+     说明:本站不提供也不链接任何盗版资源。播放按钮会带着片名去「正版平台」搜索,
+           由平台告诉你这部片子有没有上架、是否需要会员。
+     想增删平台,直接改这个数组即可;
+     url 里的 {q} 会替换成片名(中文名),{qen} 替换成英文名 */
+  watchPlatforms: [
+    { id: "qq",     name: "腾讯视频", url: "https://v.qq.com/x/search/?q={q}" },
+    { id: "iqiyi",  name: "爱奇艺",   url: "https://so.iqiyi.com/so/q_{q}" },
+    { id: "youku",  name: "优酷",     url: "https://so.youku.com/search_video/q_{q}" },
+    { id: "bili",   name: "哔哩哔哩", url: "https://search.bilibili.com/all?keyword={q}" },
+    { id: "disney", name: "Disney+",  url: "https://www.disneyplus.com/search?q={qen}" },
+    { id: "jw",     name: "JustWatch", url: "https://www.justwatch.com/us/search?q={qen}" },
+    { id: "douban", name: "豆瓣(看评分)", url: "https://search.douban.com/movie/subject_search?search_text={q}" }
+  ],
+
+  /* 默认打开哪个平台(对应上面 id;用户切换后会记住选择) */
+  defaultWatchPlatform: "qq",
+
   /* Waline 云留言板地址(另一种云端方案,二选一即可;与上面的 cloud 不冲突) */
   walineServerURL: "",
 

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="叶莲娜·贝洛娃(黑寡妇) 立绘背景">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#420a12"/><stop offset="55%" stop-color="#050d0a"/><stop offset="100%" stop-color="#020706"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#e0475a" stop-opacity=".30"/><stop offset="60%" stop-color="#e0475a" stop-opacity=".08"/>
+      <stop offset="100%" stop-color="#e0475a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fig" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#e0475a" stop-opacity=".95"/>
+      <stop offset="45%" stop-color="#e0475a" stop-opacity=".62"/>
+      <stop offset="100%" stop-color="#420a12" stop-opacity=".95"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#020706" stop-opacity="0"/><stop offset="70%" stop-color="#020706" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="#020706" stop-opacity=".92"/>
+    </linearGradient>
+    <filter id="soft2" x="-45%" y="-45%" width="190%" height="190%"><feGaussianBlur stdDeviation="12"/></filter>
+    <pattern id="hex" width="52" height="45" patternUnits="userSpaceOnUse">
+      <path d="M26 0 L52 13 L52 32 L26 45 L0 32 L0 13 Z" fill="none" stroke="#e0475a" stroke-opacity=".085" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="1200" fill="url(#g1)"/>
+  <rect width="900" height="1200" fill="url(#hex)"/>
+  <rect width="900" height="1200" fill="url(#glow)"/>
+  <text x="450" y="880" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="700"
+        font-weight="700" fill="#ffffff" opacity="0.045">YE</text>
+  
+  <g><ellipse cx="450" cy="500" rx="134" ry="160" fill="url(#fig)"/>
+  <rect x="396" y="640" width="108" height="90" fill="url(#fig)"/>
+  <path d="M130 1200 C158 900 300 828 450 828 C600 828 742 900 770 1200 Z" fill="url(#fig)"/></g>
+  <path d="M316 500 C316 412 374 340 450 340" fill="none" stroke="#ffffff" stroke-opacity=".38" stroke-width="8" filter="url(#soft2)"/>
+  <path d="M584 500 C584 412 526 340 450 340" fill="none" stroke="#e0475a" stroke-opacity=".85" stroke-width="9" filter="url(#soft2)"/>
+  <path d="M130 1200 C158 900 300 828 450 828" fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width="9" filter="url(#soft2)"/>
+  <g><path d="M414 900 L486 900 L450 1012 Z" fill="#e0475a" fill-opacity=".85"/>
+      <path d="M414 1124 L486 1124 L450 1012 Z" fill="#e0475a" fill-opacity=".5"/>
+      <path d="M400 880 h100 M400 1144 h100" stroke="#e8eef5" stroke-width="7"/></g>
+    <g stroke="#e0475a" stroke-opacity=".4" stroke-width="4" fill="none"><circle cx="450" cy="700" r="180" stroke-dasharray="8 16"/></g>
+  <rect width="900" height="1200" fill="url(#fade)"/>
+</svg>

@@ -41,24 +41,67 @@ function check(name, cond, extra = "") {
 const filmsSrc = read("assets/js/data-films.js");
 const charsSrc = read("assets/js/data-characters.js");
 const appSrc = read("assets/js/app.js");
+const configSrcTop = read("assets/js/site-config.js");
+const charArtSrc = read("assets/js/data-char-art.js");
 const data = new Function(filmsSrc + "\n" + charsSrc + "\nreturn {FILMS, TV_SHOWS, TRAILER_CHARS, PREDICTED_CHARS, EASTER_EGGS};")();
+const extra = new Function("window", "document", configSrcTop + "\n" + charArtSrc + "\nreturn {SITE_CONFIG: window.SITE_CONFIG, CHAR_ART: CHAR_ART};")(
+  { localStorage: { getItem: () => null, setItem() {} } }, {});
 const docA = makeDoc();
-new Function("window", "document", filmsSrc + "\n" + charsSrc + "\n" + appSrc)(
-  { scrollTo() {}, scrollY: 0, addEventListener() {}, ...data }, docA);
+const winA = {
+  scrollTo() {}, scrollY: 0, pageYOffset: 0, addEventListener() {}, ...data,
+  SITE_CONFIG: extra.SITE_CONFIG, CHAR_ART: extra.CHAR_ART,
+  localStorage: { getItem: () => null, setItem() {} },
+};
+new Function("window", "document", filmsSrc + "\n" + charsSrc + "\n" + configSrcTop + "\n" + charArtSrc + "\n" + appSrc)(winA, docA);
 docA._fire("DOMContentLoaded");
 
 const q = sel => docA.querySelector(sel).innerHTML;
 const countCards = (html, cls) => (html.match(new RegExp('class="' + cls + '"', "g")) || []).length;
+const countBy = (html, token) => (html.match(new RegExp(token, "g")) || []).length;
 
 const total = data.FILMS.length + data.TV_SHOWS.length;
 check("作品卡片渲染 " + total + " 条", countCards(q("#filmsList"), "film-card") === total);
-check("确认角色卡片 " + data.TRAILER_CHARS.length + " 位", countCards(q("#trailerCharGrid"), "char-card") === data.TRAILER_CHARS.length);
-check("预测角色卡片 " + data.PREDICTED_CHARS.length + " 位", countCards(q("#predictedCharGrid"), "char-card") === data.PREDICTED_CHARS.length);
-check("彩蛋速报 " + data.EASTER_EGGS.length + " 条", countCards(q("#eggList"), "egg-card") === data.EASTER_EGGS.length);
-check("速览卡片 / FAQ / 路线均渲染", countCards(q("#factGrid"), "fact-card") === 8 && countCards(q("#faqList"), "faq-item") === 7 && countCards(q("#routeList"), "route-item") === 12);
+check("作品卡含封面与播放按钮", q("#filmsList").includes("film-poster") && q("#filmsList").includes("poster-play"));
+check("播放按钮指向正版平台搜索", /v\.qq\.com\/x\/search\/\?q=/.test(q("#filmsList")));
+check("待映影片显示锁而不是播放键", q("#filmsList").includes("poster-soon"));
+check("平台选择器已渲染", q("#controls").includes("chip-platform") && q("#controls").includes("哔哩哔哩"));
+
+/* 角色图鉴(PPT 式轮播) */
+const trailerN = data.TRAILER_CHARS.length;
+check("角色舞台已渲染首位角色", q("#castStage").includes("cast-img") && q("#castStage").includes("cast-body"));
+check("角色计数显示 1 / " + trailerN, docA.querySelector("#castPos").textContent === "1 / " + trailerN);
+check("角色分组标签渲染", q("#castTabs").includes("预告确认登场") && q("#castTabs").includes("预测登场"));
+check("角色索引条 " + trailerN + " 个", countBy(q("#castStrip"), "strip-item") === trailerN);
+check("立绘地址指向 chars 目录", /assets\/img\/chars\/doom\.svg/.test(q("#castStage")));
+
+/* 轮播切换 + 平台切换(直接调用暴露的 API) */
+winA.GuideApp.castGo(1);
+check("切换到第二位角色", docA.querySelector("#castPos").textContent === "2 / " + trailerN);
+winA.GuideApp.castGo(-1);
+check("可以退回第一位", docA.querySelector("#castPos").textContent === "1 / " + trailerN);
+check("切换分组到预测角色", (() => {
+  winA.GuideApp.state.castTab = "predicted";
+  winA.GuideApp.state.castIndex = 0;
+  winA.GuideApp.renderCast();
+  return docA.querySelector("#castPos").textContent === "1 / " + data.PREDICTED_CHARS.length;
+})());
+winA.GuideApp.state.castTab = "trailer";
+winA.GuideApp.state.castIndex = 0;
+winA.GuideApp.renderCast();
+
+check("路线 / FAQ / 彩蛋 / 速览仍正常", countCards(q("#eggList"), "egg-card") === data.EASTER_EGGS.length &&
+  countCards(q("#factGrid"), "fact-card") === 8 && countCards(q("#faqList"), "faq-item") === 8 && countCards(q("#routeList"), "route-item") === 12);
 check("复联4加码臻享版条目存在", data.FILMS.some(f => f.id === "endgame2026"));
 check("蜘蛛侠4含凤凰女揭示", (data.FILMS.find(f => f.id === "smbnd").plot || "").includes("琴·葛蕾"));
-check("浩克在确认区、不在预测区", q("#trailerCharGrid").includes("绿巨人") && !q("#predictedCharGrid").includes("绿巨人"));
+check("浩克在确认分组、不在预测分组", (() => {
+  const inTrailer = data.TRAILER_CHARS.some(c => c.name.includes("绿巨人"));
+  const inPredicted = data.PREDICTED_CHARS.some(c => c.name.includes("绿巨人"));
+  return inTrailer && !inPredicted;
+})());
+check("每位角色都配了立绘", data.TRAILER_CHARS.concat(data.PREDICTED_CHARS).every(c => {
+  const cfg = extra.CHAR_ART[c.name];
+  return cfg && cfg.id && fs.existsSync(dir + "assets/img/chars/" + cfg.id + ".svg");
+}));
 
 /* ---------- 2. 留言板 ---------- */
 const configSrc = read("assets/js/site-config.js");

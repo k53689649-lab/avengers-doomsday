@@ -1,14 +1,33 @@
 /* =========================================================
    毁灭之日观影指南 — 渲染逻辑
+   板块:速览 / 彩蛋速报 / 观影路线 / 作品库(封面+播放按钮)/ 角色图鉴(PPT 式轮播)/ FAQ
    ========================================================= */
 (function () {
   "use strict";
 
+  var CFG = window.SITE_CONFIG || {};
+  var WATCH = CFG.watchPlatforms || [
+    { id: "qq", name: "腾讯视频", url: "https://v.qq.com/x/search/?q={q}" },
+    { id: "iqiyi", name: "爱奇艺", url: "https://so.iqiyi.com/so/q_{q}" },
+    { id: "youku", name: "优酷", url: "https://so.youku.com/search_video/q_{q}" },
+    { id: "bili", name: "哔哩哔哩", url: "https://search.bilibili.com/all?keyword={q}" },
+    { id: "douban", name: "豆瓣(看评分)", url: "https://search.douban.com/movie/subject_search?search_text={q}" }
+  ];
+  var KEY_PLATFORM = "dd_platform";
+
   var ALL = [].concat(FILMS, TV_SHOWS.map(function (t) { return Object.assign({}, t, { isTV: true }); }));
 
-  var REL_LABEL = {
-    direct: "直接相关", context: "重要背景", minor: "一般关联", info: "番外"
-  };
+  var REL_LABEL = { direct: "直接相关", context: "重要背景", minor: "一般关联", info: "番外" };
+
+  var STUDIO_COLOR = [
+    [/漫威影业/, "#e23636"], [/福克斯/, "#4a7fd6"], [/索尼/, "#3b9ac4"],
+    [/环球/, "#c08a2e"], [/新线/, "#7d5fff"], [/狮门/, "#8a6ce0"],
+    [/迪士尼/, "#4aa3df"], [/哥伦比亚/, "#c46a2e"], [/康斯坦丁/, "#7a7a7a"], [/世纪电影/, "#7a7a7a"]
+  ];
+  function studioColor(s) {
+    for (var i = 0; i < STUDIO_COLOR.length; i++) if (STUDIO_COLOR[i][0].test(s || "")) return STUDIO_COLOR[i][1];
+    return "#5c6b7a";
+  }
 
   /* ---------------- 电影速览 ---------------- */
   var FACTS = [
@@ -98,8 +117,12 @@
       a: "只推荐两部:①《洛基》(S1-S2)——TVA、康之死、时间树全部在这里,不看它复联5的多元宇宙设定会缺一角;②《假如…?》——多元宇宙的可视化教材。其余剧集(旺达幻视、猎鹰与冬兵、夜魔侠:重生等)按需补。"
     },
     {
-      q: "索尼、福克斯、环球这些公司的作品跟复联5有关系吗?",
-      a: "有,而且很重要:福克斯的X战警宇宙角色已确定在复联5登场(预告中牌皇、X战警阵营出现);索尼的蜘蛛侠/毒液宇宙是'跨界传闻'的富矿;老漫威片(刀锋、艾丽卡、夜魔侠等)的角色在《死侍与金刚狼》里已被官方'激活'为多元宇宙角色。本指南把所有片方的作品都收录并标注了关联度。"
+      q: "作品库里的 ▶ 播放按钮是干什么的?能免费看吗?",
+      a: "那个按钮是带片名去『正版平台』(腾讯视频/爱奇艺/优酷/B站/Disney+等)搜索,由平台告诉你这部剧有没有上架、要不要会员——本站不提供也不链接任何盗版资源,原因很简单:盗版站既不稳定也违法。国内实际能原价看到漫威电影的地方主要是各视频平台的会员区,偶尔会有老片免费(带广告)。"
+    },
+    {
+      q: "为什么作品库有的片子是灰色的/没有中文资源?",
+      a: "一部分老片(比如1986年《霍华德鸭》、1990年的《美国队长》)在大陆基本没有正版渠道,标成「一般关联」或「番外」的条目本来就不用看,放心跳过。"
     }
   ];
 
@@ -110,9 +133,20 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
+  function store(key, val) {
+    try {
+      if (val === undefined) return window.localStorage.getItem(key);
+      window.localStorage.setItem(key, String(val));
+    } catch (e) { /* 隐私模式忽略 */ }
+    return null;
+  }
 
   /* ---------------- 状态 ---------------- */
-  var state = { q: "", studio: "all", rel: "all", status: "all" };
+  var state = {
+    q: "", studio: "all", rel: "all", status: "all",
+    castTab: "trailer", castIndex: 0,
+    platform: store(KEY_PLATFORM) || CFG.defaultWatchPlatform || (WATCH[0] && WATCH[0].id)
+  };
 
   var STUDIO_GROUPS = [
     { id: "all", name: "全部作品", match: function () { return true; } },
@@ -122,7 +156,6 @@
     { id: "other", name: "其他公司", match: function (x) { return !x.isTV && x.group === "other"; } },
     { id: "tv", name: "剧集(Disney+/精选)", match: function (x) { return !!x.isTV; } }
   ];
-
   var REL_GROUPS = [
     { id: "all", name: "全部关联度" },
     { id: "direct", name: "直接相关" },
@@ -130,7 +163,6 @@
     { id: "minor", name: "一般关联" },
     { id: "info", name: "番外" }
   ];
-
   var STATUS_GROUPS = [
     { id: "all", name: "全部状态" },
     { id: "released", name: "已上映" },
@@ -139,15 +171,14 @@
 
   /* ---------------- 渲染:hero 统计 ---------------- */
   function renderHeroStats() {
-    var films = FILMS.length;
+    var filmCount = FILMS.length, tvCount = TV_SHOWS.length;
     var stud = {};
     FILMS.forEach(function (f) { stud[f.studio] = 1; });
-    var stCount = Object.keys(stud).length;
     $("#heroStats").innerHTML =
-      '<div class="stat"><b>' + films + '</b><span>收录影视作品/剧集</span></div>' +
-      '<div class="stat"><b>' + stCount + '家</b><span>出品/发行公司</span></div>' +
-      '<div class="stat"><b>' + window.TRAILER_CHARS.length + '</b><span>预告确认登场角色</span></div>' +
-      '<div class="stat"><b>' + window.PREDICTED_CHARS.length + '</b><span>大概率登场(预测)</span></div>' +
+      '<div class="stat"><b>' + filmCount + '</b><span>部影视作品</span></div>' +
+      '<div class="stat"><b>' + tvCount + '</b><span>部精选剧集</span></div>' +
+      '<div class="stat"><b>' + Object.keys(stud).length + '家</b><span>出品/发行公司</span></div>' +
+      '<div class="stat"><b>' + (window.TRAILER_CHARS.length + window.PREDICTED_CHARS.length) + '</b><span>位角色图鉴</span></div>' +
       '<div class="stat"><b>3个</b><span>即将碰撞的宇宙</span></div>';
   }
 
@@ -193,7 +224,7 @@
       }).join("");
   }
 
-  /* ---------------- 渲染:筛选器 ---------------- */
+  /* ---------------- 渲染:筛选器(含播放平台) ---------------- */
   function renderControls() {
     function chips(groups, key, label) {
       return '<div class="filter-group"><span class="filter-label">' + label + "</span>" +
@@ -201,17 +232,46 @@
           return '<button class="chip' + (state[key] === g.id ? " active" : "") + '" data-key="' + key + '" data-val="' + g.id + '">' + esc(g.name) + "</button>";
         }).join("") + "</div>";
     }
+    var platformChips = '<div class="filter-group"><span class="filter-label">播放平台</span>' +
+      WATCH.map(function (p) {
+        return '<button class="chip chip-platform' + (state.platform === p.id ? " active" : "") + '" data-platform="' + esc(p.id) + '">' + esc(p.name) + "</button>";
+      }).join("") + '<span class="chip-hint">(点封面 ▶ 会跳到这里搜索)</span></div>';
+
     $("#controls").innerHTML =
       '<div class="search-row"><input class="search-input" id="searchInput" type="search" placeholder="搜索片名 / 英文名 / 年份 / 简介关键词…" value="' + esc(state.q) + '" /></div>' +
+      platformChips +
       chips(STUDIO_GROUPS, "studio", "出品方") +
       chips(REL_GROUPS, "rel", "关联度") +
       chips(STATUS_GROUPS, "status", "状态");
   }
 
-  /* ---------------- 渲染:影片列表 ---------------- */
+  /* ---------------- 渲染:影片列表(封面 + 播放按钮) ---------------- */
   function relTag(rel) {
     var cls = { direct: "tag-direct", context: "tag-context", minor: "tag-minor", info: "tag-info" }[rel] || "tag-minor";
     return '<span class="tag ' + cls + '">' + (REL_LABEL[rel] || rel) + "</span>";
+  }
+  function currentPlatform() {
+    for (var i = 0; i < WATCH.length; i++) if (WATCH[i].id === state.platform) return WATCH[i];
+    return WATCH[0];
+  }
+  function watchUrl(f) {
+    var p = currentPlatform();
+    if (!p) return "#";
+    return p.url.replace("{q}", encodeURIComponent(f.title)).replace("{qen}", encodeURIComponent(f.en || f.title));
+  }
+  function posterHtml(f) {
+    var color = studioColor(f.studio);
+    var platform = currentPlatform();
+    var play = (f.status === "upcoming")
+      ? '<span class="poster-play poster-soon" title="还没上映">🔒</span>'
+      : '<a class="poster-play" href="' + esc(watchUrl(f)) + '" target="_blank" rel="noopener noreferrer" title="去' + esc(platform ? platform.name : "") + '搜索这部剧">▶</a>';
+    return '<div class="film-poster" style="--pa:' + color + '">' +
+      '<div class="poster-glow"></div>' +
+      '<div class="poster-body">' +
+      '<span class="poster-studio">' + esc((f.studio || "").replace(/\(.*?\)/, "")) + "</span>" +
+      '<span class="poster-title">' + esc(f.title) + "</span>" +
+      '<span class="poster-year">' + esc(f.year) + (f.isTV ? " · 剧集" : "") + "</span>" +
+      "</div>" + play + "</div>";
   }
   function filmHtml(f) {
     var statusTag = f.status === "upcoming"
@@ -219,14 +279,16 @@
       : '<span class="tag">已上映</span>';
     var tvTag = f.isTV ? '<span class="tag">剧集</span>' : "";
     return '<article class="film-card" data-id="' + esc(f.id) + '">' +
+      posterHtml(f) +
+      '<div class="film-body">' +
       '<div class="film-top"><h3 class="film-title">' + esc(f.title) +
       '<span>' + esc(f.en || "") + "</span></h3>" +
-      '<div class="film-meta"><span class="tag tag-year">' + esc(f.year) + "</span>" + statusTag + tvTag + "</div></div>" +
+      '<div class="film-meta">' + statusTag + tvTag + "</div></div>" +
       '<div class="film-meta">' + relTag(f.rel) + '<span class="tag">' + esc(f.studio) + "</span>" +
       (f.phase ? '<span class="tag">' + esc(f.phase) + "</span>" : "") + "</div>" +
       (f.plot ? '<p class="film-plot"><b>讲了什么:</b>' + esc(f.plot) + "</p>" : "") +
       (f.relation ? '<p class="film-relation"><span class="rel-label">与复联5的关系</span>' + esc(f.relation) + "</p>" : "") +
-      "</article>";
+      "</div></article>";
   }
   function renderFilms() {
     var q = state.q.trim().toLowerCase();
@@ -244,46 +306,95 @@
 
     var ext = FILMS.filter(function (f) { return f.status === "upcoming"; });
     $("#filmsMore").innerHTML =
-      '<h3>待映与说明</h3>' +
+      "<h3>待映与说明</h3>" +
       ext.map(function (f) { return '<p class="more-note">· ' + esc(f.title) + "( " + esc(f.en) + " )— " + esc(f.plot) + "</p>"; }).join("") +
-      '<p class="more-note" style="margin-top:10px">· 未收录说明:①1994年科尔曼版《神奇四侠》从未正式公映(仅按合约拍摄),仅作历史注脚收录;②1998年《复仇者》(费因斯/瑟曼)改编自英国同名间谍剧,与漫威无关,已排除;③各厂直发DVD的漫威动画长片(如《钢铁侠:科技达人》《终极复仇者》等)非院线作品,未收录;④2003年《夜魔侠》等老片与MCU不共享宇宙,但其角色已在《死侍与金刚狼》中以"老宇宙"身份回归。</p>';
+      '<p class="more-note" style="margin-top:10px">· 关于播放按钮:点封面上的 ▶ 会带片名去您选择的<b>正版平台</b>搜索(腾讯视频 / 爱奇艺 / 优酷 / B站 / Disney+ / JustWatch)。本站<b>不提供、也不链接任何盗版资源</b> —— 盗版站不稳定、随时失效,而且违法。</p>' +
+      '<p class="more-note">· 未收录说明:①1994年科尔曼版《神奇四侠》从未正式公映(仅按合约拍摄),仅作历史注脚收录;②1998年《复仇者》(费因斯/瑟曼)改编自英国同名间谍剧,与漫威无关,已排除;③各厂直发DVD的漫威动画长片(如《钢铁侠:科技达人》《终极复仇者》等)非院线作品,未收录;④2003年《夜魔侠》等老片与MCU不共享宇宙,但其角色已在《死侍与金刚狼》中以"老宇宙"身份回归。</p>';
   }
 
-  /* ---------------- 渲染:角色 ---------------- */
-  function charHtml(c) {
-    var badge = c.badge
-      ? (c.badge === "official"
-        ? '<span class="tag tag-direct">官方确认</span>'
-        : c.badge === "cast"
-          ? '<span class="tag tag-context">官方官宣</span>'
-          : c.badge === "rumor"
-            ? '<span class="tag tag-rumor">传闻</span>'
-            : "")
-      : "";
-    var prob = "";
-    if (c.prob) {
-      var cls = c.prob === "极高" ? "prob-high" : c.prob === "较高" ? "prob-mid" : "prob-low";
-      prob = '<span class="prob ' + cls + '">登场概率:' + esc(c.prob) + "</span>";
-    }
-    return '<article class="char-card">' +
-      '<div class="char-head"><h3 class="char-name">' + esc(c.name) +
-      "<span>" + esc(c.en || "") + "</span></h3>" +
-      '<div class="char-badges">' + badge + "</div></div>" +
-      (c.actor ? '<p class="char-actor">演员:' + esc(c.actor) + "</p>" : "") +
-      (c.appear ? '<p class="char-bio"><b>预告画面:</b>' + esc(c.appear) + "</p>" : "") +
-      (c.bio ? '<p class="char-bio">' + esc(c.bio) + "</p>" : "") +
-      (c.why ? '<p class="char-bio"><b>为什么与复联5有关:</b>' + esc(c.why) + "</p>" : "") +
-      (c.evidence ? '<p class="char-evidence"><em>依据:</em>' + esc(c.evidence) + prob + "</p>" : "") +
+  /* ---------------- 渲染:角色图鉴(一次一位) ---------------- */
+  function charArtUrl(c) {
+    var cfg = (window.CHAR_ART || {})[c.name];
+    if (!cfg || !cfg.id) return "";
+    if (window.CHAR_ART_DATA && window.CHAR_ART_DATA[cfg.id]) return window.CHAR_ART_DATA[cfg.id];
+    return "assets/img/chars/" + cfg.id + ".svg";
+  }
+  function charArtJpg(c) {
+    var cfg = (window.CHAR_ART || {})[c.name];
+    return cfg && cfg.id ? "assets/img/chars/" + cfg.id + ".jpg" : "";
+  }
+  function castData() {
+    return state.castTab === "predicted" ? window.PREDICTED_CHARS : window.TRAILER_CHARS;
+  }
+  function badgeHtml(c) {
+    if (c.badge === "official") return '<span class="tag tag-direct">预告确认</span>';
+    if (c.badge === "cast") return '<span class="tag tag-context">官方官宣</span>';
+    if (c.badge === "rumor") return '<span class="tag tag-rumor">传闻推测</span>';
+    return "";
+  }
+  function renderCastTabs() {
+    var tabs = [
+      { id: "trailer", name: "预告确认登场", n: window.TRAILER_CHARS.length },
+      { id: "predicted", name: "预测登场", n: window.PREDICTED_CHARS.length }
+    ];
+    $("#castTabs").innerHTML = tabs.map(function (t) {
+      return '<button class="cast-tab' + (state.castTab === t.id ? " active" : "") + '" data-cast-tab="' + t.id + '">' +
+        esc(t.name) + " <em>" + t.n + "</em></button>";
+    }).join("");
+  }
+  function renderCast() {
+    var list = castData();
+    if (!list.length) return;
+    if (state.castIndex >= list.length) state.castIndex = 0;
+    if (state.castIndex < 0) state.castIndex = list.length - 1;
+    renderCastTabs();
+    var c = list[state.castIndex];
+
+    $("#castDesc").textContent = state.castTab === "predicted"
+      ? "基于官方卡司、泄露设定、片场照与媒体报道的预测,标注了每条推断的依据与可信度。传闻仅供参考,以正片为准。"
+      : "依据已发布的两支预告与官方卡司整理,每位角色的预告画面、背景介绍与「为什么与复联5有关」都在这里。";
+
+    var art = charArtUrl(c), jpg = charArtJpg(c);
+    $("#castStage").innerHTML =
+      '<div class="cast-bg"><img class="cast-img" ' + (jpg ? 'data-jpg="' + esc(jpg) + '" ' : "") +
+      'src="' + esc(art) + '" alt="" /></div>' +
+      '<div class="cast-shade"></div>' +
+      '<article class="cast-body">' +
+      '<div class="cast-head"><h3 class="cast-name">' + esc(c.name) + "<span>" + esc(c.en || "") + "</span></h3>" +
+      '<div class="cast-badges">' + badgeHtml(c) + (c.prob ? '<span class="tag tag-rumor">' + esc(c.prob) + "</span>" : "") + "</div></div>" +
+      (c.actor ? '<p class="cast-actor">配音/出演:' + esc(c.actor) + "</p>" : "") +
+      (c.appear ? '<p class="cast-text"><b>预告画面:</b>' + esc(c.appear) + "</p>" : "") +
+      (c.bio ? '<p class="cast-text">' + esc(c.bio) + "</p>" : "") +
+      (c.why ? '<p class="cast-text"><b>为什么与复联5有关:</b>' + esc(c.why) + "</p>" : "") +
+      (c.evidence ? '<p class="cast-evidence">' + c.evidence + "</p>" : "") +
       "</article>";
-  }
 
-  function renderTrailer() {
-    $("#trailerCharGrid").innerHTML = window.TRAILER_CHARS.map(charHtml).join("");
-    $("#trailerCastDesc").textContent =
-      "已有三轮预告物料:①2026年4月CinemaCon先导片段(雷神对决毁灭博士);②7月20日首支正式预告——洛基、X教授、万磁王、镭射眼、苏睿黑豹、姆巴库、纳摩、石头人、叶莲娜等大规模集结;③8月15日前后发布的D23特别版(以毁灭博士与哨兵军团为主)。本区角色按全部已发布物料+观者反馈整理;不同物料轮次、各家逐帧解析存在版本分歧处均已标注,以正片为准。";
+    var img = $("#castStage .cast-img");
+    if (img && img.dataset && img.dataset.jpg && typeof window.Image === "function") {
+      var probe = new window.Image();
+      probe.onload = function () { img.src = img.dataset.jpg; };
+      probe.src = img.dataset.jpg;
+    }
+
+    $("#castPos").textContent = (state.castIndex + 1) + " / " + list.length;
+    $("#castStrip").innerHTML = list.map(function (x, i) {
+      var cfg = (window.CHAR_ART || {})[x.name];
+      var thumb = cfg && cfg.id ? 'style="background-image:url(' + esc(charArtUrl(x)) + ')"' : "";
+      return '<button class="strip-item' + (i === state.castIndex ? " active" : "") + '" data-cast-index="' + i +
+        '" title="' + esc(x.name) + '" ' + thumb + '><span>' + esc(x.name.replace(/[()(].*$/, "").slice(0, 4)) + "</span></button>";
+    }).join("");
   }
-  function renderPredicted() {
-    $("#predictedCharGrid").innerHTML = window.PREDICTED_CHARS.map(charHtml).join("");
+  function castGo(delta) {
+    var list = castData();
+    state.castIndex = (state.castIndex + delta + list.length) % list.length;
+    renderCast();
+    var stage = $("#castStage");
+    if (stage && stage.scrollIntoView) {
+      var top = stage.getBoundingClientRect().top + window.pageYOffset - 90;
+      if (window.pageYOffset > top || top - window.pageYOffset > window.innerHeight) {
+        window.scrollTo({ top: top, behavior: "smooth" });
+      }
+    }
   }
 
   /* ---------------- 渲染:FAQ ---------------- */
@@ -297,16 +408,43 @@
   /* ---------------- 事件 ---------------- */
   function bind() {
     document.addEventListener("click", function (e) {
-      var tab = e.target.closest(".route-tab");
-      if (tab) { renderRoute(tab.dataset.route); document.querySelectorAll(".route-tab").forEach(function (b) { b.classList.toggle("active", b === tab); }); return; }
-      var chip = e.target.closest(".chip");
-      if (chip) {
-        state[chip.dataset.key] = chip.dataset.val;
-        document.querySelectorAll(".chip[data-key='" + chip.dataset.key + "']").forEach(function (b) { b.classList.toggle("active", b === chip); });
+      var t = e.target;
+      if (!t || !t.closest) return;
+
+      var tab = t.closest(".route-tab");
+      if (tab) {
+        renderRoute(tab.dataset.route);
+        document.querySelectorAll(".route-tab").forEach(function (b) { b.classList.toggle("active", b === tab); });
+        return;
+      }
+      var pt = t.closest("[data-platform]");
+      if (pt) {
+        state.platform = pt.dataset.platform;
+        store(KEY_PLATFORM, state.platform);
+        document.querySelectorAll("[data-platform]").forEach(function (b) { b.classList.toggle("active", b === pt); });
         renderFilms();
         return;
       }
-      var q = e.target.closest(".faq-q");
+      var chip = t.closest(".chip");
+      if (chip && chip.dataset.key) {
+        state[chip.dataset.key] = chip.dataset.val;
+        document.querySelectorAll('.chip[data-key="' + chip.dataset.key + '"]').forEach(function (b) { b.classList.toggle("active", b === chip); });
+        renderFilms();
+        return;
+      }
+      var ct = t.closest("[data-cast-tab]");
+      if (ct) {
+        state.castTab = ct.dataset.castTab;
+        state.castIndex = 0;
+        renderCast();
+        return;
+      }
+      var si = t.closest("[data-cast-index]");
+      if (si) { state.castIndex = Number(si.dataset.castIndex); renderCast(); return; }
+      if (t.closest("#castPrev")) { castGo(-1); return; }
+      if (t.closest("#castNext")) { castGo(1); return; }
+
+      var q = t.closest(".faq-q");
       if (q) {
         var item = q.closest(".faq-item");
         var open = item.classList.toggle("open");
@@ -314,24 +452,26 @@
         ans.style.maxHeight = open ? ans.scrollHeight + "px" : "0";
         return;
       }
-      var navL = e.target.closest(".nav a");
+      var navL = t.closest(".nav a");
       if (navL) { $("#nav").classList.remove("open"); }
     });
+
+    document.addEventListener("keydown", function (e) {
+      if (/INPUT|TEXTAREA|SELECT/.test((e.target && e.target.tagName) || "")) return;
+      if (e.key === "ArrowLeft") castGo(-1);
+      else if (e.key === "ArrowRight") castGo(1);
+    });
+
     $("#navToggle").addEventListener("click", function () { $("#nav").classList.toggle("open"); });
+
     var si = $("#searchInput");
-    if (si) {
-      si.addEventListener("input", function () {
-        state.q = si.value;
-        renderFilms();
-      });
-    }
+    if (si) si.addEventListener("input", function () { state.q = si.value; renderFilms(); });
+
     var bt = document.createElement("button");
     bt.id = "backTop"; bt.textContent = "↑"; bt.title = "回到顶部";
     document.body.appendChild(bt);
     bt.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
-    window.addEventListener("scroll", function () {
-      bt.classList.toggle("show", window.scrollY > 600);
-    }, { passive: true });
+    window.addEventListener("scroll", function () { bt.classList.toggle("show", window.scrollY > 600); }, { passive: true });
   }
 
   /* ---------------- 启动 ---------------- */
@@ -342,9 +482,14 @@
     renderRoutes();
     renderControls();
     renderFilms();
-    renderTrailer();
-    renderPredicted();
+    renderCast();
     renderFaq();
     bind();
   });
+
+  /* 供测试使用 */
+  window.GuideApp = {
+    state: state, renderFilms: renderFilms, renderCast: renderCast, castGo: castGo,
+    watchUrl: function (f) { return watchUrl(f); }, castData: castData, charArtUrl: charArtUrl
+  };
 })();

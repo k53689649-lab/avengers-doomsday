@@ -275,8 +275,7 @@ img { max-width: 100%; display: block; }
 }
 
 /* ---------- 彩蛋速报 ---------- */
-.egg-list { display: flex; flex-direction: column; gap: 14px; }
-.egg-card {
+.egg-list { display: flex; flex-direction: column; gap: 14px; }.egg-card {
   display: flex; gap: 18px; padding: 20px 22px;
   background: linear-gradient(120deg, rgba(226, 54, 54, 0.08), rgba(247, 201, 72, 0.05));
   border: 1px solid var(--line); border-left: 3px solid var(--accent);
@@ -291,6 +290,126 @@ img { max-width: 100%; display: block; }
 .egg-film { font-size: 12px; color: var(--accent-2); margin-bottom: 8px; }
 .egg-text { font-size: 14px; color: var(--text); margin-bottom: 8px; }
 .egg-rel { font-size: 13px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 9px; }
+
+/* =========================================================
+   角色图鉴(PPT 式轮播:一次介绍一位,立绘做背景)
+   ========================================================= */
+.cast-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.cast-tab {
+  background: var(--card); border: 1px solid var(--line); color: var(--muted);
+  padding: 9px 18px; border-radius: 999px; font-size: 14px; cursor: pointer; transition: 0.2s;
+}
+.cast-tab em { font-style: normal; opacity: 0.6; font-size: 12px; margin-left: 4px; }
+.cast-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+.cast-tab:hover { color: #fff; }
+
+.cast-stage {
+  position: relative; overflow: hidden;
+  border-radius: 20px; border: 1px solid var(--line);
+  background: #05100c; box-shadow: var(--shadow);
+  min-height: 620px; display: flex; align-items: flex-end;
+}
+.cast-bg { position: absolute; inset: 0; overflow: hidden; display: flex; justify-content: flex-end; }
+.cast-img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 24%;
+  display: block;
+  filter: brightness(1.16) saturate(1.1) contrast(1.04);
+  -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.85) 12%, #000 28%, #000 100%);
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.85) 12%, #000 28%, #000 100%);
+}
+.cast-shade {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(2, 10, 7, 0.95) 0%, rgba(2, 10, 7, 0.86) 38%, rgba(2, 10, 7, 0.40) 62%, rgba(2, 10, 7, 0.12) 100%),
+    linear-gradient(0deg, rgba(2, 10, 7, 0.90) 0%, rgba(2, 10, 7, 0.22) 55%, rgba(2, 10, 7, 0.0) 100%);
+}
+.cast-body {
+  position: relative; z-index: 2; width: 100%; max-width: 780px;
+  padding: 34px 34px 30px;
+}
+.cast-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.cast-name { font-size: clamp(24px, 3.4vw, 36px); font-weight: 900; line-height: 1.2; }
+.cast-name span { display: block; font-size: 13px; font-weight: 400; color: var(--muted); margin-top: 4px; }
+.cast-badges { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 6px; }
+.cast-actor { font-size: 13.5px; color: var(--accent-2); margin: 10px 0 14px; }
+.cast-text { font-size: 14px; color: #d6e4de; margin-bottom: 10px; line-height: 1.85; }
+.cast-text b { color: #ffffff; }
+.cast-evidence {
+  font-size: 12px; color: var(--muted); border-top: 1px dashed rgba(255, 255, 255, 0.18);
+  padding-top: 10px; margin-top: 12px; line-height: 1.8;
+}
+.cast-evidence em { color: var(--accent-2); font-style: normal; }
+
+.cast-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 20px 0 14px; }
+.cast-btn {
+  background: var(--card); border: 1px solid var(--line); color: var(--text);
+  padding: 11px 22px; border-radius: 999px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s;
+}
+.cast-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.cast-pos { font-family: "Segoe UI", sans-serif; font-size: 14px; color: var(--muted); min-width: 72px; text-align: center; }
+
+.cast-strip { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 12px; scrollbar-width: thin; }
+.strip-item {
+  position: relative; flex: 0 0 auto; width: 62px; height: 62px; border-radius: 50%;
+  border: 2px solid var(--line); background-color: #0b1512; background-size: cover; background-position: center 20%;
+  cursor: pointer; overflow: hidden; transition: 0.18s; padding: 0;
+}
+.strip-item span {
+  position: absolute; inset: auto 0 0 0; font-size: 9px; color: #fff; text-align: center;
+  background: rgba(0, 0, 0, 0.55); padding: 1px 0; letter-spacing: 0.5px;
+}
+.strip-item:hover { transform: translateY(-3px); border-color: rgba(226, 54, 54, 0.6); }
+.strip-item.active { border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(247, 201, 72, 0.18); }
+.cast-tip { font-size: 12.5px; color: var(--muted); text-align: center; }
+
+@media (max-width: 860px) {
+  .cast-stage { min-height: 520px; }
+  .cast-body { padding: 22px 18px 20px; }
+  .cast-img { object-position: center 16%; }
+  .cast-nav { gap: 10px; }
+  .cast-btn { padding: 10px 16px; font-size: 13px; }
+  .strip-item { width: 54px; height: 54px; }
+}
+
+/* =========================================================
+   作品卡:封面 + 播放按钮
+   ========================================================= */
+.chip-hint { font-size: 11.5px; color: var(--muted); margin-left: 4px; }
+.film-poster {
+  position: relative; height: 158px; margin: -20px -20px 14px; overflow: hidden;
+  border-radius: 14px 14px 0 0;
+  background:
+    radial-gradient(120% 130% at 20% 0%, color-mix(in srgb, var(--pa) 55%, #05090c) 0%, #060b0e 62%),
+    linear-gradient(135deg, var(--pa) 0%, #05090c 78%);
+  border-bottom: 1px solid var(--line);
+}
+.poster-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(60% 90% at 78% 120%, color-mix(in srgb, var(--pa) 70%, transparent) 0%, transparent 70%);
+  opacity: 0.5;
+}
+.poster-body {
+  position: absolute; inset: 0; padding: 16px 18px;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 4px;
+}
+.poster-studio { font-size: 11px; letter-spacing: 1px; color: rgba(255, 255, 255, 0.72); }
+.poster-title {
+  font-size: 20px; font-weight: 900; color: #fff; line-height: 1.28;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.8);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.poster-year { font-size: 11.5px; color: rgba(255, 255, 255, 0.6); }
+.poster-play {
+  position: absolute; right: 14px; bottom: 12px;
+  width: 46px; height: 46px; border-radius: 50%;
+  display: grid; place-items: center; text-decoration: none;
+  background: rgba(226, 54, 54, 0.92); color: #fff; font-size: 17px; padding-left: 3px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55), 0 0 0 4px rgba(226, 54, 54, 0.18);
+  transition: 0.2s;
+}
+.poster-play:hover { transform: scale(1.09); background: #ff4747; }
+.poster-soon { background: rgba(90, 100, 110, 0.9); box-shadow: none; padding: 0; font-size: 15px; }
+.film-body { display: flex; flex-direction: column; gap: 10px; }
 
 </style>
   <style>
@@ -642,6 +761,35 @@ window.SITE_CONFIG = {
     commentsTable: "comments",
     announceTable: "announcements"
   },
+
+  /* ============ 预告片(首页嵌入) ============
+     bilibiliBvid: B 站视频号(BV 开头),填了就会在首页出现「点击播放」的预告片
+     youtubeId:    油管视频 ID(可选,国内一般打不开,作为备用)
+     想换成官方频道的预告:把对应视频的 BV 号填进来即可 */
+  trailer: {
+    bilibiliBvid: "BV1i6qPBwEFV",     // IGN 上传的《复联5》全新预告
+    youtubeId: "",
+    title: "《复仇者联盟5:毁灭之日》官方预告",
+    note: "视频来自 B 站(IGN 上传的官方预告),版权归漫威/迪士尼所有"
+  },
+
+  /* ============ 哪里能看(作品库播放按钮) ============
+     说明:本站不提供也不链接任何盗版资源。播放按钮会带着片名去「正版平台」搜索,
+           由平台告诉你这部片子有没有上架、是否需要会员。
+     想增删平台,直接改这个数组即可;
+     url 里的 {q} 会替换成片名(中文名),{qen} 替换成英文名 */
+  watchPlatforms: [
+    { id: "qq",     name: "腾讯视频", url: "https://v.qq.com/x/search/?q={q}" },
+    { id: "iqiyi",  name: "爱奇艺",   url: "https://so.iqiyi.com/so/q_{q}" },
+    { id: "youku",  name: "优酷",     url: "https://so.youku.com/search_video/q_{q}" },
+    { id: "bili",   name: "哔哩哔哩", url: "https://search.bilibili.com/all?keyword={q}" },
+    { id: "disney", name: "Disney+",  url: "https://www.disneyplus.com/search?q={qen}" },
+    { id: "jw",     name: "JustWatch", url: "https://www.justwatch.com/us/search?q={qen}" },
+    { id: "douban", name: "豆瓣(看评分)", url: "https://search.douban.com/movie/subject_search?search_text={q}" }
+  ],
+
+  /* 默认打开哪个平台(对应上面 id;用户切换后会记住选择) */
+  defaultWatchPlatform: "qq",
 
   /* Waline 云留言板地址(另一种云端方案,二选一即可;与上面的 cloud 不冲突) */
   walineServerURL: "",

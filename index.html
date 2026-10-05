@@ -52,6 +52,22 @@
         </a>
       </div>
 
+      <!-- 官方预告:点击后在原地播放 -->
+      <section class="trailer-box" id="trailerBox">
+        <div class="trailer-head">
+          <h2 class="trailer-title" id="trailerTitle">预告片</h2>
+          <span class="trailer-tag" id="trailerTag"></span>
+        </div>
+        <div class="trailer-frame" id="trailerFrame">
+          <button class="trailer-poster" id="trailerPlay" type="button">
+            <span class="trailer-icon">▶</span>
+            <span class="trailer-label">点击播放《复仇者联盟5:毁灭之日》预告</span>
+            <span class="trailer-src" id="trailerSrc"></span>
+          </button>
+        </div>
+        <p class="trailer-note" id="trailerNote"></p>
+      </section>
+
       <p class="portal-foot">
         本站为非官方影迷整理内容,与漫威影业 / 迪士尼 / 索尼影业等无隶属关系;影片信息以官方公布与正片为准。<br />
         Marvel 及相关角色版权归漫威 / 迪士尼所有 · 仅用于学习交流,不作商业用途
@@ -59,6 +75,7 @@
     </div>
   </main>
 
+  <script src="assets/js/site-config.js"></script>
   <script>
     /* 封面回退:cover.jpg → cover.svg */
     (function () {
@@ -68,6 +85,41 @@
         if (img.dataset.fallback === "svg") { img.style.display = "none"; return; }
         img.dataset.fallback = "svg";
         img.src = "assets/img/cover.svg";
+      });
+    })();
+
+    /* 预告片:点击后在原地加载播放器(默认不加载第三方 iframe,打开更快) */
+    (function () {
+      var cfg = (window.SITE_CONFIG && window.SITE_CONFIG.trailer) || {};
+      var box = document.getElementById("trailerBox");
+      var btn = document.getElementById("trailerPlay");
+      var frame = document.getElementById("trailerFrame");
+      var note = document.getElementById("trailerNote");
+      var srcEl = document.getElementById("trailerSrc");
+      var tagEl = document.getElementById("trailerTag");
+      if (!box || !btn) return;
+      if (!cfg.bilibiliBvid && !cfg.youtubeId) { box.style.display = "none"; return; }
+
+      var title = cfg.title || "《复仇者联盟5:毁灭之日》预告";
+      document.getElementById("trailerTitle").textContent = title;
+      if (tagEl) tagEl.textContent = cfg.bilibiliBvid ? "B 站" : "YouTube";
+      if (note) note.textContent = cfg.note || "";
+      if (srcEl) {
+        srcEl.textContent = cfg.bilibiliBvid
+          ? "www.bilibili.com/video/" + cfg.bilibiliBvid
+          : "youtube.com/watch?v=" + cfg.youtubeId;
+      }
+
+      btn.addEventListener("click", function () {
+        var url;
+        if (cfg.bilibiliBvid) {
+          url = "https://player.bilibili.com/player.html?bvid=" + encodeURIComponent(cfg.bilibiliBvid) +
+            "&page=1&high_quality=1&danmaku=0&autoplay=1";
+        } else {
+          url = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(cfg.youtubeId) + "?autoplay=1&rel=0";
+        }
+        frame.innerHTML = '<iframe class="trailer-iframe" src="' + url + '" scrolling="no" frameborder="0" ' +
+          'framespacing="0" allowfullscreen="true" allow="autoplay; fullscreen; encrypted-media"></iframe>';
       });
     })();
 
