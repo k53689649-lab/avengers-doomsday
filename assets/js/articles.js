@@ -132,14 +132,28 @@
         var ta = document.createElement("textarea");
         ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
         document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
-        flash("升级脚本已复制 → 粘到 Supabase 的 SQL Editor 里点 Run");
+        flash("升级脚本已复制(站长 UID 已自动填好)→ 粘到 Supabase 的 SQL Editor 里点 Run");
       } catch (e) { window.open(url, "_blank"); }
     };
-    fetch(url).then(function (r) { return r.text(); }).then(function (t) {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(t).then(function () { flash("升级脚本已复制 → 粘到 Supabase 的 SQL Editor 里点 Run"); }, function () { fb(t); });
-      } else fb(t);
-    }).catch(function () { window.open(url, "_blank"); });
+    /* 模板里的 OWNER_UID 换成站长真实 UID,避免复制到占位符导致 22P02 报错 */
+    var fill = function (t) {
+      var uid = String(CFG.ownerUid || "").trim();
+      if (uid && t.indexOf("OWNER_UID") !== -1) t = t.replace(/OWNER_UID/g, uid);
+      if (t.indexOf("OWNER_UID") !== -1) {
+        window.alert("注意:脚本里还有 OWNER_UID 占位符没替换。\n请把每一处 OWNER_UID 改成你自己的 Supabase User UID 再运行(或先在 site-config.js 里填好 ownerUid)。");
+      }
+      return t;
+    };
+    if (window.fetch) {
+      fetch(url).then(function (r) { return r.text(); }).then(function (t) {
+        t = fill(t);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(t).then(function () {
+            flash("升级脚本已复制(站长 UID 已自动填好)→ 粘到 Supabase 的 SQL Editor 里点 Run");
+          }, function () { fb(t); });
+        } else fb(t);
+      }).catch(function () { window.open(url, "_blank"); });
+    } else { window.open(url, "_blank"); }
   }
 
   /* ---------------- 加载数据 ---------------- */
